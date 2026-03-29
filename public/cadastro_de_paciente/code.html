@@ -5,7 +5,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Cadastro de Paciente | Clinica Odontonil</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="../css/mobile-premium.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -88,17 +89,20 @@
             -webkit-appearance: none;
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
+    <style>
+        body {
+            min-height: 100dvh;
+        }
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom, 24px);
+        }
+    </style>
   </head>
 <body class="text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed-variant min-h-screen">
 <!-- Top Navigation -->
-<header class="fixed top-0 w-full z-50 bg-[#f8fafa]/80 backdrop-blur-xl flex items-center justify-between px-6 h-16 shadow-sm shadow-teal-900/5">
+<header class="fixed top-0 w-full z-50 bg-[#f8fafa]/80 backdrop-blur-xl flex items-center justify-between px-6 pt-[env(safe-area-inset-top,0px)] h-[calc(64px+env(safe-area-inset-top,0px))] shadow-sm shadow-teal-900/5">
 <div class="flex items-center gap-4">
-<a href="../painel_da_recep_o/code.html" class="flex items-center justify-center p-2 rounded-full hover:bg-teal-50/50 transition-colors active:scale-95 duration-200">
+<a href="../painel_da_recep_o/code.html" data-haptic="light" class="flex items-center justify-center p-2 rounded-full hover:bg-teal-50/50 transition-colors active:scale-95 duration-200">
 <span class="material-symbols-outlined text-teal-900">arrow_back</span>
 </a>
 <h1 class="font-headline tracking-tight font-bold text-lg text-teal-900">Novo Paciente</h1>
@@ -119,9 +123,9 @@
                     <span class="material-symbols-outlined text-4xl mb-1">photo_camera</span>
                     <span class="text-[10px] font-bold uppercase tracking-widest">Capturar Foto</span>
                 </label>
-                <input type="file" id="camera-capture" accept="image/*" capture="user" class="hidden" onchange="previewPatientPhoto(this)">
+                <input type="file" id="camera-capture" accept="image/*" capture="user" class="hidden" onchange="previewPatientPhoto(this)"/>
                 <div id="photo-preview" class="hidden absolute inset-0 w-24 h-24 rounded-full overflow-hidden border-2 border-primary shadow-xl bg-white z-10 transition-transform duration-300 hover:scale-110">
-                    <img id="preview-img" src="" class="w-full h-full object-cover">
+                    <img id="preview-img" src="" class="w-full h-full object-cover"/>
                     <div class="absolute bottom-0 left-0 w-full bg-primary/60 backdrop-blur-sm py-1 flex justify-center cursor-pointer" onclick="document.getElementById('camera-capture').click()">
                         <span class="material-symbols-outlined text-white text-xs">refresh</span>
                     </div>
@@ -145,23 +149,16 @@
                 </div>
                 <div class="group">
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Nome Completo (Obrigatório)</label>
-                    <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60 uppercase" 
-                           placeholder="DIGITE O NOME COMPLETO" 
-                           type="text" 
-                           required 
-                           oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '')"
-                           pattern="[A-Z\s]{3,}"/>
+                    <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60 uppercase" placeholder="DIGITE O NOME COMPLETO" required="" style="text-transform: uppercase;" type="text"/>
                 </div>
                 <div class="group">
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Data de Nascimento</label>
-                    <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all font-mono" 
-                           type="date"
-                           onchange="document.getElementById('residenciais').scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => document.getElementById('cep').focus(), 300);"/>
+                    <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all font-mono" onchange="document.getElementById('residenciais').scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => document.getElementById('cep').focus(), 300);" type="date"/>
                 </div>
             </div>
 
             <!-- Address Segment -->
-            <div id="residenciais" class="bg-surface-container-low/50 rounded-[2rem] p-6 space-y-6 pt-16">
+            <div class="bg-surface-container-low/50 rounded-[2rem] p-6 space-y-6 pt-16" id="residenciais">
                 <div class="flex items-center gap-3 mb-2">
                     <span class="material-symbols-outlined text-primary text-xl">location_on</span>
                     <h3 class="font-headline font-bold text-primary text-sm">Detalhes Residenciais</h3>
@@ -169,12 +166,8 @@
                 <div class="relative">
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">CEP</label>
                     <div class="flex gap-2">
-                        <input id="cep" class="flex-1 bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" 
-                               placeholder="00000-000" 
-                               type="text" 
-                               maxlength="9"
-                               oninput="let v = this.value.replace(/\D/g, ''); if (v.length > 5) v = v.substring(0, 5) + '-' + v.substring(5, 8); this.value = v; if(v.length === 9) buscarCEP();"/>
-                        <button onclick="buscarCEP()" class="bg-primary text-white px-3 rounded-xl font-headline font-bold text-[10px] uppercase tracking-wider hover:bg-primary-container transition-all active:scale-95 flex items-center justify-center min-w-[70px]" type="button">
+                        <input class="flex-1 bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="cep" inputmode="numeric" maxlength="9" oninput="let v = this.value.replace(/\D/g, ''); if (v.length > 5) v = v.substring(0, 5) + '-' + v.substring(5, 8); this.value = v; if(v.length === 9) buscarCEP();" placeholder="00000-000" type="text"/>
+                        <button class="bg-primary text-white px-3 rounded-xl font-headline font-bold text-[10px] uppercase tracking-wider hover:bg-primary-container transition-all active:scale-95 flex items-center justify-center min-w-[70px]" data-haptic="medium" onclick="buscarCEP()" type="button">
                             Buscar
                         </button>
                     </div>
@@ -182,25 +175,25 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Endereço / Logradouro</label>
-                        <input id="logradouro" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" placeholder="Rua, Avenida, etc." type="text"/>
+                        <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="endereco" placeholder="Rua, Avenida, etc." type="text"/>
                     </div>
                     <div class="w-24">
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Nº</label>
-                        <input id="numero" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" placeholder="00" type="text"/>
+                        <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="numero" inputmode="numeric" placeholder="00" type="text"/>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2">
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary/60 mb-1.5 ml-1">Bairro</label>
-                        <input id="bairro" class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" readonly="" type="text" value=""/>
+                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" id="bairro" readonly="" type="text" value=""/>
                     </div>
                     <div>
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary/60 mb-1.5 ml-1">Cidade</label>
-                        <input id="cidade" class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" readonly="" type="text" value=""/>
+                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" id="cidade" readonly="" type="text" value=""/>
                     </div>
                     <div>
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary/60 mb-1.5 ml-1">Estado</label>
-                        <input id="uf" class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" readonly="" type="text" value=""/>
+                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" id="uf" readonly="" type="text" value=""/>
                     </div>
                 </div>
                 <div>
@@ -222,12 +215,12 @@
 </main>
 
 <!-- Bottom Action Bar -->
-<footer class="fixed bottom-0 left-0 w-full bg-[#f8fafa]/90 backdrop-blur-xl px-6 pt-4 pb-8 flex items-center justify-center shadow-[0_-8px_30px_rgba(0,0,0,0.04)] z-50">
+<footer class="fixed bottom-0 left-0 w-full bg-[#f8fafa]/90 backdrop-blur-xl px-6 pt-4 safe-area-bottom flex items-center justify-center shadow-[0_-8px_30px_rgba(0,0,0,0.04)] z-50">
     <div class="container mx-auto max-w-4xl flex items-center gap-4">
-        <a href="../painel_da_recep_o/code.html" class="flex-1 py-4 px-6 rounded-2xl font-headline font-bold text-secondary text-sm hover:bg-surface-container-highest transition-all active:scale-95 duration-200 text-center" type="button">
+        <a class="flex-1 py-4 px-6 rounded-2xl font-headline font-bold text-secondary text-sm hover:bg-surface-container-highest transition-all active:scale-95 duration-200 text-center" data-haptic="light" href="../painel_da_recep_o/code.html" type="button">
             Cancelar
         </a>
-        <button class="flex-[2] py-4 px-6 rounded-2xl font-headline font-bold text-white text-sm bg-gradient-to-r from-primary to-primary-container shadow-lg shadow-primary/20 transition-all active:scale-95 duration-200" type="submit">
+        <button class="flex-[1.5] py-4 px-10 bg-primary text-on-primary rounded-2xl font-headline font-extrabold text-sm shadow-[0_8px_20px_rgba(13,115,119,0.3)] hover:shadow-primary/40 active:scale-[0.98] transition-all duration-300 uppercase tracking-widest" data-haptic="heavy" onclick="salvarPaciente()">
             Salvar Paciente
         </button>
     </div>
@@ -236,53 +229,60 @@
 <!-- Decorative Background Accent -->
 <div class="fixed -top-24 -right-24 w-64 h-64 bg-primary-fixed/20 blur-[100px] rounded-full -z-10"></div>
 <div class="fixed top-1/2 -left-32 w-80 h-80 bg-secondary-container/30 blur-[120px] rounded-full -z-10"></div>
-<script>
-    async function buscarCEP() {
-        const cepInput = document.getElementById('cep');
-        const cep = cepInput.value.replace(/\D/g, '');
-        if (cep.length !== 8) {
-            alert('Por favor, digite um CEP válido com 8 números.');
-            return;
-        }
-
-        try {
-            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data = await response.json();
-
-            if (data.erro) {
-                alert('CEP não encontrado.');
+    <script src="../js/mobile-utils.js"></script>
+    <script>
+        async function buscarCEP() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            if (cep.length !== 8) {
+                showToast("Por favor, digite um CEP válido com 8 dígitos.", "error");
                 return;
             }
 
-            document.getElementById('logradouro').value = data.logradouro || '';
-            document.getElementById('bairro').value = data.bairro || '';
-            document.getElementById('cidade').value = data.localidade || '';
-            document.getElementById('uf').value = data.uf || '';
-            
-            // Focando no número para facilitar a preenchimento
-            document.getElementById('numero').focus();
-        } catch (error) {
-            console.error('Erro ao buscar CEP:', error);
-            alert('Erro ao buscar o endereço. Tente novamente.');
-        }
-    }
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await response.json();
 
-    function previewPatientPhoto(input) {
-        const preview = document.getElementById('photo-preview');
-        const img = document.getElementById('preview-img');
-        
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-                preview.classList.remove('hidden');
+                if (data.erro) {
+                    showToast("CEP não encontrado. Por favor, preencha manualmente.", "error");
+                    return;
+                }
+
+                document.getElementById('endereco').value = data.logradouro;
+                document.getElementById('bairro').value = data.bairro;
+                document.getElementById('cidade').value = data.localidade;
+                document.getElementById('uf').value = data.uf;
+                showToast("Endereço localizado com sucesso!", "success");
+                document.getElementById('numero').focus();
+            } catch (error) {
+                showToast("Erro ao buscar o CEP. Tente novamente ou preencha manualmente.", "error");
             }
-            reader.readAsDataURL(input.files[0]);
         }
-    }
-</script>
-</body></html>
-<!-- Decorative Background Accent -->
-<div class="fixed -top-24 -right-24 w-64 h-64 bg-primary-fixed/20 blur-[100px] rounded-full -z-10"></div>
-<div class="fixed top-1/2 -left-32 w-80 h-80 bg-secondary-container/30 blur-[120px] rounded-full -z-10"></div>
-</body></html>
+
+        function previewPatientPhoto(input) {
+            const preview = document.getElementById('photo-preview');
+            const img = document.getElementById('preview-img');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    showToast("Foto capturada!", "success");
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function salvarPaciente() {
+            showToast("Paciente salvo com sucesso!", "success");
+            setTimeout(() => {
+                window.location.href = '../painel_da_recep_o/code.html';
+            }, 1000);
+        }
+    </script>
+
+    <!-- Decorative Background Accents -->
+    <div class="fixed -top-24 -right-24 w-64 h-64 bg-primary-fixed/20 blur-[100px] rounded-full -z-10"></div>
+    <div class="fixed top-1/2 -left-32 w-80 h-80 bg-secondary-container/30 blur-[120px] rounded-full -z-10"></div>
+</body>
+</html>

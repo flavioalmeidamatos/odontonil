@@ -4,7 +4,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Clinica Odontonil | Bem-vindo</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link href="css/mobile-premium.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
       tailwind.config = {
@@ -83,9 +84,9 @@
         }
     </style>
   </head>
-<body class="bg-surface font-body text-on-surface antialiased overflow-hidden h-screen flex flex-col">
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden min-h-[100dvh] flex flex-col">
 <!-- Top Navigation Anchor -->
-<header class="fixed top-0 w-full z-50 bg-[#f8fafa]/80 dark:bg-[#191c1d]/80 backdrop-blur-xl shadow-sm shadow-teal-900/5 flex items-center justify-between px-6 h-16 w-full">
+<header class="fixed top-0 w-full z-50 bg-[#f8fafa]/80 dark:bg-[#191c1d]/80 backdrop-blur-xl shadow-sm shadow-teal-900/5 flex items-center justify-between px-6 pt-[env(safe-area-inset-top,0px)] h-[calc(64px+env(safe-area-inset-top,0px))] w-full">
 <div class="flex items-center gap-3">
 <span class="font-manrope font-extrabold text-teal-900 dark:text-teal-50 italic text-xl">Clinica Odontonil</span>
 </div>
@@ -110,7 +111,7 @@
     <!-- Main Interaction Layer -->
     <div class="flex-1 px-6 pb-24 md:pb-0 -mt-4 md:mt-0 relative z-10 flex flex-col justify-center gap-6 w-full md:max-w-md mx-auto">
         <!-- Reception Button -->
-        <a href="painel_da_recep_o/code.html" class="group w-full bg-surface-container-lowest p-1 rounded-[1.5rem] shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all active:scale-[0.98] duration-300">
+        <a href="painel_da_recep_o/code.html" data-haptic="medium" class="group relative flex flex-col items-center p-8 bg-surface-container-low dark:bg-surface-container-low rounded-[2.5rem] border border-white/50 dark:border-white/5 shadow-sm hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 active:scale-[0.98]">
             <div class="flex items-center gap-5 p-6 rounded-[1.25rem] bg-gradient-to-br from-primary to-primary-container text-white overflow-hidden relative">
                 <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center">
@@ -125,7 +126,7 @@
         </a>
 
         <!-- Doctor Button -->
-        <a href="buscar_paciente_m_dico/code.html" class="group w-full bg-surface-container-low p-1 rounded-[1.5rem] hover:shadow-xl hover:translate-y-[-4px] transition-all active:scale-[0.98] duration-300">
+        <a href="buscar_paciente_m_dico/code.html" data-haptic="medium" class="group relative flex flex-col items-center p-8 bg-surface-container-low dark:bg-surface-container-low rounded-[2.5rem] border border-white/50 dark:border-white/5 shadow-sm hover:shadow-xl hover:shadow-secondary/10 transition-all duration-300 active:scale-[0.98]">
             <div class="flex items-center gap-5 p-6 rounded-[1.25rem] bg-surface-container-lowest border border-outline-variant/10 text-primary">
                 <div class="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center text-primary">
                     <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'wght' 300;">medical_services</span>
@@ -150,9 +151,11 @@
 </div>
 </main>
 <!-- Subtle Footer Layer -->
-<footer class="fixed bottom-0 left-0 w-full px-6 py-8 flex justify-center items-center pointer-events-none md:justify-end">
+<footer class="fixed bottom-0 left-0 w-full px-6 pb-[env(safe-area-inset-bottom,32px)] pt-8 flex justify-center items-center pointer-events-none md:justify-end">
 <div class="bg-surface-container-high/40 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
 <p class="text-[10px] text-secondary/50 tracking-widest uppercase">Selecione seu destino para prosseguir</p>
 </div>
 </footer>
-</body></html>
+    <script src="js/mobile-utils.js"></script>
+</body>
+</html>
