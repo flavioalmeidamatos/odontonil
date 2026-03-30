@@ -3,75 +3,10 @@
 <html class="light" lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Prescrição Odontonil | Clinica Odontonil</title>
+<title>Clinica Odontonil - Módulo Médico</title>
+<link href="../public_style.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "surface-container-highest": "#e1e3e3",
-              "background": "#f8fafa",
-              "surface-tint": "#29695b",
-              "on-secondary-fixed-variant": "#2e4b57",
-              "on-error-container": "#93000a",
-              "on-tertiary-fixed-variant": "#3c494f",
-              "on-primary-fixed-variant": "#065043",
-              "on-tertiary-fixed": "#101d23",
-              "outline": "#707975",
-              "tertiary-container": "#38454b",
-              "inverse-on-surface": "#eff1f1",
-              "secondary-container": "#c6e4f4",
-              "surface-container": "#eceeee",
-              "surface-dim": "#d8dada",
-              "outline-variant": "#bfc9c4",
-              "tertiary-fixed-dim": "#bbc9d0",
-              "surface-variant": "#e1e3e3",
-              "on-background": "#191c1d",
-              "surface-container-lowest": "#ffffff",
-              "tertiary-fixed": "#d7e5ec",
-              "on-tertiary": "#ffffff",
-              "on-primary": "#ffffff",
-              "surface-bright": "#f8fafa",
-              "surface-container-low": "#f2f4f4",
-              "primary-fixed-dim": "#94d3c1",
-              "secondary": "#466270",
-              "on-surface-variant": "#3f4945",
-              "on-tertiary-container": "#a4b2b9",
-              "primary-fixed": "#afefdd",
-              "on-secondary-container": "#4a6774",
-              "error-container": "#ffdad6",
-              "primary-container": "#004d40",
-              "surface": "#f8fafa",
-              "primary": "#00342b",
-              "error": "#ba1a1a",
-              "on-secondary-fixed": "#001f2a",
-              "on-primary-container": "#7ebdac",
-              "on-surface": "#191c1d",
-              "on-secondary": "#ffffff",
-              "secondary-fixed-dim": "#adcbda",
-              "on-error": "#ffffff",
-              "secondary-fixed": "#c9e7f7",
-              "surface-container-high": "#e6e8e9",
-              "inverse-surface": "#2e3131",
-              "inverse-primary": "#94d3c1",
-              "tertiary": "#222f34",
-              "on-primary-fixed": "#00201a"
-            },
-            fontFamily: {
-              "headline": ["Manrope"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
 <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -83,25 +18,28 @@
             white-space: nowrap;
             direction: ltr;
         }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        body {
+            min-height: max(884px, 100dvh);
+            font-family: 'Inter', sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
 </head>
-<body class="bg-background text-on-surface font-body antialiased min-h-screen pb-32">
-<!-- TopAppBar -->
+<body class="bg-background text-on-surface antialiased min-h-screen pb-32">
 <header class="fixed top-0 w-full z-50 bg-[#f8fafa]/80 backdrop-blur-xl shadow-sm shadow-teal-900/5 flex items-center justify-between px-6 h-16">
 <div class="flex items-center gap-4">
 <a href="../buscar_paciente_m_dico/code.html" class="active:scale-95 duration-200 p-2 -ml-2 hover:bg-teal-50/50 rounded-full transition-colors">
 <span class="material-symbols-outlined text-teal-900" data-icon="arrow_back">arrow_back</span>
 </a>
 <a href="../index.html" class="font-headline tracking-tight font-bold text-lg text-teal-900 hover:opacity-80 transition-opacity flex items-center gap-2">
-    <span class="material-symbols-outlined text-primary-container" data-icon="home">home</span>
-    Clinica Odontonil
+<span class="material-symbols-outlined text-primary-container" data-icon="home">home</span>
+Clinica Odontonil - Módulo Médico
 </a>
 </div>
 <div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/15 shadow-sm">
@@ -111,36 +49,28 @@
 
 <main class="pt-24 px-6 container mx-auto max-w-5xl">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- Left Column: Patient Info -->
         <div class="lg:col-span-5 space-y-8">
             <section class="bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm border border-outline-variant/10">
                 <div class="flex items-start justify-between mb-6">
                     <div class="flex items-center gap-4">
-                        <div id="patient-photo-container" class="h-14 w-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl overflow-hidden shadow-sm border border-outline-variant/20 shrink-0">
-                            <!-- Foto injetada via JS -->
-                        </div>
+                        <div id="patient-photo-container" class="h-14 w-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl overflow-hidden shadow-sm border border-outline-variant/20 shrink-0"></div>
                         <div>
                             <span class="font-label text-[0.65rem] tracking-[0.1em] uppercase text-secondary font-bold mb-1 block">Ficha do Paciente</span>
                             <h2 id="patient-name" class="font-headline text-2xl font-extrabold text-primary tracking-tight">Carregando...</h2>
                         </div>
                     </div>
-                    <div id="patient-id" class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-wider uppercase mt-1">
-                        ID: #0000
-                    </div>
+                    <div id="patient-id" class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-wider uppercase mt-1">ID: 0000</div>
                 </div>
-                
+
                 <div class="space-y-6">
                     <div class="bg-surface-container-low p-5 rounded-2xl">
                         <div class="flex items-center gap-2 mb-3">
                             <span class="material-symbols-outlined text-primary text-xl" data-icon="location_on">location_on</span>
                             <h3 class="font-label text-[11px] font-bold tracking-wider uppercase text-on-surface-variant">Endereço</h3>
                         </div>
-                        <p id="patient-address" class="text-on-surface font-medium text-sm leading-relaxed">
-                            Carregando endereço...
-                        </p>
+                        <p id="patient-address" class="text-on-surface font-medium text-sm leading-relaxed">Carregando endereço...</p>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-surface-container-low p-4 rounded-2xl">
                             <h4 class="font-label text-[10px] font-semibold text-secondary mb-1">Status</h4>
@@ -153,10 +83,8 @@
                     </div>
                 </div>
             </section>
+        </div>
 
-            <!-- Procedimentos Atuais removido conforme solicitado -->
-
-        <!-- Right Column: Prescription Area -->
         <div class="lg:col-span-7 space-y-6">
             <section class="bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm border border-outline-variant/10 min-h-[500px] flex flex-col">
                 <div class="flex items-center justify-between mb-6">
@@ -164,32 +92,28 @@
                         <div class="w-10 h-10 bg-primary-fixed/30 rounded-full flex items-center justify-center">
                             <span class="material-symbols-outlined text-primary" data-icon="description">description</span>
                         </div>
-                        <h3 class="font-headline text-xl font-bold text-primary tracking-tight">Prescrição & Notas</h3>
+                        <h3 class="font-headline text-xl font-bold text-primary tracking-tight">Prescrição e Notas</h3>
                     </div>
                     <span class="text-outline text-[10px] font-bold uppercase tracking-widest bg-surface-container-low px-3 py-1 rounded-full">Sincronizado</span>
                 </div>
-                
+
                 <div class="flex-1 relative group">
-                    <textarea class="w-full h-full min-h-[400px] bg-transparent border-none focus:ring-0 p-0 text-on-surface font-body leading-relaxed text-lg placeholder:text-slate-300 placeholder:italic resize-none" placeholder="Digite aqui as prescrições, dosagens e orientações para o paciente..."></textarea>
-                    
-                    <!-- Bottom Decorative Element -->
+                    <textarea id="patient-notes" class="w-full h-full min-h-[400px] bg-transparent border-none focus:ring-0 p-0 text-on-surface font-body leading-relaxed text-lg placeholder:text-slate-300 placeholder:italic resize-none" placeholder="Digite aqui as prescricoes, dosagens e orientacoes para o paciente..."></textarea>
                     <div class="absolute bottom-0 right-0 p-4 opacity-10 pointer-events-none">
                         <span class="material-symbols-outlined text-6xl text-primary" data-icon="clinical_notes">clinical_notes</span>
                     </div>
                 </div>
             </section>
 
-            <!-- Action Button -->
-            <a href="../painel_da_recep_o/code.html" class="w-full bg-gradient-to-r from-primary to-primary-container text-white py-5 px-8 rounded-3xl font-headline font-bold text-lg flex items-center justify-center gap-3 shadow-xl shadow-primary/20 hover:shadow-2xl hover:translate-y-[-2px] transition-all active:scale-[0.98]">
+            <button id="save-prontuario-button" type="button" class="w-full bg-gradient-to-r from-primary to-primary-container text-white py-5 px-8 rounded-3xl font-headline font-bold text-lg flex items-center justify-center gap-3 shadow-xl shadow-primary/20 hover:shadow-2xl hover:translate-y-[-2px] transition-all active:scale-[0.98]">
                 <span class="material-symbols-outlined text-2xl" data-icon="check_circle">check_circle</span>
                 Finalizar e Salvar Prontuário
-            </a>
+            </button>
         </div>
     </div>
 </main>
 
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 safe-area-bottom pt-3 bg-[#f8fafa]/90 backdrop-blur-md z-50 rounded-t-[2rem] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] pb-4">
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 bg-[#f8fafa]/90 backdrop-blur-md z-50 rounded-t-[2rem] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] pb-4">
 <a class="flex flex-col items-center justify-center text-slate-400 rounded-2xl px-6 py-2 hover:text-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,52,43,0.2)] hover:-translate-y-1 active:scale-90 transition-all duration-300" data-haptic="light" href="../painel_da_recep_o/code.html">
 <span class="material-symbols-outlined mb-1" data-icon="desk">desk</span>
 <span class="font-inter text-[11px] font-medium tracking-wide uppercase">Recepção</span>
@@ -199,54 +123,97 @@
 <span class="font-inter text-[11px] font-bold tracking-wide uppercase">Pacientes</span>
 </a>
 </nav>
-</nav>
 
 <script src="../js/mobile-utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabase-client.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
-        // Formatar e exibir Data do Atendimento
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-24 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full text-white font-medium z-50 transition-all duration-300 ${
+                type === 'error' ? 'bg-red-500' : 'bg-green-500'
+            }`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        async function loadProntuario(patientId) {
+            const response = await fetch(`/api/prontuarios/${encodeURIComponent(patientId)}`);
+            if (!response.ok) {
+                throw new Error('Falha ao carregar prontuário.');
+            }
+            return response.json();
+        }
+
+        async function saveProntuario(patientId, notes) {
+            const response = await fetch(`/api/prontuarios/${encodeURIComponent(patientId)}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ notes }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha ao salvar prontuário.');
+            }
+
+            return response.json();
+        }
+
+        subscribeToPacientesRealtime({ reload: true });
+
         const dateDisplay = document.getElementById('current-date-display');
         if (dateDisplay) {
             const now = new Date();
             const formatter = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
             const formattedParts = formatter.formatToParts(now);
-            
-            let day = formattedParts.find(p => p.type === 'day')?.value || '';
-            let month = formattedParts.find(p => p.type === 'month')?.value || '';
-            let year = formattedParts.find(p => p.type === 'year')?.value || '';
-            
+
+            let day = formattedParts.find((part) => part.type === 'day')?.value || '';
+            let month = formattedParts.find((part) => part.type === 'month')?.value || '';
+            let year = formattedParts.find((part) => part.type === 'year')?.value || '';
+
             month = month.replace(/\./g, '');
-            if(month.length > 0) {
+            if (month.length > 0) {
                 month = month.charAt(0).toUpperCase() + month.slice(1);
             }
-            
+
             dateDisplay.textContent = `${day} ${month} ${year}`.trim();
         }
 
-        // Buscar parâmetros e popular dados do paciente
         const urlParams = new URLSearchParams(window.location.search);
         const patientId = urlParams.get('patient');
-        
+
         const elName = document.getElementById('patient-name');
         const elId = document.getElementById('patient-id');
         const elAddress = document.getElementById('patient-address');
+        const notesInput = document.getElementById('patient-notes');
+        const saveButton = document.getElementById('save-prontuario-button');
 
         if (patientId) {
             const patients = await getPacientes();
-            const patient = patients.find(p => p.id === patientId);
+            const patient = patients.find((item) => item.id === patientId);
 
             if (patient) {
-                const displayId = patient.id.split('-')[0].substring(0, 5).toUpperCase();
-                if (elName) elName.textContent = patient.name || 'Paciente Sem Nome';
-                if (elId) elId.textContent = `ID: #${displayId}`;
-                
+                if (elName) {
+                    elName.textContent = patient.name || 'Paciente Sem Nome';
+                }
+                if (elId) {
+                    elId.textContent = `ID: ${formatPatientId(patient.id)}`;
+                }
+
                 const elPhoto = document.getElementById('patient-photo-container');
                 if (elPhoto) {
                     if (patient.photo) {
                         elPhoto.innerHTML = `<img alt="${patient.name}" src="${patient.photo}" class="h-full w-full object-cover" />`;
                     } else {
-                        const initials = patient.name ? patient.name.split(' ').filter(Boolean).slice(0,2).map(p=>p[0]).join('').toUpperCase() : 'P';
+                        const initials = patient.name
+                            ? patient.name.split(' ').filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase()
+                            : 'P';
                         elPhoto.innerHTML = initials;
                     }
                 }
@@ -256,7 +223,7 @@
                     fullAddress = patient.endereco;
                     if (patient.numero) fullAddress += `, ${patient.numero}`;
                     if (patient.complemento) fullAddress += ` - ${patient.complemento}`;
-                    if (patient.bairro) fullAddress += ` • ${patient.bairro}`;
+                    if (patient.bairro) fullAddress += ` - ${patient.bairro}`;
                     if (patient.cidade && patient.uf) {
                         fullAddress += `, ${patient.cidade} - ${patient.uf}`;
                     } else if (patient.cidade) {
@@ -264,12 +231,46 @@
                     }
                     if (patient.cep) fullAddress += ` (${patient.cep})`;
                 }
-                if (elAddress) elAddress.textContent = fullAddress;
+
+                if (elAddress) {
+                    elAddress.textContent = fullAddress;
+                }
             } else {
                 if (elName) elName.textContent = 'Paciente Não Encontrado';
                 if (elAddress) elAddress.textContent = 'Dados não disponíveis';
             }
+
+            try {
+                const prontuario = await loadProntuario(patientId);
+                notesInput.value = prontuario.notes || '';
+            } catch (error) {
+                console.error('Erro ao carregar prontuário:', error);
+                showToast('Não foi possível carregar o prontuário salvo.', 'error');
+            }
         }
+
+        saveButton.addEventListener('click', async () => {
+            if (!patientId) {
+                showToast('Paciente não identificado para salvar o prontuário.', 'error');
+                return;
+            }
+
+            saveButton.disabled = true;
+            showToast('Salvando prontuário...', 'success');
+
+            try {
+                await saveProntuario(patientId, notesInput.value);
+                showToast('Prontuário salvo com sucesso!', 'success');
+                setTimeout(() => {
+                    window.location.href = '../buscar_paciente_m_dico/code.html';
+                }, 700);
+            } catch (error) {
+                console.error('Erro ao salvar prontuário:', error);
+                showToast('Não foi possível salvar o prontuário.', 'error');
+            } finally {
+                saveButton.disabled = false;
+            }
+        });
     });
 </script>
 </body></html>

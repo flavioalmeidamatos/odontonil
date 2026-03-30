@@ -3,8 +3,8 @@
 <html lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Busca de Pacientes | Clinica Odontonil</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<title>Clinica Odontonil - Módulo Médico</title>
+<link href="../public_style.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;700;800&amp;display=swap" rel="stylesheet"/>
     <link href="../css/mobile-premium.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -21,71 +21,7 @@
             font-family: 'Manrope', sans-serif;
         }
     </style>
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              colors: {
-                "surface-container-highest": "#e1e3e3",
-                "background": "#f8fafa",
-                "surface-tint": "#29695b",
-                "on-secondary-fixed-variant": "#2e4b57",
-                "on-error-container": "#93000a",
-                "on-tertiary-fixed-variant": "#3c494f",
-                "on-primary-fixed-variant": "#065043",
-                "on-tertiary-fixed": "#101d23",
-                "outline": "#707975",
-                "tertiary-container": "#38454b",
-                "inverse-on-surface": "#eff1f1",
-                "secondary-container": "#c6e4f4",
-                "surface-container": "#eceeee",
-                "surface-dim": "#d8dada",
-                "outline-variant": "#bfc9c4",
-                "tertiary-fixed-dim": "#bbc9d0",
-                "surface-variant": "#e1e3e3",
-                "on-background": "#191c1d",
-                "surface-container-lowest": "#ffffff",
-                "tertiary-fixed": "#d7e5ec",
-                "on-tertiary": "#ffffff",
-                "on-primary": "#ffffff",
-                "surface-bright": "#f8fafa",
-                "surface-container-low": "#f2f4f4",
-                "primary-fixed-dim": "#94d3c1",
-                "secondary": "#466270",
-                "on-surface-variant": "#3f4945",
-                "on-tertiary-container": "#a4b2b9",
-                "primary-fixed": "#afefdd",
-                "on-secondary-container": "#4a6774",
-                "error-container": "#ffdad6",
-                "primary-container": "#004d40",
-                "surface": "#f8fafa",
-                "primary": "#00342b",
-                "error": "#ba1a1a",
-                "on-secondary-fixed": "#001f2a",
-                "on-primary-container": "#7ebdac",
-                "on-surface": "#191c1d",
-                "on-secondary": "#ffffff",
-                "secondary-fixed-dim": "#adcbda",
-                "on-error": "#ffffff",
-                "secondary-fixed": "#c9e7f7",
-                "surface-container-high": "#e6e8e9",
-                "inverse-surface": "#2e3131",
-                "inverse-primary": "#94d3c1",
-                "tertiary": "#222f34",
-                "on-primary-fixed": "#00201a"
-              },
-              fontFamily: {
-                "headline": ["Manrope"],
-                "body": ["Inter"],
-                "label": ["Inter"]
-              },
-              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-            },
-          },
-        }
-    </script>
-    <style>
+<style>
         body {
             min-height: 100dvh;
         }
@@ -103,7 +39,7 @@
 </a>
 <a href="../index.html" class="font-headline font-bold text-lg text-teal-900 tracking-tight hover:opacity-80 transition-opacity flex items-center gap-2">
     <span class="material-symbols-outlined text-primary-container" data-icon="home">home</span>
-    Clinica Odontonil
+    Clinica Odontonil - Módulo Médico
 </a>
 </div>
 <div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/15 shadow-sm">
@@ -143,6 +79,7 @@
 </a>
 </nav>
 <script src="../js/mobile-utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabase-client.js"></script>
 <script>
     const searchInput = document.getElementById('patient-search');
@@ -173,8 +110,6 @@
         }
         
         grid.innerHTML = patients.map(patient => {
-            const displayId = patient.id ? patient.id.split('-')[0].substring(0, 5).toUpperCase() : '00000';
-            
             return `
             <div class="patient-card bg-surface-container-lowest rounded-[2rem] p-6 flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 border border-outline-variant/10">
                 <div class="flex items-start gap-4 mb-6">
@@ -184,8 +119,8 @@
                     }
                     <div class="flex-1 min-w-0">
                         <h3 class="text-on-surface font-bold text-lg truncate">${patient.name}</h3>
-                        <p class="text-secondary text-sm font-body">ID: #${displayId}</p>
-                        <p class="text-primary/60 text-xs font-medium mt-1">Cadastro do paciente • Cadastro ativo</p>
+                        <p class="text-secondary text-sm font-body break-all">ID: ${formatPatientId(patient.id)}</p>
+                        <p class="text-primary/60 text-xs font-medium mt-1">Cadastro ativo</p>
                     </div>
                 </div>
                 <a href="../prescri_o_do_paciente_odontonil/code.html?patient=${encodeURIComponent(patient.id)}" class="w-full bg-primary text-white text-center py-3 rounded-2xl text-sm font-bold tracking-wide transition-all active:scale-95 shadow-lg shadow-primary/20">
@@ -217,6 +152,7 @@
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', async () => {
+        subscribeToPacientesRealtime({ reload: true });
         await renderPatients();
         searchInput.addEventListener('input', filterPatients);
     });

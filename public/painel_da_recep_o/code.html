@@ -3,76 +3,12 @@
 <html lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Clinica Odontonil | Recepção</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<title>Clinica Odontonil - Módulo Recepção</title>
+<link href="../public_style.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;700;800&amp;display=swap" rel="stylesheet"/>
     <link href="../css/mobile-premium.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "surface-container-highest": "#e1e3e3",
-              "background": "#f8fafa",
-              "surface-tint": "#29695b",
-              "on-secondary-fixed-variant": "#2e4b57",
-              "on-error-container": "#93000a",
-              "on-tertiary-fixed-variant": "#3c494f",
-              "on-primary-fixed-variant": "#065043",
-              "on-tertiary-fixed": "#101d23",
-              "outline": "#707975",
-              "tertiary-container": "#38454b",
-              "inverse-on-surface": "#eff1f1",
-              "secondary-container": "#c6e4f4",
-              "surface-container": "#eceeee",
-              "surface-dim": "#d8dada",
-              "outline-variant": "#bfc9c4",
-              "tertiary-fixed-dim": "#bbc9d0",
-              "surface-variant": "#e1e3e3",
-              "on-background": "#191c1d",
-              "surface-container-lowest": "#ffffff",
-              "tertiary-fixed": "#d7e5ec",
-              "on-tertiary": "#ffffff",
-              "on-primary": "#ffffff",
-              "surface-bright": "#f8fafa",
-              "surface-container-low": "#f2f4f4",
-              "primary-fixed-dim": "#94d3c1",
-              "secondary": "#466270",
-              "on-surface-variant": "#3f4945",
-              "on-tertiary-container": "#a4b2b9",
-              "primary-fixed": "#afefdd",
-              "on-secondary-container": "#4a6774",
-              "error-container": "#ffdad6",
-              "primary-container": "#004d40",
-              "surface": "#f8fafa",
-              "primary": "#00342b",
-              "error": "#ba1a1a",
-              "on-secondary-fixed": "#001f2a",
-              "on-primary-container": "#7ebdac",
-              "on-surface": "#191c1d",
-              "on-secondary": "#ffffff",
-              "secondary-fixed-dim": "#adcbda",
-              "on-error": "#ffffff",
-              "secondary-fixed": "#c9e7f7",
-              "surface-container-high": "#e6e8e9",
-              "inverse-surface": "#2e3131",
-              "inverse-primary": "#94d3c1",
-              "tertiary": "#222f34",
-              "on-primary-fixed": "#00201a"
-            },
-            fontFamily: {
-              "headline": ["Manrope"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
 <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
@@ -107,7 +43,7 @@
 <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
 <span class="material-symbols-outlined text-on-primary-container text-xl" data-icon="home">home</span>
 </div>
-<h1 class="font-manrope tracking-tight font-bold text-lg text-teal-900">Clinica Odontonil</h1>
+<h1 class="font-manrope tracking-tight font-bold text-lg text-teal-900">Clinica Odontonil - Módulo Recepção</h1>
 </a>
 <div class="w-9 h-9 rounded-full overflow-hidden border border-outline-variant/20">
 <img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up professional portrait of a medical receptionist in a clean white uniform smiling warmly in a bright modern clinic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEIa2TTq1HEalTzjJ0HP2Ym41Q-Q1hXuyQ9py4Rk08nwjTjHNaLkFGnyQYSncjLhX4I9llS0VH5CjU_0mpH75BOtWvrFJHpgtGUy7gvMTGZlkS7tLPqm3n3zkfxrjSBWBW0Dz1W_CvGZMSLi-5fZId82HExksGRHROtGuh_pkaOfCsZHX4gRwYHYrfv3KELpkxfT2SDU2KdUoAUPU-G1r6ir-NLaNOVYHvpBzkdbtVRIGxye4vsPCKBor7foulLz7YuFTDfxN8LXc"/>
@@ -126,9 +62,9 @@
                         <p class="font-label text-xs uppercase tracking-[0.15em] opacity-80 mb-2">Total de Pacientes</p>
                         <div class="flex items-baseline gap-2">
                             <span id="kpi-total-patients" class="text-5xl font-extrabold tracking-tighter">0</span>
-                            <span class="text-primary-fixed-dim text-sm font-medium flex items-center">
-                                <span class="material-symbols-outlined text-base mr-1" data-icon="trending_up">trending_up</span>
-                                +12%
+                            <span id="kpi-growth-indicator" class="text-primary-fixed-dim text-sm font-medium flex items-center">
+                                <span id="kpi-growth-icon" class="material-symbols-outlined text-base mr-1" data-icon="trending_flat">trending_flat</span>
+                                <span id="kpi-growth-value">0%</span>
                             </span>
                         </div>
                         <div id="kpi-avatars-container" class="mt-6 flex -space-x-3">
@@ -226,6 +162,7 @@
 </a>
 </nav>
     <script src="../js/mobile-utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-client.js"></script>
     <script>
         // Função showToast para notificações
@@ -357,7 +294,78 @@
         }
 
         function getPatientStatusMarkup(patient) {
-            return `Cadastro do paciente • <span class="text-secondary/60">Cadastro ativo</span>`;
+            return `<span class="text-secondary/60">Cadastro ativo</span>`;
+        }
+
+        function getPatientReferenceDate(patient) {
+            const rawDate = patient.createdAt || patient.updatedAt || '';
+            if (!rawDate) {
+                return null;
+            }
+
+            const parsedDate = new Date(rawDate);
+            return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+        }
+
+        function updateGrowthIndicator(patients) {
+            const growthContainer = document.getElementById('kpi-growth-indicator');
+            const growthIcon = document.getElementById('kpi-growth-icon');
+            const growthValue = document.getElementById('kpi-growth-value');
+            if (!growthContainer || !growthIcon || !growthValue) {
+                return;
+            }
+
+            const now = new Date();
+            const currentPeriodStart = new Date(now);
+            currentPeriodStart.setDate(currentPeriodStart.getDate() - 30);
+
+            const previousPeriodStart = new Date(currentPeriodStart);
+            previousPeriodStart.setDate(previousPeriodStart.getDate() - 30);
+
+            let currentCount = 0;
+            let previousCount = 0;
+
+            patients.forEach((patient) => {
+                const referenceDate = getPatientReferenceDate(patient);
+                if (!referenceDate) {
+                    return;
+                }
+
+                if (referenceDate >= currentPeriodStart) {
+                    currentCount += 1;
+                    return;
+                }
+
+                if (referenceDate >= previousPeriodStart && referenceDate < currentPeriodStart) {
+                    previousCount += 1;
+                }
+            });
+
+            let iconName = 'trending_flat';
+            let valueLabel = '0%';
+            let colorClasses = 'text-primary-fixed-dim';
+
+            if (previousCount === 0 && currentCount > 0) {
+                iconName = 'trending_up';
+                valueLabel = `+${currentCount}`;
+                colorClasses = 'text-emerald-200';
+            } else if (previousCount > 0) {
+                const percentage = Math.round(((currentCount - previousCount) / previousCount) * 100);
+                if (percentage > 0) {
+                    iconName = 'trending_up';
+                    valueLabel = `+${percentage}%`;
+                    colorClasses = 'text-emerald-200';
+                } else if (percentage < 0) {
+                    iconName = 'trending_down';
+                    valueLabel = `${percentage}%`;
+                    colorClasses = 'text-rose-200';
+                }
+            }
+
+            growthContainer.className = `text-sm font-medium flex items-center ${colorClasses}`;
+            growthIcon.textContent = iconName;
+            growthIcon.setAttribute('data-icon', iconName);
+            growthValue.textContent = valueLabel;
         }
 
         async function renderPatientList() {
@@ -370,6 +378,8 @@
                 const totalFormatted = patients.length.toLocaleString('pt-BR');
                 kpiTotalElement.textContent = totalFormatted;
             }
+
+            updateGrowthIndicator(patients);
 
             const avatarsContainer = document.getElementById('kpi-avatars-container');
             if (avatarsContainer) {
@@ -400,6 +410,7 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <h4 class="font-bold text-on-surface text-base truncate">${patient.name}</h4>
+                        <p class="text-[11px] text-secondary break-all">ID: ${formatPatientId(patient.id)}</p>
                         <p class="text-sm text-secondary truncate">${getPatientStatusMarkup(patient)}</p>
                     </div>
                     <button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-secondary-container hover:text-primary transition-all" data-patient-menu="${patient.id}" aria-label="Abrir acoes de ${patient.name}">
@@ -425,7 +436,7 @@
             document.getElementById('detail-name').textContent = patient.name || 'Nao informado';
             document.getElementById('detail-birth-date').textContent = formatBirthDate(patient.birthDate);
             document.getElementById('detail-cep').textContent = patient.cep || 'Nao informado';
-            document.getElementById('detail-address').textContent = patient.endereco || 'Nao informado';
+            document.getElementById('detail-address').textContent = patient.endereco || 'Não informado';
             document.getElementById('detail-number').textContent = patient.numero || 'Nao informado';
             document.getElementById('detail-neighborhood').textContent = patient.bairro || 'Nao informado';
             document.getElementById('detail-city-state').textContent = (patient.cidade || patient.uf) ? `${patient.cidade || ''}${patient.cidade && patient.uf ? '/' : ''}${patient.uf || ''}` : 'Nao informado';
@@ -506,6 +517,7 @@
             }
         });
 
+        subscribeToPacientesRealtime({ reload: true });
         renderPatientList();
     </script>
 </body>

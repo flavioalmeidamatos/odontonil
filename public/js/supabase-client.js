@@ -6,17 +6,44 @@
 const SUPABASE_URL = 'https://bwxerrewhylsadfnehxa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3eGVycmV3aHlsc2FkZm5laHhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTA0MDIsImV4cCI6MjA5MDQ2NjQwMn0.150B71cGTjunWYT2HsIBo4puJdbljcj185xUfRfA2bU';
 const STORAGE_KEY = 'odontonilPatients';
+const REALTIME_CHANNEL_NAME = 'odontonil-pacientes-sync';
+
+let realtimeClient = null;
+let realtimeChannel = null;
+let realtimeReloadTimeoutId = null;
 
 function readCachedPatients() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const cachedPatients = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    return cachedPatients.map((patient) => ({
+      ...patient,
+      id: formatPatientId(patient.id),
+      name: normalizePatientName(patient.name),
+    }));
   } catch {
     return [];
   }
 }
 
 function writeCachedPatients(patients) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(patients));
+  const normalizedPatients = patients.map((patient) => ({
+    ...patient,
+    id: formatPatientId(patient.id),
+    name: normalizePatientName(patient.name),
+  }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedPatients));
+}
+
+function normalizePatientName(name) {
+  return String(name || '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toUpperCase();
+}
+
+function formatPatientId(patientId) {
+  const normalizedId = String(patientId || '').trim();
+  return normalizedId || 'Nao informado';
 }
 
 function setSyncState(source, errorMessage = '') {
@@ -25,6 +52,97 @@ function setSyncState(source, errorMessage = '') {
     errorMessage,
     updatedAt: new Date().toISOString(),
   };
+}
+
+function markLocalMutation() {
+  window.odontonilLastLocalMutationAt = Date.now();
+}
+
+function shouldSkipRealtimeReload() {
+  if (window.odontonilDisableRealtimeReload) {
+    return true;
+  }
+
+  const lastLocalMutationAt = window.odontonilLastLocalMutationAt || 0;
+  return Date.now() - lastLocalMutationAt < 2000;
+}
+
+function scheduleRealtimeReload(delayMs = 350) {
+  if (shouldSkipRealtimeReload()) {
+    return;
+  }
+
+  clearTimeout(realtimeReloadTimeoutId);
+  realtimeReloadTimeoutId = window.setTimeout(() => {
+    if (shouldSkipRealtimeReload()) {
+      return;
+    }
+
+    window.location.reload();
+  }, delayMs);
+}
+
+function getRealtimeClient() {
+  if (realtimeClient) {
+    return realtimeClient;
+  }
+
+  if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+    console.warn('Supabase Realtime indisponivel: SDK nao carregado na pagina.');
+    return null;
+  }
+
+  realtimeClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
+
+  return realtimeClient;
+}
+
+function subscribeToPacientesRealtime(options = {}) {
+  const {
+    reload = false,
+    delayMs = 350,
+    onChange = null,
+  } = options;
+
+  const client = getRealtimeClient();
+  if (!client) {
+    return null;
+  }
+
+  if (!realtimeChannel) {
+    realtimeChannel = client
+      .channel(REALTIME_CHANNEL_NAME)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'pacientes',
+        },
+        (payload) => {
+          window.odontonilLastRealtimeEvent = payload;
+
+          if (typeof onChange === 'function') {
+            onChange(payload);
+          }
+
+          if (reload) {
+            scheduleRealtimeReload(delayMs);
+          }
+        }
+      )
+      .subscribe((status) => {
+        window.odontonilRealtimeStatus = status;
+      });
+  }
+
+  return realtimeChannel;
 }
 
 /**
@@ -55,8 +173,8 @@ async function supabaseRequest(path, options = {}) {
  */
 function toSupabase(patient) {
   return {
-    id: patient.id,
-    nome: patient.name,
+    id: formatPatientId(patient.id),
+    nome: normalizePatientName(patient.name),
     data_nascimento: patient.birthDate || null,
     cep: patient.cep || null,
     endereco: patient.endereco || null,
@@ -75,8 +193,8 @@ function toSupabase(patient) {
  */
 function fromSupabase(row) {
   return {
-    id: row.id,
-    name: row.nome,
+    id: formatPatientId(row.id),
+    name: normalizePatientName(row.nome),
     birthDate: row.data_nascimento || '',
     cep: row.cep || '',
     endereco: row.endereco || '',
@@ -86,6 +204,7 @@ function fromSupabase(row) {
     uf: row.uf || '',
     complemento: row.complemento || '',
     photo: row.foto || '',
+    createdAt: row.criado_em || '',
     updatedAt: row.atualizado_em,
   };
 }
@@ -135,6 +254,7 @@ async function salvarPacienteSupabase(patient) {
 
   writeCachedPatients(cached);
   setSyncState('remote');
+  markLocalMutation();
   return true;
 }
 
@@ -151,5 +271,6 @@ async function excluirPacienteSupabase(patientId) {
   const cached = readCachedPatients();
   writeCachedPatients(cached.filter((patient) => patient.id !== patientId));
   setSyncState('remote');
+  markLocalMutation();
   return true;
 }

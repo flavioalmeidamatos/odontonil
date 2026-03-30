@@ -4,75 +4,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Cadastro de Paciente | Clinica Odontonil</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="../public_style.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;700;800&amp;display=swap" rel="stylesheet"/>
     <link href="../css/mobile-premium.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "surface-container-highest": "#e1e3e3",
-                        "background": "#f8fafa",
-                        "surface-tint": "#29695b",
-                        "on-secondary-fixed-variant": "#2e4b57",
-                        "on-error-container": "#93000a",
-                        "on-tertiary-fixed-variant": "#3c494f",
-                        "on-primary-fixed-variant": "#065043",
-                        "on-tertiary-fixed": "#101d23",
-                        "outline": "#707975",
-                        "tertiary-container": "#38454b",
-                        "inverse-on-surface": "#eff1f1",
-                        "secondary-container": "#c6e4f4",
-                        "surface-container": "#eceeee",
-                        "surface-dim": "#d8dada",
-                        "outline-variant": "#bfc9c4",
-                        "tertiary-fixed-dim": "#bbc9d0",
-                        "surface-variant": "#e1e3e3",
-                        "on-background": "#191c1d",
-                        "surface-container-lowest": "#ffffff",
-                        "tertiary-fixed": "#d7e5ec",
-                        "on-tertiary": "#ffffff",
-                        "on-primary": "#ffffff",
-                        "surface-bright": "#f8fafa",
-                        "surface-container-low": "#f2f4f4",
-                        "primary-fixed-dim": "#94d3c1",
-                        "secondary": "#466270",
-                        "on-surface-variant": "#3f4945",
-                        "on-tertiary-container": "#a4b2b9",
-                        "primary-fixed": "#afefdd",
-                        "on-secondary-container": "#4a6774",
-                        "error-container": "#ffdad6",
-                        "primary-container": "#004d40",
-                        "surface": "#f8fafa",
-                        "primary": "#00342b",
-                        "error": "#ba1a1a",
-                        "on-secondary-fixed": "#001f2a",
-                        "on-primary-container": "#7ebdac",
-                        "on-surface": "#191c1d",
-                        "on-secondary": "#ffffff",
-                        "secondary-fixed-dim": "#adcbda",
-                        "on-error": "#ffffff",
-                        "secondary-fixed": "#c9e7f7",
-                        "surface-container-high": "#e6e8e9",
-                        "inverse-surface": "#2e3131",
-                        "inverse-primary": "#94d3c1",
-                        "tertiary": "#222f34",
-                        "on-primary-fixed": "#00201a"
-                    },
-                    fontFamily: {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    },
-                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-                },
-            },
-        }
-    </script>
 <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
@@ -83,10 +19,6 @@
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
-        }
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            display: none;
-            -webkit-appearance: none;
         }
     </style>
     <style>
@@ -118,17 +50,28 @@
         <span class="font-label text-[10px] uppercase tracking-[0.2em] text-secondary font-semibold mb-2 block">Portal de Cadastro</span>
         <h2 class="font-headline text-3xl font-extrabold text-primary leading-tight">Cadastro de <br class="hidden md:block"/>Paciente</h2>
         <div class="mt-4 flex justify-center md:justify-start">
-            <div class="relative group">
-                <label for="camera-capture" class="w-24 h-24 rounded-full bg-surface-container-low border-2 border-dashed border-outline-variant/40 flex flex-col items-center justify-center cursor-pointer hover:bg-primary hover:text-white hover:border-solid transition-all duration-300 shadow-sm">
-                    <span class="material-symbols-outlined text-4xl mb-1">photo_camera</span>
-                    <span class="text-[10px] font-bold uppercase tracking-widest">Capturar Foto</span>
-                </label>
-                <input type="file" id="camera-capture" accept="image/*" capture="user" class="hidden" onchange="previewPatientPhoto(this)"/>
-                <div id="photo-preview" class="hidden absolute inset-0 w-24 h-24 rounded-full overflow-hidden border-2 border-primary shadow-xl bg-white z-10 transition-transform duration-300 hover:scale-110">
+            <div class="flex flex-col items-center md:items-start gap-3">
+                <div class="relative group">
+                    <div class="w-24 h-24 rounded-full bg-surface-container-low border-2 border-dashed border-outline-variant/40 flex flex-col items-center justify-center shadow-sm text-secondary">
+                        <span class="material-symbols-outlined text-4xl mb-1">photo_camera</span>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-center leading-tight px-2">Foto do Paciente</span>
+                    </div>
+                    <input type="file" id="camera-capture" accept="image/*" capture="user" class="hidden" onchange="previewPatientPhoto(this)"/>
+                    <input type="file" id="gallery-capture" accept="image/*" class="hidden" onchange="previewPatientPhoto(this)"/>
+                    <div id="photo-preview" class="hidden absolute inset-0 w-24 h-24 rounded-full overflow-hidden border-2 border-primary shadow-xl bg-white z-10 transition-transform duration-300 hover:scale-110">
                     <img id="preview-img" src="" class="w-full h-full object-cover"/>
-                    <div class="absolute bottom-0 left-0 w-full bg-primary/60 backdrop-blur-sm py-1 flex justify-center cursor-pointer" onclick="document.getElementById('camera-capture').click()">
+                    <div class="absolute bottom-0 left-0 w-full bg-primary/60 backdrop-blur-sm py-1 flex justify-center cursor-pointer" onclick="document.getElementById('gallery-capture').click()">
                         <span class="material-symbols-outlined text-white text-xs">refresh</span>
                     </div>
+                </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="openCameraCapture()" class="px-4 py-2 rounded-full bg-primary text-white text-[11px] font-bold uppercase tracking-wider shadow-sm hover:bg-primary-container transition-all active:scale-95">
+                        Tirar foto
+                    </button>
+                    <button type="button" onclick="document.getElementById('gallery-capture').click()" class="px-4 py-2 rounded-full bg-surface-container-low text-primary text-[11px] font-bold uppercase tracking-wider border border-outline-variant/30 shadow-sm hover:bg-surface-container transition-all active:scale-95">
+                        Galeria
+                    </button>
                 </div>
             </div>
         </div>
@@ -153,7 +96,7 @@
                 </div>
                 <div class="group">
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Data de Nascimento</label>
-                    <input id="birth-date" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all font-mono" onchange="document.getElementById('residenciais').scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => document.getElementById('cep').focus(), 300);" type="date"/>
+                    <input id="birth-date" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all font-mono" inputmode="numeric" maxlength="10" placeholder="DD/MM/AAAA" required="" type="text"/>
                 </div>
             </div>
 
@@ -166,7 +109,7 @@
                 <div class="relative">
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">CEP</label>
                     <div class="flex gap-2">
-                        <input class="flex-1 bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="cep" inputmode="numeric" maxlength="9" oninput="let v = this.value.replace(/\D/g, ''); if (v.length > 5) v = v.substring(0, 5) + '-' + v.substring(5, 8); this.value = v; if(v.length === 9) buscarCEP();" placeholder="00000-000" type="text"/>
+                        <input class="flex-1 bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="cep" inputmode="numeric" maxlength="9" oninput="let v = this.value.replace(/\D/g, ''); if (v.length > 5) v = v.substring(0, 5) + '-' + v.substring(5, 8); this.value = v; if(v.length === 9) buscarCEP();" placeholder="00000-000" required="" type="text"/>
                         <button class="bg-primary text-white px-3 rounded-xl font-headline font-bold text-[10px] uppercase tracking-wider hover:bg-primary-container transition-all active:scale-95 flex items-center justify-center min-w-[70px]" data-haptic="medium" onclick="buscarCEP()" type="button">
                             Buscar
                         </button>
@@ -175,30 +118,30 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Endereço / Logradouro</label>
-                        <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="endereco" placeholder="Rua, Avenida, etc." type="text"/>
+                        <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="endereco" placeholder="Rua, Avenida, etc." required="" type="text"/>
                     </div>
                     <div class="w-24">
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Nº</label>
-                        <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="numero" inputmode="numeric" placeholder="00" type="text"/>
+                        <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60" id="numero" inputmode="numeric" placeholder="00" required="" type="text"/>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2">
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary/60 mb-1.5 ml-1">Bairro</label>
-                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" id="bairro" readonly="" type="text" value=""/>
+                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0" id="bairro" required="" type="text" value=""/>
                     </div>
                     <div>
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary/60 mb-1.5 ml-1">Cidade</label>
-                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" id="cidade" readonly="" type="text" value=""/>
+                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0" id="cidade" required="" type="text" value=""/>
                     </div>
                     <div>
                         <label class="block font-label text-[11px] uppercase tracking-wider text-secondary/60 mb-1.5 ml-1">Estado</label>
-                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0 cursor-default" id="uf" readonly="" type="text" value=""/>
+                        <input class="w-full bg-transparent border-b border-outline-variant/30 px-1 py-2 text-on-surface-variant font-medium text-sm focus:ring-0" id="uf" required="" type="text" value=""/>
                     </div>
                 </div>
                 <div>
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Complemento</label>
-                    <textarea id="complemento" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60 resize-none" placeholder="Apartamento, Bloco, etc." rows="2"></textarea>
+                    <textarea id="complemento" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60 resize-none" placeholder="Apartamento, Bloco, etc." required="" rows="2"></textarea>
                 </div>
             </div>
         </div>
@@ -225,11 +168,36 @@
         </button>
     </div>
 </footer>
+<div id="webcam-modal" class="hidden fixed inset-0 z-[70] bg-slate-950/70 backdrop-blur-sm items-center justify-center p-6">
+    <div class="w-full max-w-2xl bg-surface-container-lowest rounded-[2rem] p-6 shadow-2xl">
+        <div class="flex items-center justify-between gap-4 mb-4">
+            <div>
+                <h3 class="font-headline text-xl font-extrabold text-primary">Capturar Foto</h3>
+                <p class="text-secondary text-sm">Use a webcam do computador para registrar a imagem do paciente.</p>
+            </div>
+            <button type="button" onclick="closeWebcamModal()" class="w-10 h-10 rounded-full bg-surface-container-low text-secondary hover:text-primary hover:bg-surface-container transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="rounded-[1.5rem] overflow-hidden bg-slate-950 aspect-video flex items-center justify-center">
+            <video id="webcam-video" class="w-full h-full object-cover" autoplay="" muted="" playsinline=""></video>
+        </div>
+        <div class="flex items-center justify-end gap-3 mt-5">
+            <button type="button" onclick="closeWebcamModal()" class="px-5 py-3 rounded-2xl bg-surface-container-low text-secondary font-headline font-bold hover:bg-surface-container transition-all active:scale-95">
+                Cancelar
+            </button>
+            <button type="button" onclick="capturePhotoFromWebcam()" class="px-5 py-3 rounded-2xl bg-primary text-white font-headline font-bold hover:bg-primary-container transition-all active:scale-95">
+                Capturar
+            </button>
+        </div>
+    </div>
+</div>
 
 <!-- Decorative Background Accent -->
 <div class="fixed -top-24 -right-24 w-64 h-64 bg-primary-fixed/20 blur-[100px] rounded-full -z-10"></div>
 <div class="fixed top-1/2 -left-32 w-80 h-80 bg-secondary-container/30 blur-[120px] rounded-full -z-10"></div>
     <script src="../js/mobile-utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-client.js"></script>
     <script>
         async function buscarCEP() {
@@ -267,8 +235,13 @@
         const birthDateInput = document.getElementById('birth-date');
         const photoPreview = document.getElementById('photo-preview');
         const previewImg = document.getElementById('preview-img');
+        const cameraCaptureInput = document.getElementById('camera-capture');
+        const galleryCaptureInput = document.getElementById('gallery-capture');
+        const webcamModal = document.getElementById('webcam-modal');
+        const webcamVideo = document.getElementById('webcam-video');
         const searchParams = new URLSearchParams(window.location.search);
         const editingId = searchParams.get('edit');
+        let webcamStream = null;
 
         function generatePatientId() {
             const year = new Date().getFullYear();
@@ -276,11 +249,52 @@
             return `PS-${year}-${suffix}`;
         }
 
+        function normalizeBirthDateInput(value) {
+            const digits = String(value || '').replace(/\D/g, '').slice(0, 8);
+            if (digits.length <= 2) return digits;
+            if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+            return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+        }
+
+        function toStorageBirthDate(value) {
+            const normalized = String(value || '').trim();
+            if (!normalized) return '';
+
+            if (/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+                return normalized;
+            }
+
+            const match = normalized.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+            if (!match) return '';
+
+            const [, day, month, year] = match;
+            const isoDate = `${year}-${month}-${day}`;
+            const parsedDate = new Date(`${isoDate}T00:00:00`);
+            if (Number.isNaN(parsedDate.getTime())) return '';
+            if (parsedDate.getUTCFullYear() !== Number(year)) return '';
+            if (parsedDate.getUTCMonth() + 1 !== Number(month)) return '';
+            if (parsedDate.getUTCDate() !== Number(day)) return '';
+            return isoDate;
+        }
+
+        function toDisplayBirthDate(value) {
+            const normalized = String(value || '').trim();
+            if (!normalized) return '';
+
+            const isoMatch = normalized.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            if (isoMatch) {
+                const [, year, month, day] = isoMatch;
+                return `${day}/${month}/${year}`;
+            }
+
+            return normalizeBirthDateInput(normalized);
+        }
+
         function buildPatientFromForm() {
             return {
                 id: patientIdInput.value,
-                name: patientNameInput.value.trim(),
-                birthDate: birthDateInput.value,
+                name: normalizePatientName(patientNameInput.value),
+                birthDate: toStorageBirthDate(birthDateInput.value),
                 cep: document.getElementById('cep').value.trim(),
                 endereco: document.getElementById('endereco').value.trim(),
                 numero: document.getElementById('numero').value.trim(),
@@ -295,8 +309,8 @@
 
         function fillForm(patient) {
             patientIdInput.value = patient.id;
-            patientNameInput.value = patient.name || '';
-            birthDateInput.value = patient.birthDate || '';
+            patientNameInput.value = normalizePatientName(patient.name);
+            birthDateInput.value = toDisplayBirthDate(patient.birthDate);
             document.getElementById('cep').value = patient.cep || '';
             document.getElementById('endereco').value = patient.endereco || '';
             document.getElementById('numero').value = patient.numero || '';
@@ -324,6 +338,115 @@
             patientIdInput.value = generatePatientId();
         }
 
+        birthDateInput.addEventListener('input', (event) => {
+            event.target.value = normalizeBirthDateInput(event.target.value);
+        });
+
+        function isDesktopMode() {
+            return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        }
+
+        function validateRequiredFields() {
+            const requiredFields = [
+                { element: patientNameInput, message: 'Preencha o nome completo do paciente.' },
+                { element: birthDateInput, message: 'Preencha a data de nascimento do paciente.' },
+                { element: document.getElementById('cep'), message: 'Preencha o CEP do paciente.' },
+                { element: document.getElementById('endereco'), message: 'Preencha o endereco do paciente.' },
+                { element: document.getElementById('numero'), message: 'Preencha o numero do endereco.' },
+                { element: document.getElementById('bairro'), message: 'Busque e confirme o bairro do paciente a partir do CEP.' },
+                { element: document.getElementById('cidade'), message: 'Busque e confirme a cidade do paciente a partir do CEP.' },
+                { element: document.getElementById('uf'), message: 'Busque e confirme o estado do paciente a partir do CEP.' },
+                { element: document.getElementById('complemento'), message: 'Preencha o complemento do endereco.' },
+            ];
+
+            for (const field of requiredFields) {
+                if (String(field.element.value || '').trim()) {
+                    continue;
+                }
+
+                showToast(field.message, 'error');
+                if (!field.element.hasAttribute('readonly')) {
+                    field.element.focus();
+                } else {
+                    document.getElementById('cep').focus();
+                }
+                return false;
+            }
+
+            return true;
+        }
+
+        function stopWebcamStream() {
+            if (!webcamStream) {
+                return;
+            }
+
+            webcamStream.getTracks().forEach((track) => track.stop());
+            webcamStream = null;
+            webcamVideo.srcObject = null;
+        }
+
+        function closeWebcamModal() {
+            webcamModal.classList.add('hidden');
+            webcamModal.classList.remove('flex');
+            stopWebcamStream();
+        }
+
+        async function openWebcamModal() {
+            if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
+                showToast('Este navegador nao oferece suporte para captura por webcam.', 'error');
+                return;
+            }
+
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                webcamVideo.srcObject = webcamStream;
+                webcamModal.classList.remove('hidden');
+                webcamModal.classList.add('flex');
+            } catch (error) {
+                console.error('Erro ao abrir webcam:', error);
+
+                if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+                    showToast('Nenhuma webcam foi encontrada neste computador.', 'error');
+                    return;
+                }
+
+                if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                    showToast('Permita o acesso a webcam para tirar a foto.', 'error');
+                    return;
+                }
+
+                showToast('Nao foi possivel iniciar a webcam.', 'error');
+            }
+        }
+
+        function capturePhotoFromWebcam() {
+            if (!webcamStream || !webcamVideo.videoWidth || !webcamVideo.videoHeight) {
+                showToast('A webcam ainda nao esta pronta para captura.', 'error');
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = webcamVideo.videoWidth;
+            canvas.height = webcamVideo.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(webcamVideo, 0, 0, canvas.width, canvas.height);
+
+            previewImg.src = canvas.toDataURL('image/jpeg', 0.92);
+            photoPreview.classList.remove('hidden');
+            closeWebcamModal();
+            showToast('Foto capturada!', 'success');
+        }
+
+        function openCameraCapture() {
+            if (!isDesktopMode()) {
+                cameraCaptureInput.click();
+                return;
+            }
+
+            openWebcamModal();
+        }
+
         function previewPatientPhoto(input) {
             const preview = document.getElementById('photo-preview');
             const img = document.getElementById('preview-img');
@@ -343,12 +466,19 @@
             event.preventDefault();
 
             if (!form.reportValidity()) return;
+            if (!validateRequiredFields()) return;
 
             const patient = buildPatientFromForm();
 
             if (!patient.name) {
                 showToast("Preencha o nome do paciente para continuar.", "error");
                 patientNameInput.focus();
+                return;
+            }
+
+            if (birthDateInput.value && !patient.birthDate) {
+                showToast("Informe a data de nascimento no formato DD/MM/AAAA.", "error");
+                birthDateInput.focus();
                 return;
             }
 
@@ -367,6 +497,8 @@
         }
 
         initializeForm();
+        closeWebcamModal();
+        window.addEventListener('beforeunload', stopWebcamStream);
     </script>
 
     <!-- Decorative Background Accents -->

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build:css": "node \"./node_modules/tailwindcss/lib/cli.js\" -i ./public/input.css -o ./public/public_style.css"
+    "build:css": "tailwindcss -i ./public/input.css -o ./public/public_style.css"
   },
   "keywords": [
     "odontologia",
@@ -23,6 +23,7 @@
     "open": "^8.4.2"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.11",
     "autoprefixer": "^10.4.27",
