@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Busca de Pacientes | Clinica Odontonil</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="../css/mobile-premium.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "surface-container-highest": "#e1e3e3",
+                "background": "#f8fafa",
+                "surface-tint": "#29695b",
+                "on-secondary-fixed-variant": "#2e4b57",
+                "on-error-container": "#93000a",
+                "on-tertiary-fixed-variant": "#3c494f",
+                "on-primary-fixed-variant": "#065043",
+                "on-tertiary-fixed": "#101d23",
+                "outline": "#707975",
+                "tertiary-container": "#38454b",
+                "inverse-on-surface": "#eff1f1",
+                "secondary-container": "#c6e4f4",
+                "surface-container": "#eceeee",
+                "surface-dim": "#d8dada",
+                "outline-variant": "#bfc9c4",
+                "tertiary-fixed-dim": "#bbc9d0",
+                "surface-variant": "#e1e3e3",
+                "on-background": "#191c1d",
+                "surface-container-lowest": "#ffffff",
+                "tertiary-fixed": "#d7e5ec",
+                "on-tertiary": "#ffffff",
+                "on-primary": "#ffffff",
+                "surface-bright": "#f8fafa",
+                "surface-container-low": "#f2f4f4",
+                "primary-fixed-dim": "#94d3c1",
+                "secondary": "#466270",
+                "on-surface-variant": "#3f4945",
+                "on-tertiary-container": "#a4b2b9",
+                "primary-fixed": "#afefdd",
+                "on-secondary-container": "#4a6774",
+                "error-container": "#ffdad6",
+                "primary-container": "#004d40",
+                "surface": "#f8fafa",
+                "primary": "#00342b",
+                "error": "#ba1a1a",
+                "on-secondary-fixed": "#001f2a",
+                "on-primary-container": "#7ebdac",
+                "on-surface": "#191c1d",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#adcbda",
+                "on-error": "#ffffff",
+                "secondary-fixed": "#c9e7f7",
+                "surface-container-high": "#e6e8e9",
+                "inverse-surface": "#2e3131",
+                "inverse-primary": "#94d3c1",
+                "tertiary": "#222f34",
+                "on-primary-fixed": "#00201a"
+              },
+              fontFamily: {
+                "headline": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+    <style>
+        body {
+            min-height: 100dvh;
+        }
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom, 24px);
+        }
+    </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f8fafa]/80 backdrop-blur-xl shadow-sm shadow-teal-900/5 flex items-center justify-between px-6 h-16">
+<div class="flex items-center gap-4">
+<a href="../painel_da_recep_o/code.html" class="text-teal-900 active:scale-95 duration-200 transition-colors hover:bg-teal-50/50 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</a>
+<a href="../index.html" class="font-headline font-bold text-lg text-teal-900 tracking-tight hover:opacity-80 transition-opacity flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary-container" data-icon="home">home</span>
+    Clinica Odontonil
+</a>
+</div>
+<div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/15 shadow-sm">
+<img alt="Perfil do Médico" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpDegVI8TGmd_Q-xtC24FIscAVwKh09FPWd43Tbtwyw2Mo62M-qW8XvWNqxiSwcufB5oHKbmRkWXM7mJnOij1AO_oU2ineN3U2J2JsfVjKVWkixwc3JaiYfDiSN2YeUQq2Ed995CE34lJYVhq4R-i3I3l0WGRzbUVzfEh8GPDqTHQf8UokUFa5bSiyHzLvchoM7zT6nC1uACaRuAhp3gOxlVKYUbwqgULq542Rn5UiI8zPz4TtM2SmCxleivW18X5DdDXVYRxCCZo"/>
+</div>
+</header>
+<main class="pt-24 px-6 container mx-auto max-w-6xl">
+<!-- Search Section -->
+<div class="mb-12">
+<h2 class="font-headline text-3xl font-extrabold text-primary mb-6 tracking-tight">Diretório de Pacientes</h2>
+<div class="relative group max-w-4xl">
+<div class="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-400">
+    <span class="material-symbols-outlined" data-icon="search">search</span>
+</div>
+<input id="patient-search" class="w-full bg-surface-container-lowest border-none h-16 md:h-20 pl-14 pr-6 rounded-2xl md:rounded-3xl shadow-sm md:text-xl focus:ring-2 focus:ring-primary-fixed-dim transition-all placeholder:text-slate-400 font-body" placeholder="Buscar por nome, ID ou número do prontuário..." type="text"/>
+</div>
+<div class="flex gap-2 mt-6 overflow-x-auto pb-2 no-scrollbar">
+<span class="px-6 py-2 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold tracking-wide uppercase font-label whitespace-nowrap">Todos os Pacientes</span>
+</div>
+</div>
+
+<!-- Results Grid -->
+<div id="patients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Os pacientes serao renderizados aqui dinamicamente pelo JS -->
+</div>
+<p id="no-results" class="hidden mt-6 text-center text-secondary text-sm font-medium">Nenhum paciente encontrado para esta busca.</p>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 safe-area-bottom pt-3 bg-[#f8fafa]/90 backdrop-blur-md z-50 rounded-t-[2rem] shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+<a class="flex flex-col items-center justify-center text-slate-400 rounded-2xl px-6 py-2 hover:text-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,52,43,0.2)] hover:-translate-y-1 active:scale-90 transition-all duration-300" data-haptic="light" href="../painel_da_recep_o/code.html">
+<span class="material-symbols-outlined mb-1" data-icon="desk">desk</span>
+<span class="font-inter text-[11px] font-medium tracking-wide uppercase">Recepção</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-2xl px-6 py-2 transition-all duration-300 shadow-[0_0_15px_rgba(0,52,43,0.15)] hover:shadow-[0_0_20px_rgba(0,52,43,0.25)] hover:bg-primary/20 hover:-translate-y-1" data-haptic="medium" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-inter text-[11px] font-bold tracking-wide uppercase">Pacientes</span>
+</a>
+</nav>
+<script src="../js/mobile-utils.js"></script>
+<script>
+    const searchInput = document.getElementById('patient-search');
+    const noResults = document.getElementById('no-results');
+    const grid = document.getElementById('patients-grid');
+    const STORAGE_KEY = 'odontonilPatients';
+
+    function getPatients() {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                return JSON.parse(stored);
+            }
+        } catch (error) {
+            console.error('Erro ao ler pacientes salvos.', error);
+        }
+        return [];
+    }
+
+    function getInitials(name) {
+        if (!name) return 'P';
+        return name
+            .split(' ')
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part[0])
+            .join('')
+            .toUpperCase();
+    }
+
+    function renderPatients() {
+        const patients = getPatients();
+        
+        if (patients.length === 0) {
+            grid.innerHTML = '<p class="col-span-full text-center text-secondary py-10 font-bold">Nenhum paciente cadastrado via tela de recepção.</p>';
+            return;
+        }
+        
+        grid.innerHTML = patients.map(patient => {
+            const displayId = patient.id ? patient.id.split('-')[0].substring(0, 5).toUpperCase() : '00000';
+            
+            return `
+            <div class="patient-card bg-surface-container-lowest rounded-[2rem] p-6 flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 border border-outline-variant/10">
+                <div class="flex items-start gap-4 mb-6">
+                    ${patient.photo
+                        ? `<img alt="${patient.name}" class="h-14 w-14 rounded-full object-cover shadow-sm border border-outline-variant/20" src="${patient.photo}"/>`
+                        : `<div class="h-14 w-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl">${getInitials(patient.name)}</div>`
+                    }
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-on-surface font-bold text-lg truncate">${patient.name}</h3>
+                        <p class="text-secondary text-sm font-body">ID: #${displayId}</p>
+                        <p class="text-primary/60 text-xs font-medium mt-1">Cadastro do paciente • Cadastro ativo</p>
+                    </div>
+                </div>
+                <a href="../prescri_o_do_paciente_odontonil/code.html?patient=${encodeURIComponent(patient.id)}" class="w-full bg-primary text-white text-center py-3 rounded-2xl text-sm font-bold tracking-wide transition-all active:scale-95 shadow-lg shadow-primary/20">
+                    Ver Prontuário
+                </a>
+            </div>
+            `;
+        }).join('');
+    }
+
+    function filterPatients() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+        const patientCards = Array.from(document.querySelectorAll('.patient-card'));
+
+        patientCards.forEach((card) => {
+            const cardText = card.textContent.toLowerCase();
+            const matches = query === '' || cardText.includes(query);
+
+            card.classList.toggle('hidden', !matches);
+
+            if (matches) {
+                visibleCount += 1;
+            }
+        });
+
+        noResults.classList.toggle('hidden', visibleCount !== 0);
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+        renderPatients();
+        searchInput.addEventListener('input', filterPatients);
+    });
+</script>
+</body>
+</html>
