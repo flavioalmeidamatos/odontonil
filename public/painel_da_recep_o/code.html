@@ -87,6 +87,17 @@
         .safe-area-bottom {
             padding-bottom: env(safe-area-inset-bottom, 24px);
         }
+        .patient-menu-panel {
+            transform: translateY(24px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .patient-menu-panel.is-open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
   </head>
 <body class="bg-background text-on-surface min-h-screen pb-32">
@@ -114,17 +125,14 @@
                     <div class="relative z-10">
                         <p class="font-label text-xs uppercase tracking-[0.15em] opacity-80 mb-2">Total de Pacientes</p>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-5xl font-extrabold tracking-tighter">1.284</span>
+                            <span id="kpi-total-patients" class="text-5xl font-extrabold tracking-tighter">0</span>
                             <span class="text-primary-fixed-dim text-sm font-medium flex items-center">
                                 <span class="material-symbols-outlined text-base mr-1" data-icon="trending_up">trending_up</span>
                                 +12%
                             </span>
                         </div>
-                        <div class="mt-6 flex -space-x-3">
-                            <img alt="Patient 1" class="w-8 h-8 rounded-full border-2 border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZesQ9hN4UzY3N-vqyNxBI60wRq7OYNay2v35PTg1tOG2oM6QqcizgZMqthcE3EG6Tc70ITgdqWJpPT6r_OHY5PTnTEDupoMGsrXlnBChS09lDLbJY1sjmbX2odnG_h77ONOI0o1vzAENMAiw36BrM5kyydKlQ-C28w4LpSAewZSgksy2t0NUQnISSZFOZRnk1zlQBDh6ghCVKI-t9o3y0tpXEDgUwz_-TUIDYq3OwVe3JVoKR1__SNZ7v9_c2eYdYgeNoKhdNy8Q"/>
-                            <img alt="Patient 2" class="w-8 h-8 rounded-full border-2 border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQPO1MLdHqriQeqT3pg3adZx2xFHilD8se4u37GrRtmTXLoPb8muTafTnGdd_5KU1AwEIbokS6BzmGw4wjHmA8keZgSaLT_7pHjHjSA6KI2fU1IvyfcKouubutYBRg1l-RrheJyZnMfVwOMHCG3lOTf9g_ITPqLZyLcCPAlpIeMqDeuRD1JRX1jCRXrEorpelMBBCBYva3Xe-UXEyQhCk4uWD7sOSYYpi7sysNTgB0iJSBalpd6SnsFek0sGhUVYjHwAjcXNuQZB8"/>
-                            <img alt="Patient 3" class="w-8 h-8 rounded-full border-2 border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnzYLkC5qspsYX4jRoM0uSkuSgI4ic4zEmDXmie8RP-XEVWi87EcsR59scHDMonQxPtgYJwaq-F0Y38sD7OVUpEBjoT53KX3srINRK7Qp7GpxrPmWgA5tAInDhWbZEHWWbIywfEXiwl2bCFz4RdzrvXUUkf3xKQOuXq00ynwCPKbZ-B9G4GcXzR8nOHlShspHpnde7SbIbHZzt0aBqhcBNrKajZbx3OWOXtlKdIvikv89MiKQhuaSC0sxoUlygk2k3-jd0ajNb_No"/>
-                            <div class="w-8 h-8 rounded-full border-2 border-primary bg-primary-container flex items-center justify-center text-[10px] font-bold">+42</div>
+                        <div id="kpi-avatars-container" class="mt-6 flex -space-x-3">
+                            <!-- Miniaturas carregadas dinamicamente via JS -->
                         </div>
                     </div>
                 </div>
@@ -153,70 +161,352 @@
                 </div>
 
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="font-manrope text-sm font-extrabold text-primary/60 tracking-widest uppercase">Próximos Pacientes</h2>
+                    <h2 class="font-manrope text-sm font-extrabold text-primary/60 tracking-widest uppercase">Nossos Pacientes</h2>
                     <a href="../buscar_paciente_m_dico/code.html" class="text-primary text-[10px] font-bold flex items-center gap-1 hover:underline uppercase tracking-wider">
                         Pesquisar Tudo
                         <span class="material-symbols-outlined text-sm" data-icon="search">search</span>
                     </a>
                 </div>
                 
-                <div class="space-y-4">
-                    <!-- Patient Card 1 -->
-                    <div class="bg-surface-container-lowest p-5 rounded-2xl md:rounded-[2rem] shadow-sm border border-outline-variant/10 flex items-center gap-4 group hover:bg-surface-container-low hover:border-primary/20 transition-all duration-300">
-                        <div class="relative">
-                            <img alt="Helena Martins" class="w-14 h-14 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8pfsXEwEWFwWPDVwl65SIngDeD0LZuc82wEE2nHFhreZbNI-qxZlShqipDFXFVBMK7aogoMP3uRn7brrv6XAzNKXuemf5gc0_XjmiE-d3U-T8LKPtWSuUpfHmlCNXK1gbMx-Dwjx1DtS76_EHrHgKh68jkWLiBX8iSsJnhmOgCZCNXjOtjc2ArFW4glYkOkNfYv0gSnUoNCqP-Zl0D1TbA5aqjnmYmsehzhmWGUAtI32IP8AX_hu9h7-H0IZX_0Z6rrO8SxS7Hhc"/>
-                            <div class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"></div>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-on-surface text-base">Helena Martins</h4>
-                            <p class="text-sm text-secondary">Limpeza de Rotina • <span class="text-primary font-medium">Na Clínica</span></p>
-                        </div>
-                        <button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-secondary-container hover:text-primary transition-all">
-                            <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-                        </button>
-                    </div>
-                    <!-- Patient Card 2 -->
-                    <div class="bg-surface-container-lowest p-5 rounded-2xl md:rounded-[2rem] shadow-sm border border-outline-variant/10 flex items-center gap-4 group hover:bg-surface-container-low transition-all duration-300">
-                        <div class="relative">
-                            <img alt="Ricardo Silva" class="w-14 h-14 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVRGlHsJ8_zcMQ5rVJBeLpZ0c6QfsEVUadmbeogy7yerTC2qK07w_Sa6r9-U0nxUtm439gFUx-z7evQ0GSrjaggptK8AphLBmZVznfBrc4EN2Uuy6iu-4Qe6YMkX96utG0xKtmwo_z7tFRLXjr8NH6jXgWEnYj40oQjN3_zbN_vNANLini0pcETHyL3ifgvewE-TJPkpu_01ZZzY5QQHqCXZ1SU9k5l52T4Dx8Sw2YVtrrNTUQYBM1X4thbsf4cFHlyYpUDzcZjSY"/>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-on-surface text-base">Ricardo Silva</h4>
-                            <p class="text-sm text-secondary">Consulta • <span class="text-secondary/60">Aguardando</span></p>
-                        </div>
-                        <button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-secondary-container transition-all">
-                            <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-                        </button>
-                    </div>
-                    <!-- Patient Card 3 -->
-                    <div class="bg-surface-container-lowest p-5 rounded-2xl md:rounded-[2rem] shadow-sm border border-outline-variant/10 flex items-center gap-4 group hover:bg-surface-container-low transition-all duration-300">
-                        <div class="relative">
-                            <img alt="Ana Oliveira" class="w-14 h-14 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkycKfSxWRAmM903gqCgbjQSn8pyxNupgpedefMAHuD9WhufTojqLbc9uLKO20bNfIT_ylfzOihMARy2oi5t05FeQgKjfHGtE3xqqpr6In7i5GX5iYL1tbvTkpDeTFEbRLsnrxSpbmqu5c0Q81o7hPupxUdQT7pIVwmJgpTxHV77wGxeuXNgEV-wH6Zk5pWE4jHXPJKXqpibtQHR2mO9H5uUwAQ1squrFtiV7eYEER8keZewuwUH8JoCk6wfUYo4XpIpRlpvXZeH8"/>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-on-surface text-base">Ana Oliveira</h4>
-                            <p class="text-sm text-secondary">Ortodontia • <span class="text-secondary/60">Em Tratamento</span></p>
-                        </div>
-                        <button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-secondary-container transition-all">
-                            <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-                        </button>
-                    </div>
-                </div>
+                <div id="patient-list" class="space-y-4"></div>
             </section>
         </div>
     </div>
 </main>
+<div id="patient-menu" class="fixed inset-0 z-[60] hidden">
+    <button id="patient-menu-backdrop" class="absolute inset-0 bg-slate-950/35 backdrop-blur-[2px]" aria-label="Fechar detalhes do paciente"></button>
+    <div id="patient-menu-panel" class="patient-menu-panel absolute bottom-0 left-0 right-0 bg-surface-container-lowest rounded-t-[2rem] shadow-[0_-20px_60px_rgba(0,0,0,0.18)] p-6 pb-10 safe-area-bottom max-h-[85vh] overflow-y-auto">
+        <div class="w-12 h-1.5 rounded-full bg-outline-variant mx-auto mb-6"></div>
+        <button id="close-patient-menu-btn" class="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-low text-secondary hover:bg-surface-container hover:text-primary transition-colors cursor-pointer z-10" aria-label="Fechar detalhes do paciente">
+            <span class="material-symbols-outlined text-xl" data-icon="close">close</span>
+        </button>
+        <div class="flex items-start gap-4">
+            <img id="menu-patient-photo" alt="Foto do paciente" class="w-20 h-20 rounded-3xl object-cover border border-outline-variant/20 shadow-sm" src=""/>
+            <div class="flex-1">
+                <p class="text-[11px] uppercase tracking-[0.18em] text-secondary font-bold">Cadastro do Paciente</p>
+                <h3 id="menu-patient-name" class="font-headline text-2xl font-extrabold text-primary mt-1">Paciente</h3>
+                <p id="menu-patient-id" class="text-sm text-secondary mt-1">ID:</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 gap-4 mt-6">
+            <div class="bg-surface-container-low rounded-3xl p-4">
+                <p class="text-[11px] uppercase tracking-[0.14em] text-secondary font-bold">Dados principais</p>
+                <div class="mt-3 space-y-2 text-sm text-on-surface">
+                    <p><span class="font-bold">Nome:</span> <span id="detail-name"></span></p>
+                    <p><span class="font-bold">Nascimento:</span> <span id="detail-birth-date"></span></p>
+                    <p><span class="font-bold">CEP:</span> <span id="detail-cep"></span></p>
+                </div>
+            </div>
+            <div class="bg-surface-container-low rounded-3xl p-4">
+                <p class="text-[11px] uppercase tracking-[0.14em] text-secondary font-bold">Endereço</p>
+                <div class="mt-3 space-y-2 text-sm text-on-surface">
+                    <p><span class="font-bold">Logradouro:</span> <span id="detail-address"></span></p>
+                    <p><span class="font-bold">Número:</span> <span id="detail-number"></span></p>
+                    <p><span class="font-bold">Bairro:</span> <span id="detail-neighborhood"></span></p>
+                    <p><span class="font-bold">Cidade/UF:</span> <span id="detail-city-state"></span></p>
+                    <p><span class="font-bold">Complemento:</span> <span id="detail-complement"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mt-6">
+            <button id="edit-patient-button" class="py-4 rounded-2xl bg-primary text-white font-headline font-bold tracking-wide">Alterar</button>
+            <button id="delete-patient-button" class="py-4 rounded-2xl bg-error-container text-on-error-container font-headline font-bold tracking-wide">Excluir</button>
+        </div>
+    </div>
+</div>
 <!-- BottomNavBar Shell -->
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 safe-area-bottom pt-3 bg-[#f8fafa]/90 backdrop-blur-md shadow-[0_-4px_24px_rgba(0,0,0,0.04)] rounded-t-[2rem] z-50">
-<a class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-2xl px-6 py-2 transition-transform duration-300" data-haptic="medium" href="#">
+<a class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-2xl px-6 py-2 transition-all duration-300 shadow-[0_0_15px_rgba(0,52,43,0.15)] hover:shadow-[0_0_20px_rgba(0,52,43,0.25)] hover:bg-primary/20 hover:-translate-y-1" data-haptic="medium" href="#">
 <span class="material-symbols-outlined mb-1" data-icon="desk" style="font-variation-settings: 'FILL' 1;">desk</span>
 <span class="font-inter text-[11px] font-bold tracking-wide uppercase">Recepção</span>
 </a>
-<a class="flex flex-col items-center justify-center text-slate-400 px-6 py-2 hover:text-primary active:scale-90 transition-all duration-300" data-haptic="light" href="../buscar_paciente_m_dico/code.html">
+<a class="flex flex-col items-center justify-center text-slate-400 rounded-2xl px-6 py-2 hover:text-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,52,43,0.2)] hover:-translate-y-1 active:scale-90 transition-all duration-300" data-haptic="light" href="../buscar_paciente_m_dico/code.html">
 <span class="material-symbols-outlined mb-1" data-icon="group">group</span>
 <span class="font-inter text-[11px] font-medium tracking-wide uppercase">Pacientes</span>
 </a>
 </nav>
     <script src="../js/mobile-utils.js"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script>
+        // Função showToast para notificações
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-24 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full text-white font-medium z-50 transition-all duration-300 ${
+                type === 'error' ? 'bg-red-500' : 'bg-green-500'
+            }`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showSyncWarningIfNeeded() {
+            const syncState = window.odontonilSyncState;
+            if (syncState?.source === 'cache') {
+                showToast('Exibindo cache local. O Supabase nao respondeu e os aparelhos podem divergir.', 'error');
+            }
+        }
+
+        // STORAGE_KEY já vem de supabase-client.js
+        const STORAGE_SEEDED_KEY = 'odontonilPatientsSeeded';
+        const FALLBACK_PATIENTS = [
+            {
+                id: 'PS-2024-1001',
+                name: 'Helena Martins',
+                birthDate: '1989-03-14',
+                cep: '01310-100',
+                endereco: 'Avenida Paulista',
+                numero: '1500',
+                bairro: 'Bela Vista',
+                cidade: 'Sao Paulo',
+                uf: 'SP',
+                complemento: 'Sala 24',
+                photo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB8pfsXEwEWFwWPDVwl65SIngDeD0LZuc82wEE2nHFhreZbNI-qxZlShqipDFXFVBMK7aogoMP3uRn7brrv6XAzNKXuemf5gc0_XjmiE-d3U-T8LKPtWSuUpfHmlCNXK1gbMx-Dwjx1DtS76_EHrHgKh68jkWLiBX8iSsJnhmOgCZCNXjOtjc2ArFW4glYkOkNfYv0gSnUoNCqP-Zl0D1TbA5aqjnmYmsehzhmWGUAtI32IP8AX_hu9h7-H0IZX_0Z6rrO8SxS7Hhc',
+                service: 'Limpeza de Rotina',
+                status: 'Na Clinica'
+            },
+            {
+                id: 'PS-2024-1002',
+                name: 'Ricardo Silva',
+                birthDate: '1991-08-22',
+                cep: '30130-010',
+                endereco: 'Rua da Bahia',
+                numero: '245',
+                bairro: 'Centro',
+                cidade: 'Belo Horizonte',
+                uf: 'MG',
+                complemento: 'Apto 802',
+                photo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVRGlHsJ8_zcMQ5rVJBeLpZ0c6QfsEVUadmbeogy7yerTC2qK07w_Sa6r9-U0nxUtm439gFUx-z7evQ0GSrjaggptK8AphLBmZVznfBrc4EN2Uuy6iu-4Qe6YMkX96utG0xKtmwo_z7tFRLXjr8NH6jXgWEnYj40oQjN3_zbN_vNANLini0pcETHyL3ifgvewE-TJPkpu_01ZZzY5QQHqCXZ1SU9k5l52T4Dx8Sw2YVtrrNTUQYBM1X4thbsf4cFHlyYpUDzcZjSY',
+                service: 'Consulta',
+                status: 'Aguardando'
+            },
+            {
+                id: 'PS-2024-1003',
+                name: 'Ana Oliveira',
+                birthDate: '1995-11-05',
+                cep: '40015-000',
+                endereco: 'Ladeira da Barra',
+                numero: '90',
+                bairro: 'Barra',
+                cidade: 'Salvador',
+                uf: 'BA',
+                complemento: 'Casa',
+                photo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBkycKfSxWRAmM903gqCgbjQSn8pyxNupgpedefMAHuD9WhufTojqLbc9uLKO20bNfIT_ylfzOihMARy2oi5t05FeQgKjfHGtE3xqqpr6In7i5GX5iYL1tbvTkpDeTFEbRLsnrxSpbmqu5c0Q81o7hPupxUdQT7pIVwmJgpTxHV77wGxeuXNgEV-wH6Zk5pWE4jHXPJKXqpibtQHR2mO9H5uUwAQ1squrFtiV7eYEER8keZewuwUH8JoCk6wfUYo4XpIpRlpvXZeH8',
+                service: 'Ortodontia',
+                status: 'Em Tratamento'
+            }
+        ];
+
+        const patientList = document.getElementById('patient-list');
+        const patientMenu = document.getElementById('patient-menu');
+        const patientMenuPanel = document.getElementById('patient-menu-panel');
+        const patientMenuBackdrop = document.getElementById('patient-menu-backdrop');
+        const editPatientButton = document.getElementById('edit-patient-button');
+        const deletePatientButton = document.getElementById('delete-patient-button');
+        let activePatientId = null;
+
+        async function getPatients() {
+            const remotePatients = await getPacientes();
+            const isRemoteSync = window.odontonilSyncState?.source === 'remote';
+            // Semeia os 3 pacientes demo no Supabase se ainda não existirem
+            if (isRemoteSync && remotePatients.length === 0 && localStorage.getItem(STORAGE_SEEDED_KEY) !== 'true') {
+                for (const p of FALLBACK_PATIENTS) {
+                    await salvarPacienteSupabase(p);
+                }
+                localStorage.setItem(STORAGE_SEEDED_KEY, 'true');
+                return [...FALLBACK_PATIENTS];
+            }
+            if (isRemoteSync) {
+                localStorage.setItem(STORAGE_SEEDED_KEY, 'true');
+            }
+            return remotePatients;
+        }
+
+        function getStatusColor(status) {
+            if (status === 'Na Clinica') {
+                return 'text-primary font-medium';
+            }
+
+            return 'text-secondary/60';
+        }
+
+        function getInitials(name) {
+            return name
+                .split(' ')
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((part) => part[0])
+                .join('')
+                .toUpperCase();
+        }
+
+        function formatBirthDate(value) {
+            if (!value) {
+                return 'Nao informado';
+            }
+
+            const date = new Date(`${value}T00:00:00`);
+            if (Number.isNaN(date.getTime())) {
+                return value;
+            }
+
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        function getPatientStatusMarkup(patient) {
+            return `Cadastro do paciente • <span class="text-secondary/60">Cadastro ativo</span>`;
+        }
+
+        async function renderPatientList() {
+            const patients = await getPatients();
+            showSyncWarningIfNeeded();
+
+            const kpiTotalElement = document.getElementById('kpi-total-patients');
+            if (kpiTotalElement) {
+                // Formata o número com separador de milhar (ponto)
+                const totalFormatted = patients.length.toLocaleString('pt-BR');
+                kpiTotalElement.textContent = totalFormatted;
+            }
+
+            const avatarsContainer = document.getElementById('kpi-avatars-container');
+            if (avatarsContainer) {
+                let avatarsHtml = '';
+                const maxAvatars = 3;
+                for (let i = 0; i < Math.min(patients.length, maxAvatars); i++) {
+                    const patient = patients[i];
+                    if (patient.photo) {
+                        avatarsHtml += `<img alt="Patient" class="w-8 h-8 rounded-full border-2 border-primary object-cover" src="${patient.photo}"/>`;
+                    } else {
+                        avatarsHtml += `<div class="w-8 h-8 rounded-full border-2 border-primary bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container">${getInitials(patient.name)}</div>`;
+                    }
+                }
+                if (patients.length > maxAvatars) {
+                    avatarsHtml += `<div class="w-8 h-8 rounded-full border-2 border-primary bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container">+${patients.length - maxAvatars}</div>`;
+                }
+                avatarsContainer.innerHTML = avatarsHtml;
+            }
+
+            patientList.innerHTML = patients.map((patient) => `
+                <div class="bg-surface-container-lowest p-5 rounded-2xl md:rounded-[2rem] shadow-sm border border-outline-variant/10 flex items-center gap-4 group hover:bg-surface-container-low hover:border-primary/20 transition-all duration-300">
+                    <div class="relative">
+                        ${patient.photo
+                            ? `<img alt="${patient.name}" class="w-14 h-14 rounded-full object-cover" src="${patient.photo}"/>`
+                            : `<div class="w-14 h-14 rounded-full bg-primary-fixed flex items-center justify-center font-headline font-bold text-primary">${getInitials(patient.name)}</div>`
+                        }
+                        <div class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-on-surface text-base truncate">${patient.name}</h4>
+                        <p class="text-sm text-secondary truncate">${getPatientStatusMarkup(patient)}</p>
+                    </div>
+                    <button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-secondary-container hover:text-primary transition-all" data-patient-menu="${patient.id}" aria-label="Abrir acoes de ${patient.name}">
+                        <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+                    </button>
+                </div>
+            `).join('');
+
+            if (patients.length === 0) {
+                patientList.innerHTML = `
+                    <div class="bg-surface-container-lowest p-6 rounded-[2rem] border border-dashed border-outline-variant/40 text-center">
+                        <p class="font-headline text-lg font-bold text-primary">Nenhum paciente cadastrado</p>
+                        <p class="text-secondary text-sm mt-2">Cadastre um paciente para habilitar as acoes de alterar e excluir.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function fillPatientMenu(patient) {
+            document.getElementById('menu-patient-photo').src = patient.photo || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBQb4g2nPqc4jqM-2xZStp2w0S-mxS0vwKuQ2gXt6c03Si7gPlv0P4I-F5XR3_UbhJhmqu6pR0EKiBfNcOR8oKdYjU70j6Vh6CCY0o4PeA7Ln3g9QKiBZv3vY_AQz4p6e0_Xt1KqV2uwAJxvXj4MpQi4C4hW_6nKMqJcCMsNQf0pp3j0PoXwixl8jEwDUhxnWQ62Z0S5kdrxAnO7JQG6x_v5fjvGj4KvnDnxJVEQ9uy4g4sSx6EWjIJX5QjDrFfD8FE7ctetQ';
+            document.getElementById('menu-patient-name').textContent = patient.name || 'Paciente';
+            document.getElementById('menu-patient-id').textContent = `ID: ${patient.id || 'Nao informado'}`;
+            document.getElementById('detail-name').textContent = patient.name || 'Nao informado';
+            document.getElementById('detail-birth-date').textContent = formatBirthDate(patient.birthDate);
+            document.getElementById('detail-cep').textContent = patient.cep || 'Nao informado';
+            document.getElementById('detail-address').textContent = patient.endereco || 'Nao informado';
+            document.getElementById('detail-number').textContent = patient.numero || 'Nao informado';
+            document.getElementById('detail-neighborhood').textContent = patient.bairro || 'Nao informado';
+            document.getElementById('detail-city-state').textContent = (patient.cidade || patient.uf) ? `${patient.cidade || ''}${patient.cidade && patient.uf ? '/' : ''}${patient.uf || ''}` : 'Nao informado';
+            document.getElementById('detail-complement').textContent = patient.complemento || 'Nao informado';
+        }
+
+        async function openPatientMenu(patientId) {
+            const patients = await getPatients();
+            const patient = patients.find((item) => item.id === patientId);
+            if (!patient) {
+                showToast('Paciente nao encontrado.', 'error');
+                return;
+            }
+
+            activePatientId = patient.id;
+            fillPatientMenu(patient);
+            patientMenu.classList.remove('hidden');
+            requestAnimationFrame(() => patientMenuPanel.classList.add('is-open'));
+        }
+
+        function closePatientMenu() {
+            patientMenuPanel.classList.remove('is-open');
+            setTimeout(() => patientMenu.classList.add('hidden'), 250);
+        }
+
+        patientList.addEventListener('click', (event) => {
+            const menuButton = event.target.closest('[data-patient-menu]');
+            if (!menuButton) {
+                return;
+            }
+
+            openPatientMenu(menuButton.getAttribute('data-patient-menu'));
+        });
+
+        patientMenuBackdrop.addEventListener('click', closePatientMenu);
+
+        const closePatientMenuBtn = document.getElementById('close-patient-menu-btn');
+        if (closePatientMenuBtn) closePatientMenuBtn.addEventListener('click', closePatientMenu);
+
+        editPatientButton.addEventListener('click', () => {
+            if (!activePatientId) {
+                return;
+            }
+
+            window.location.href = `../cadastro_de_paciente/code.html?edit=${encodeURIComponent(activePatientId)}`;
+        });
+
+        deletePatientButton.addEventListener('click', async () => {
+            if (!activePatientId) return;
+
+            const patients = await getPatients();
+            const patient = patients.find((item) => item.id === activePatientId);
+
+            if (!patient) {
+                showToast('Paciente nao encontrado.', 'error');
+                closePatientMenu();
+                return;
+            }
+
+            const confirmed = window.confirm(`Excluir o cadastro de ${patient.name}?`);
+            if (!confirmed) return;
+
+            showToast('Excluindo paciente...', 'success');
+            try {
+                await excluirPacienteSupabase(activePatientId);
+                closePatientMenu();
+                renderPatientList();
+                showToast('Paciente excluido com sucesso.', 'success');
+            } catch (error) {
+                console.error('Erro ao excluir paciente:', error);
+                showToast('Nao foi possivel excluir no Supabase. Nenhuma alteracao local foi mantida.', 'error');
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !patientMenu.classList.contains('hidden')) {
+                closePatientMenu();
+            }
+        });
+
+        renderPatientList();
+    </script>
 </body>
 </html>

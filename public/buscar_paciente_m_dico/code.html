@@ -118,95 +118,108 @@
 <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-400">
     <span class="material-symbols-outlined" data-icon="search">search</span>
 </div>
-<input class="w-full bg-surface-container-lowest border-none h-16 md:h-20 pl-14 pr-6 rounded-2xl md:rounded-3xl shadow-sm md:text-xl focus:ring-2 focus:ring-primary-fixed-dim transition-all placeholder:text-slate-400 font-body" placeholder="Buscar por nome, ID ou número do prontuário..." type="text"/>
+<input id="patient-search" class="w-full bg-surface-container-lowest border-none h-16 md:h-20 pl-14 pr-6 rounded-2xl md:rounded-3xl shadow-sm md:text-xl focus:ring-2 focus:ring-primary-fixed-dim transition-all placeholder:text-slate-400 font-body" placeholder="Buscar por nome, ID ou número do prontuário..." type="text"/>
 </div>
 <div class="flex gap-2 mt-6 overflow-x-auto pb-2 no-scrollbar">
 <span class="px-6 py-2 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold tracking-wide uppercase font-label whitespace-nowrap">Todos os Pacientes</span>
-<span class="px-6 py-2 bg-surface-container-low text-secondary rounded-full text-xs font-bold tracking-wide uppercase font-label whitespace-nowrap hover:bg-surface-container-highest transition-all cursor-pointer">Recentes</span>
-<span class="px-6 py-2 bg-surface-container-low text-secondary rounded-full text-xs font-bold tracking-wide uppercase font-label whitespace-nowrap hover:bg-surface-container-highest transition-all cursor-pointer">Na Clínica</span>
-<span class="px-6 py-2 bg-surface-container-low text-secondary rounded-full text-xs font-bold tracking-wide uppercase font-label whitespace-nowrap hover:bg-surface-container-highest transition-all cursor-pointer">Emergência</span>
 </div>
 </div>
 
 <!-- Results Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-<!-- Patient Card 1 -->
-<div class="bg-surface-container-lowest rounded-[2rem] p-6 flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 border border-outline-variant/10">
-<div class="flex items-start gap-4 mb-6">
-<div class="h-14 w-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl">
-                        JD
-                    </div>
-<div>
-<h3 class="text-on-surface font-bold text-lg">Julianne De Marco</h3>
-<p class="text-secondary text-sm font-body">ID: #44920</p>
-<p class="text-primary/60 text-xs font-medium mt-1">Última visita: 12 Out</p>
+<div id="patients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Os pacientes serao renderizados aqui dinamicamente pelo JS -->
 </div>
-</div>
-<a href="../prescri_o_do_paciente_odontonil/code.html" class="w-full bg-primary text-white text-center py-3 rounded-2xl text-sm font-bold tracking-wide transition-all active:scale-95 shadow-lg shadow-primary/20">
-                    Ver Prontuário
-                </a>
-</div>
-<!-- Patient Card 2 -->
-<div class="bg-surface-container-lowest rounded-[2rem] p-6 flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 border border-outline-variant/10">
-<div class="flex items-start gap-4 mb-6">
-<div class="h-14 w-14 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed font-headline font-bold text-xl">
-                        AM
-                    </div>
-<div>
-<h3 class="text-on-surface font-bold text-lg">Arthur Morgan</h3>
-<p class="text-secondary text-sm font-body">ID: #44891</p>
-<p class="text-primary/60 text-xs font-medium mt-1">Última visita: 28 Set</p>
-</div>
-</div>
-<a href="../prescri_o_do_paciente_odontonil/code.html" class="w-full bg-primary text-white text-center py-3 rounded-2xl text-sm font-bold tracking-wide transition-all active:scale-95 shadow-lg shadow-primary/20">
-                    Ver Prontuário
-                </a>
-</div>
-<!-- Patient Card 3 -->
-<div class="bg-primary-container/5 border-2 border-primary-fixed/30 rounded-[2rem] p-6 flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300">
-<div class="flex items-start gap-4 mb-6">
-<div class="h-14 w-14 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-headline font-bold text-xl">
-                        LW
-                    </div>
-<div>
-<h3 class="text-on-surface font-bold text-lg">Lucas Wright</h3>
-<p class="text-secondary text-sm font-body">ID: #45012</p>
-<p class="text-emerald-600 text-xs font-bold mt-1 uppercase tracking-wider">Na Clínica Agora</p>
-</div>
-</div>
-<a href="../prescri_o_do_paciente_odontonil/code.html" class="w-full bg-primary text-white text-center py-3 rounded-2xl text-sm font-bold tracking-wide transition-all active:scale-95 shadow-lg shadow-primary/20">
-                    Atender Paciente
-                </a>
-</div>
-<!-- Patient Card 4 -->
-<div class="bg-surface-container-lowest rounded-[2rem] p-6 flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 border border-outline-variant/10">
-<div class="flex items-start gap-4 mb-6">
-<div class="h-14 w-14 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant font-headline font-bold text-xl">
-                        SC
-                    </div>
-<div>
-<h3 class="text-on-surface font-bold text-lg">Sarah Chen</h3>
-<p class="text-secondary text-sm font-body">ID: #44905</p>
-<p class="text-primary/60 text-xs font-medium mt-1">Última visita: 05 Out</p>
-</div>
-</div>
-<a href="../prescri_o_do_paciente_odontonil/code.html" class="w-full bg-primary text-white text-center py-3 rounded-2xl text-sm font-bold tracking-wide transition-all active:scale-95 shadow-lg shadow-primary/20">
-                    Ver Prontuário
-                </a>
-</div>
-</div>
+<p id="no-results" class="hidden mt-6 text-center text-secondary text-sm font-medium">Nenhum paciente encontrado para esta busca.</p>
 </main>
 <!-- BottomNavBar -->
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 safe-area-bottom pt-3 bg-[#f8fafa]/90 backdrop-blur-md z-50 rounded-t-[2rem] shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
-<a class="flex flex-col items-center justify-center text-slate-400 px-6 py-2 hover:text-primary transition-all active:scale-90 duration-300" data-haptic="light" href="../painel_da_recep_o/code.html">
+<a class="flex flex-col items-center justify-center text-slate-400 rounded-2xl px-6 py-2 hover:text-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,52,43,0.2)] hover:-translate-y-1 active:scale-90 transition-all duration-300" data-haptic="light" href="../painel_da_recep_o/code.html">
 <span class="material-symbols-outlined mb-1" data-icon="desk">desk</span>
 <span class="font-inter text-[11px] font-medium tracking-wide uppercase">Recepção</span>
 </a>
-<a class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-2xl px-6 py-2 transition-all active:scale-90 duration-300" data-haptic="medium" href="#">
+<a class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-2xl px-6 py-2 transition-all duration-300 shadow-[0_0_15px_rgba(0,52,43,0.15)] hover:shadow-[0_0_20px_rgba(0,52,43,0.25)] hover:bg-primary/20 hover:-translate-y-1" data-haptic="medium" href="#">
 <span class="material-symbols-outlined mb-1" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
 <span class="font-inter text-[11px] font-bold tracking-wide uppercase">Pacientes</span>
 </a>
 </nav>
 <script src="../js/mobile-utils.js"></script>
+<script src="../js/supabase-client.js"></script>
+<script>
+    const searchInput = document.getElementById('patient-search');
+    const noResults = document.getElementById('no-results');
+    const grid = document.getElementById('patients-grid');
+
+    async function getPatients() {
+        return await getPacientes();
+    }
+
+    function getInitials(name) {
+        if (!name) return 'P';
+        return name
+            .split(' ')
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part[0])
+            .join('')
+            .toUpperCase();
+    }
+
+    async function renderPatients() {
+        const patients = await getPatients();
+        
+        if (patients.length === 0) {
+            grid.innerHTML = '<p class="col-span-full text-center text-secondary py-10 font-bold">Nenhum paciente cadastrado via tela de recepção.</p>';
+            return;
+        }
+        
+        grid.innerHTML = patients.map(patient => {
+            const displayId = patient.id ? patient.id.split('-')[0].substring(0, 5).toUpperCase() : '00000';
+            
+            return `
+            <div class="patient-card bg-surface-container-lowest rounded-[2rem] p-6 flex flex-col justify-between group cursor-pointer hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 border border-outline-variant/10">
+                <div class="flex items-start gap-4 mb-6">
+                    ${patient.photo
+                        ? `<img alt="${patient.name}" class="h-14 w-14 rounded-full object-cover shadow-sm border border-outline-variant/20" src="${patient.photo}"/>`
+                        : `<div class="h-14 w-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl">${getInitials(patient.name)}</div>`
+                    }
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-on-surface font-bold text-lg truncate">${patient.name}</h3>
+                        <p class="text-secondary text-sm font-body">ID: #${displayId}</p>
+                        <p class="text-primary/60 text-xs font-medium mt-1">Cadastro do paciente • Cadastro ativo</p>
+                    </div>
+                </div>
+                <a href="../prescri_o_do_paciente_odontonil/code.html?patient=${encodeURIComponent(patient.id)}" class="w-full bg-primary text-white text-center py-3 rounded-2xl text-sm font-bold tracking-wide transition-all active:scale-95 shadow-lg shadow-primary/20">
+                    Ver Prontuário
+                </a>
+            </div>
+            `;
+        }).join('');
+    }
+
+    function filterPatients() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+        const patientCards = Array.from(document.querySelectorAll('.patient-card'));
+
+        patientCards.forEach((card) => {
+            const cardText = card.textContent.toLowerCase();
+            const matches = query === '' || cardText.includes(query);
+
+            card.classList.toggle('hidden', !matches);
+
+            if (matches) {
+                visibleCount += 1;
+            }
+        });
+
+        noResults.classList.toggle('hidden', visibleCount !== 0);
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', async () => {
+        await renderPatients();
+        searchInput.addEventListener('input', filterPatients);
+    });
+</script>
 </body>
 </html>

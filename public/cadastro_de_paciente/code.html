@@ -105,7 +105,7 @@
 <a href="../painel_da_recep_o/code.html" data-haptic="light" class="flex items-center justify-center p-2 rounded-full hover:bg-teal-50/50 transition-colors active:scale-95 duration-200">
 <span class="material-symbols-outlined text-teal-900">arrow_back</span>
 </a>
-<h1 class="font-headline tracking-tight font-bold text-lg text-teal-900">Novo Paciente</h1>
+<h1 id="page-title" class="font-headline tracking-tight font-bold text-lg text-teal-900">Novo Paciente</h1>
 </div>
 <a href="../index.html" class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity">
 <span class="material-symbols-outlined text-on-secondary-container text-sm" data-icon="home">home</span>
@@ -135,7 +135,7 @@
     </section>
 
     <!-- Form Container -->
-    <form class="space-y-8">
+    <form id="patient-form" class="space-y-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Identification Segment -->
             <div class="space-y-6">
@@ -145,15 +145,15 @@
                 </div>
                 <div class="group">
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">ID do Paciente (Auto)</label>
-                    <input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3.5 text-secondary font-mono text-sm cursor-not-allowed focus:ring-0" readonly="" type="text" value="PS-2024-0892"/>
+                    <input id="patient-id" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3.5 text-secondary font-mono text-sm cursor-not-allowed focus:ring-0" readonly="" type="text" value="PS-2024-0892"/>
                 </div>
                 <div class="group">
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Nome Completo (Obrigatório)</label>
-                    <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60 uppercase" placeholder="DIGITE O NOME COMPLETO" required="" style="text-transform: uppercase;" type="text"/>
+                    <input id="patient-name" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60 uppercase" placeholder="DIGITE O NOME COMPLETO" required="" style="text-transform: uppercase;" type="text"/>
                 </div>
                 <div class="group">
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Data de Nascimento</label>
-                    <input class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all font-mono" onchange="document.getElementById('residenciais').scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => document.getElementById('cep').focus(), 300);" type="date"/>
+                    <input id="birth-date" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all font-mono" onchange="document.getElementById('residenciais').scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => document.getElementById('cep').focus(), 300);" type="date"/>
                 </div>
             </div>
 
@@ -198,7 +198,7 @@
                 </div>
                 <div>
                     <label class="block font-label text-[11px] uppercase tracking-wider text-secondary mb-1.5 ml-1">Complemento</label>
-                    <textarea class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60 resize-none" placeholder="Apartamento, Bloco, etc." rows="2"></textarea>
+                    <textarea id="complemento" class="w-full bg-surface-container-lowest border-none rounded-xl px-4 py-3.5 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline-variant/60 resize-none" placeholder="Apartamento, Bloco, etc." rows="2"></textarea>
                 </div>
             </div>
         </div>
@@ -220,7 +220,7 @@
         <a class="flex-1 py-4 px-6 rounded-2xl font-headline font-bold text-secondary text-sm hover:bg-surface-container-highest transition-all active:scale-95 duration-200 text-center" data-haptic="light" href="../painel_da_recep_o/code.html" type="button">
             Cancelar
         </a>
-        <button class="flex-[1.5] py-4 px-10 bg-primary text-on-primary rounded-2xl font-headline font-extrabold text-sm shadow-[0_8px_20px_rgba(13,115,119,0.3)] hover:shadow-primary/40 active:scale-[0.98] transition-all duration-300 uppercase tracking-widest" data-haptic="heavy" onclick="salvarPaciente()">
+        <button class="flex-[1.5] py-4 px-10 bg-primary text-on-primary rounded-2xl font-headline font-extrabold text-sm shadow-[0_8px_20px_rgba(13,115,119,0.3)] hover:shadow-primary/40 active:scale-[0.98] transition-all duration-300 uppercase tracking-widest" data-haptic="heavy" onclick="salvarPaciente(event)">
             Salvar Paciente
         </button>
     </div>
@@ -230,6 +230,7 @@
 <div class="fixed -top-24 -right-24 w-64 h-64 bg-primary-fixed/20 blur-[100px] rounded-full -z-10"></div>
 <div class="fixed top-1/2 -left-32 w-80 h-80 bg-secondary-container/30 blur-[120px] rounded-full -z-10"></div>
     <script src="../js/mobile-utils.js"></script>
+    <script src="../js/supabase-client.js"></script>
     <script>
         async function buscarCEP() {
             const cep = document.getElementById('cep').value.replace(/\D/g, '');
@@ -258,6 +259,71 @@
             }
         }
 
+        const FALLBACK_PHOTO = '';
+        const form = document.getElementById('patient-form');
+        const pageTitle = document.getElementById('page-title');
+        const patientIdInput = document.getElementById('patient-id');
+        const patientNameInput = document.getElementById('patient-name');
+        const birthDateInput = document.getElementById('birth-date');
+        const photoPreview = document.getElementById('photo-preview');
+        const previewImg = document.getElementById('preview-img');
+        const searchParams = new URLSearchParams(window.location.search);
+        const editingId = searchParams.get('edit');
+
+        function generatePatientId() {
+            const year = new Date().getFullYear();
+            const suffix = String(Date.now()).slice(-4);
+            return `PS-${year}-${suffix}`;
+        }
+
+        function buildPatientFromForm() {
+            return {
+                id: patientIdInput.value,
+                name: patientNameInput.value.trim(),
+                birthDate: birthDateInput.value,
+                cep: document.getElementById('cep').value.trim(),
+                endereco: document.getElementById('endereco').value.trim(),
+                numero: document.getElementById('numero').value.trim(),
+                bairro: document.getElementById('bairro').value.trim(),
+                cidade: document.getElementById('cidade').value.trim(),
+                uf: document.getElementById('uf').value.trim(),
+                complemento: document.getElementById('complemento').value.trim(),
+                photo: previewImg.getAttribute('src') || FALLBACK_PHOTO,
+                updatedAt: new Date().toISOString()
+            };
+        }
+
+        function fillForm(patient) {
+            patientIdInput.value = patient.id;
+            patientNameInput.value = patient.name || '';
+            birthDateInput.value = patient.birthDate || '';
+            document.getElementById('cep').value = patient.cep || '';
+            document.getElementById('endereco').value = patient.endereco || '';
+            document.getElementById('numero').value = patient.numero || '';
+            document.getElementById('bairro').value = patient.bairro || '';
+            document.getElementById('cidade').value = patient.cidade || '';
+            document.getElementById('uf').value = patient.uf || '';
+            document.getElementById('complemento').value = patient.complemento || '';
+
+            if (patient.photo) {
+                previewImg.src = patient.photo;
+                photoPreview.classList.remove('hidden');
+            }
+        }
+
+        async function initializeForm() {
+            if (editingId) {
+                const patients = await getPacientes();
+                const existingPatient = patients.find((patient) => patient.id === editingId);
+                if (existingPatient) {
+                    pageTitle.textContent = 'Alterar Paciente';
+                    fillForm(existingPatient);
+                    return;
+                }
+            }
+            patientIdInput.value = generatePatientId();
+        }
+
         function previewPatientPhoto(input) {
             const preview = document.getElementById('photo-preview');
             const img = document.getElementById('preview-img');
@@ -273,12 +339,34 @@
             }
         }
 
-        function salvarPaciente() {
-            showToast("Paciente salvo com sucesso!", "success");
-            setTimeout(() => {
-                window.location.href = '../painel_da_recep_o/code.html';
-            }, 1000);
+        async function salvarPaciente(event) {
+            event.preventDefault();
+
+            if (!form.reportValidity()) return;
+
+            const patient = buildPatientFromForm();
+
+            if (!patient.name) {
+                showToast("Preencha o nome do paciente para continuar.", "error");
+                patientNameInput.focus();
+                return;
+            }
+
+            showToast("Salvando paciente...", "success");
+            try {
+                const existia = !!(await getPacientes()).find(p => p.id === patient.id);
+                await salvarPacienteSupabase(patient);
+                showToast(existia ? "Paciente atualizado com sucesso!" : "Paciente salvo com sucesso!", "success");
+                setTimeout(() => {
+                    window.location.href = '../painel_da_recep_o/code.html';
+                }, 1000);
+            } catch (error) {
+                console.error('Erro ao salvar paciente:', error);
+                showToast("Nao foi possivel sincronizar com o Supabase. Verifique a conexao e tente novamente.", "error");
+            }
         }
+
+        initializeForm();
     </script>
 
     <!-- Decorative Background Accents -->

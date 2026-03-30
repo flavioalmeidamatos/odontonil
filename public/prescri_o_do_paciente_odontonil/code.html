@@ -116,12 +116,17 @@
         <div class="lg:col-span-5 space-y-8">
             <section class="bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm border border-outline-variant/10">
                 <div class="flex items-start justify-between mb-6">
-                    <div>
-                        <span class="font-label text-[0.65rem] tracking-[0.1em] uppercase text-secondary font-bold mb-1 block">Ficha do Paciente</span>
-                        <h2 class="font-headline text-2xl font-extrabold text-primary tracking-tight">Helena Cavalcanti</h2>
+                    <div class="flex items-center gap-4">
+                        <div id="patient-photo-container" class="h-14 w-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl overflow-hidden shadow-sm border border-outline-variant/20 shrink-0">
+                            <!-- Foto injetada via JS -->
+                        </div>
+                        <div>
+                            <span class="font-label text-[0.65rem] tracking-[0.1em] uppercase text-secondary font-bold mb-1 block">Ficha do Paciente</span>
+                            <h2 id="patient-name" class="font-headline text-2xl font-extrabold text-primary tracking-tight">Carregando...</h2>
+                        </div>
                     </div>
-                    <div class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-wider uppercase">
-                        ID: #8829
+                    <div id="patient-id" class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-wider uppercase mt-1">
+                        ID: #0000
                     </div>
                 </div>
                 
@@ -131,8 +136,8 @@
                             <span class="material-symbols-outlined text-primary text-xl" data-icon="location_on">location_on</span>
                             <h3 class="font-label text-[11px] font-bold tracking-wider uppercase text-on-surface-variant">Endereço</h3>
                         </div>
-                        <p class="text-on-surface font-medium text-sm leading-relaxed">
-                            Avenida das Américas, 4200 - Bloco 2, Sala 301 • Barra da Tijuca, Rio de Janeiro - RJ
+                        <p id="patient-address" class="text-on-surface font-medium text-sm leading-relaxed">
+                            Carregando endereço...
                         </p>
                     </div>
                     
@@ -142,28 +147,14 @@
                             <p class="text-emerald-600 font-bold text-sm uppercase tracking-tighter">Em Atendimento</p>
                         </div>
                         <div class="bg-surface-container-low p-4 rounded-2xl">
-                            <h4 class="font-label text-[10px] font-semibold text-secondary mb-1">Última Visita</h4>
-                            <p class="text-on-surface font-semibold text-sm">12 Out 2023</p>
+                            <h4 class="font-label text-[10px] font-semibold text-secondary mb-1">Data Atendimento</h4>
+                            <p id="current-date-display" class="text-on-surface font-semibold text-sm"></p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Treatment History/Quick Info -->
-            <section class="bg-surface-container-low p-6 rounded-[2rem]">
-                <h3 class="font-headline font-bold text-primary text-sm mb-4">Procedimentos Atuais</h3>
-                <div class="flex flex-wrap gap-2">
-                    <div class="flex items-center gap-1.5 px-4 py-2 bg-white text-primary text-[10px] font-bold rounded-full border border-primary/10 shadow-sm">
-                        <span class="material-symbols-outlined text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span> 
-                        LIMPEZA DENTAL
-                    </div>
-                    <button class="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-[10px] font-bold rounded-full hover:bg-primary-container transition-all active:scale-95 shadow-md shadow-primary/10">
-                        <span class="material-symbols-outlined text-sm" data-icon="add">add</span> 
-                        NOVO PROCEDIMENTO
-                    </button>
-                </div>
-            </section>
-        </div>
+            <!-- Procedimentos Atuais removido conforme solicitado -->
 
         <!-- Right Column: Prescription Area -->
         <div class="lg:col-span-7 space-y-6">
@@ -198,23 +189,87 @@
 </main>
 
 <!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full bg-[#f8fafa]/90 backdrop-blur-md z-50 rounded-t-[2rem] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] flex justify-around items-center px-4 pb-6 pt-3">
-<a class="flex flex-col items-center justify-center text-slate-400 px-6 py-2 hover:text-primary transition-all active:scale-90 duration-300" href="../painel_da_recep_o/code.html">
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 safe-area-bottom pt-3 bg-[#f8fafa]/90 backdrop-blur-md z-50 rounded-t-[2rem] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] pb-4">
+<a class="flex flex-col items-center justify-center text-slate-400 rounded-2xl px-6 py-2 hover:text-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,52,43,0.2)] hover:-translate-y-1 active:scale-90 transition-all duration-300" data-haptic="light" href="../painel_da_recep_o/code.html">
 <span class="material-symbols-outlined mb-1" data-icon="desk">desk</span>
-<span class="font-label text-[11px] font-medium tracking-wide uppercase">RECEPÇÃO</span>
+<span class="font-inter text-[11px] font-medium tracking-wide uppercase">Recepção</span>
 </a>
-<a class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-2xl px-6 py-2 transition-all active:scale-90 duration-300" href="../buscar_paciente_m_dico/code.html">
+<a class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-2xl px-6 py-2 transition-all duration-300 shadow-[0_0_15px_rgba(0,52,43,0.15)] hover:shadow-[0_0_20px_rgba(0,52,43,0.25)] hover:bg-primary/20 hover:-translate-y-1" data-haptic="medium" href="../buscar_paciente_m_dico/code.html">
 <span class="material-symbols-outlined mb-1" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
-<span class="font-label text-[11px] font-bold tracking-wide uppercase">PACIENTES</span>
-</a>
-<a class="flex flex-col items-center justify-center text-slate-400 px-6 py-2 hover:text-primary transition-all active:scale-90 duration-300" href="#">
-<span class="material-symbols-outlined mb-1" data-icon="calendar_today">calendar_today</span>
-<span class="font-label text-[11px] font-medium tracking-wide uppercase">AGENDA</span>
-</a>
-<a class="flex flex-col items-center justify-center text-slate-400 px-6 py-2 hover:text-primary transition-all active:scale-90 duration-300" href="#">
-<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
-<span class="font-label text-[11px] font-medium tracking-wide uppercase">CONFIGURAÇÕES</span>
+<span class="font-inter text-[11px] font-bold tracking-wide uppercase">Pacientes</span>
 </a>
 </nav>
-</body></html>
+</nav>
+
+<script src="../js/mobile-utils.js"></script>
+<script src="../js/supabase-client.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Formatar e exibir Data do Atendimento
+        const dateDisplay = document.getElementById('current-date-display');
+        if (dateDisplay) {
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+            const formattedParts = formatter.formatToParts(now);
+            
+            let day = formattedParts.find(p => p.type === 'day')?.value || '';
+            let month = formattedParts.find(p => p.type === 'month')?.value || '';
+            let year = formattedParts.find(p => p.type === 'year')?.value || '';
+            
+            month = month.replace(/\./g, '');
+            if(month.length > 0) {
+                month = month.charAt(0).toUpperCase() + month.slice(1);
+            }
+            
+            dateDisplay.textContent = `${day} ${month} ${year}`.trim();
+        }
+
+        // Buscar parâmetros e popular dados do paciente
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientId = urlParams.get('patient');
+        
+        const elName = document.getElementById('patient-name');
+        const elId = document.getElementById('patient-id');
+        const elAddress = document.getElementById('patient-address');
+
+        if (patientId) {
+            const patients = await getPacientes();
+            const patient = patients.find(p => p.id === patientId);
+
+            if (patient) {
+                const displayId = patient.id.split('-')[0].substring(0, 5).toUpperCase();
+                if (elName) elName.textContent = patient.name || 'Paciente Sem Nome';
+                if (elId) elId.textContent = `ID: #${displayId}`;
+                
+                const elPhoto = document.getElementById('patient-photo-container');
+                if (elPhoto) {
+                    if (patient.photo) {
+                        elPhoto.innerHTML = `<img alt="${patient.name}" src="${patient.photo}" class="h-full w-full object-cover" />`;
+                    } else {
+                        const initials = patient.name ? patient.name.split(' ').filter(Boolean).slice(0,2).map(p=>p[0]).join('').toUpperCase() : 'P';
+                        elPhoto.innerHTML = initials;
+                    }
+                }
+
+                let fullAddress = 'Endereço não informado';
+                if (patient.endereco) {
+                    fullAddress = patient.endereco;
+                    if (patient.numero) fullAddress += `, ${patient.numero}`;
+                    if (patient.complemento) fullAddress += ` - ${patient.complemento}`;
+                    if (patient.bairro) fullAddress += ` • ${patient.bairro}`;
+                    if (patient.cidade && patient.uf) {
+                        fullAddress += `, ${patient.cidade} - ${patient.uf}`;
+                    } else if (patient.cidade) {
+                        fullAddress += `, ${patient.cidade}`;
+                    }
+                    if (patient.cep) fullAddress += ` (${patient.cep})`;
+                }
+                if (elAddress) elAddress.textContent = fullAddress;
+            } else {
+                if (elName) elName.textContent = 'Paciente Não Encontrado';
+                if (elAddress) elAddress.textContent = 'Dados não disponíveis';
+            }
+        }
+    });
+</script>
 </body></html>
