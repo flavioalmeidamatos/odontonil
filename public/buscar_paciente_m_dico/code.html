@@ -143,22 +143,15 @@
 </a>
 </nav>
 <script src="../js/mobile-utils.js"></script>
+<script src="../js/supabase-client.js"></script>
 <script>
     const searchInput = document.getElementById('patient-search');
     const noResults = document.getElementById('no-results');
     const grid = document.getElementById('patients-grid');
     const STORAGE_KEY = 'odontonilPatients';
 
-    function getPatients() {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                return JSON.parse(stored);
-            }
-        } catch (error) {
-            console.error('Erro ao ler pacientes salvos.', error);
-        }
-        return [];
+    async function getPatients() {
+        return await getPacientes();
     }
 
     function getInitials(name) {
@@ -172,8 +165,8 @@
             .toUpperCase();
     }
 
-    function renderPatients() {
-        const patients = getPatients();
+    async function renderPatients() {
+        const patients = await getPatients();
         
         if (patients.length === 0) {
             grid.innerHTML = '<p class="col-span-full text-center text-secondary py-10 font-bold">Nenhum paciente cadastrado via tela de recepção.</p>';
@@ -224,8 +217,8 @@
     }
 
     // Inicialização
-    document.addEventListener('DOMContentLoaded', () => {
-        renderPatients();
+    document.addEventListener('DOMContentLoaded', async () => {
+        await renderPatients();
         searchInput.addEventListener('input', filterPatients);
     });
 </script>

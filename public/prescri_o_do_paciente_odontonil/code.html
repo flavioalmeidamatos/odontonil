@@ -201,8 +201,10 @@
 </nav>
 </nav>
 
+<script src="../js/mobile-utils.js"></script>
+<script src="../js/supabase-client.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         // Formatar e exibir Data do Atendimento
         const dateDisplay = document.getElementById('current-date-display');
         if (dateDisplay) {
@@ -231,52 +233,43 @@
         const elAddress = document.getElementById('patient-address');
 
         if (patientId) {
-            try {
-                const storedValue = localStorage.getItem('odontonilPatients');
-                if (storedValue) {
-                    const patients = JSON.parse(storedValue);
-                    const patient = patients.find(p => p.id === patientId);
+            const patients = await getPacientes();
+            const patient = patients.find(p => p.id === patientId);
 
-                    if (patient) {
-                        const displayId = patient.id.split('-')[0].substring(0, 5).toUpperCase();
-                        if (elName) elName.textContent = patient.name || 'Paciente Sem Nome';
-                        if (elId) elId.textContent = `ID: #${displayId}`;
-                        
-                        const elPhoto = document.getElementById('patient-photo-container');
-                        if (elPhoto) {
-                            if (patient.photo) {
-                                elPhoto.innerHTML = `<img alt="${patient.name}" src="${patient.photo}" class="h-full w-full object-cover" />`;
-                            } else {
-                                const initials = patient.name ? patient.name.split(' ').filter(Boolean).slice(0,2).map(p=>p[0]).join('').toUpperCase() : 'P';
-                                elPhoto.innerHTML = initials;
-                            }
-                        }
-
-                        let fullAddress = 'Endereço não informado';
-                        if (patient.endereco) {
-                            fullAddress = patient.endereco;
-                            if (patient.numero) fullAddress += `, ${patient.numero}`;
-                            if (patient.complemento) fullAddress += ` - ${patient.complemento}`;
-                            if (patient.bairro) fullAddress += ` • ${patient.bairro}`;
-                            if (patient.cidade && patient.uf) {
-                                fullAddress += `, ${patient.cidade} - ${patient.uf}`;
-                            } else if (patient.cidade) {
-                                fullAddress += `, ${patient.cidade}`;
-                            }
-                            if (patient.cep) fullAddress += ` (${patient.cep})`;
-                        }
-                        if (elAddress) elAddress.textContent = fullAddress;
-                        return; // Successfully got patient
+            if (patient) {
+                const displayId = patient.id.split('-')[0].substring(0, 5).toUpperCase();
+                if (elName) elName.textContent = patient.name || 'Paciente Sem Nome';
+                if (elId) elId.textContent = `ID: #${displayId}`;
+                
+                const elPhoto = document.getElementById('patient-photo-container');
+                if (elPhoto) {
+                    if (patient.photo) {
+                        elPhoto.innerHTML = `<img alt="${patient.name}" src="${patient.photo}" class="h-full w-full object-cover" />`;
+                    } else {
+                        const initials = patient.name ? patient.name.split(' ').filter(Boolean).slice(0,2).map(p=>p[0]).join('').toUpperCase() : 'P';
+                        elPhoto.innerHTML = initials;
                     }
                 }
-            } catch (error) {
-                console.error('Erro ao ler pacientes:', error);
+
+                let fullAddress = 'Endereço não informado';
+                if (patient.endereco) {
+                    fullAddress = patient.endereco;
+                    if (patient.numero) fullAddress += `, ${patient.numero}`;
+                    if (patient.complemento) fullAddress += ` - ${patient.complemento}`;
+                    if (patient.bairro) fullAddress += ` • ${patient.bairro}`;
+                    if (patient.cidade && patient.uf) {
+                        fullAddress += `, ${patient.cidade} - ${patient.uf}`;
+                    } else if (patient.cidade) {
+                        fullAddress += `, ${patient.cidade}`;
+                    }
+                    if (patient.cep) fullAddress += ` (${patient.cep})`;
+                }
+                if (elAddress) elAddress.textContent = fullAddress;
+            } else {
+                if (elName) elName.textContent = 'Paciente Não Encontrado';
+                if (elAddress) elAddress.textContent = 'Dados não disponíveis';
             }
         }
-        
-        // Se paciente não encontrado:
-        if (elName) elName.textContent = 'Paciente Não Encontrado';
-        if (elAddress) elAddress.textContent = 'Dados não disponíveis';
     });
 </script>
 </body></html>

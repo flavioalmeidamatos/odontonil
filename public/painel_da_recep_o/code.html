@@ -226,6 +226,7 @@
 </a>
 </nav>
     <script src="../js/mobile-utils.js"></script>
+    <script src="../js/supabase-client.js"></script>
     <script>
         const STORAGE_KEY = 'odontonilPatients';
         const STORAGE_SEEDED_KEY = 'odontonilPatientsSeeded';
@@ -285,38 +286,18 @@
         const deletePatientButton = document.getElementById('delete-patient-button');
         let activePatientId = null;
 
-        function getPatients() {
-            try {
-                const rawPatients = localStorage.getItem(STORAGE_KEY);
-                if (rawPatients !== null) {
-                    const storedPatients = JSON.parse(rawPatients);
-                    if (Array.isArray(storedPatients)) {
-                        return storedPatients;
-                    }
+        async function getPatients() {
+            const remotePatients = await getPacientes();
+            // Semeia os 3 pacientes demo no Supabase se ainda não existirem
+            if (remotePatients.length === 0 && localStorage.getItem(STORAGE_SEEDED_KEY) !== 'true') {
+                for (const p of FALLBACK_PATIENTS) {
+                    await salvarPacienteSupabase(p);
                 }
-
-                if (localStorage.getItem(STORAGE_SEEDED_KEY) === 'true') {
-                    return [];
-                }
-            } catch (error) {
-                console.error('Erro ao ler pacientes salvos.', error);
+                localStorage.setItem(STORAGE_SEEDED_KEY, 'true');
+                return [...FALLBACK_PATIENTS];
             }
-
-            try {
-                if (localStorage.getItem(STORAGE_SEEDED_KEY) !== 'true') {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(FALLBACK_PATIENTS));
-                    localStorage.setItem(STORAGE_SEEDED_KEY, 'true');
-                    return [...FALLBACK_PATIENTS];
-                }
-            } catch (error) {
-                console.error('Erro ao inicializar pacientes padrao.', error);
-            }
-
-            return localStorage.getItem(STORAGE_SEEDED_KEY) === 'true' ? [] : [...FALLBACK_PATIENTS];
-        }
-
-        function setPatients(patients) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(patients));
+            localStorage.setItem(STORAGE_SEEDED_KEY, 'true');
+            return remotePatients;
         }
 
         function getStatusColor(status) {
@@ -354,8 +335,8 @@
             return `Cadastro do paciente • <span class="text-secondary/60">Cadastro ativo</span>`;
         }
 
-        function renderPatientList() {
-            const patients = getPatients();
+        async function renderPatientList() {
+            const patients = await getPatients();
 
             const kpiTotalElement = document.getElementById('kpi-total-patients');
             if (kpiTotalElement) kpiTotalElement.textContent = patients.length;
@@ -421,8 +402,9 @@
             document.getElementById('detail-complement').textContent = patient.complemento || 'Nao informado';
         }
 
-        function openPatientMenu(patientId) {
-            const patient = getPatients().find((item) => item.id === patientId);
+        async function openPatientMenu(patientId) {
+            const patients = await getPatients();
+            const patient = patients.find((item) => item.id === patientId);
             if (!patient) {
                 showToast('Paciente nao encontrado.', 'error');
                 return;
@@ -461,12 +443,10 @@
             window.location.href = `../cadastro_de_paciente/code.html?edit=${encodeURIComponent(activePatientId)}`;
         });
 
-        deletePatientButton.addEventListener('click', () => {
-            if (!activePatientId) {
-                return;
-            }
+        deletePatientButton.addEventListener('click', async () => {
+            if (!activePatientId) return;
 
-            const patients = getPatients();
+            const patients = await getPatients();
             const patient = patients.find((item) => item.id === activePatientId);
 
             if (!patient) {
@@ -476,12 +456,10 @@
             }
 
             const confirmed = window.confirm(`Excluir o cadastro de ${patient.name}?`);
-            if (!confirmed) {
-                return;
-            }
+            if (!confirmed) return;
 
-            const updatedPatients = patients.filter((item) => item.id !== activePatientId);
-            setPatients(updatedPatients);
+            showToast('Excluindo paciente...', 'success');
+            await excluirPacienteSupabase(activePatientId);
             closePatientMenu();
             renderPatientList();
             showToast('Paciente excluido com sucesso.', 'success');
