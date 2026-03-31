@@ -3,7 +3,7 @@
 <html class="light" lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Clinica Odontonil - Módulo Médico</title>
+<title>Clinica Odontonil - Modulo Medico</title>
 <link href="../public_style.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -39,11 +39,11 @@
 </a>
 <a href="../index.html" class="font-headline tracking-tight font-bold text-lg text-teal-900 hover:opacity-80 transition-opacity flex items-center gap-2">
 <span class="material-symbols-outlined text-primary-container" data-icon="home">home</span>
-Clinica Odontonil - Módulo Médico
+Clinica Odontonil - Modulo Medico
 </a>
 </div>
 <div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/15 shadow-sm">
-<img alt="Perfil do Médico" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATnVPuf6QGlVhPOVA5JPowkC0Y6VQaTGk_ssZgKxFZS1baCaF8I29D6Ly0-fYiguZfJoqftPb9i7OC7eDYIcGeRqWxmJ_Fa3Osa7uDk25WdLCHIs2HEOTB-Oh5G5YZfyXyiW1OO_nnGEP6OgEvLTbt8o66wzd65KckFUq2yO4G-W-XwATKynOOiC8RDRA2xYkB9dw_WWDGATm7bSOPPu4M3u62AgBrr4tvZp_56qfRAFGO0yZSBfOBAW7bYq_yVejD27GqgmjQur0"/>
+<img alt="Perfil do medico" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATnVPuf6QGlVhPOVA5JPowkC0Y6VQaTGk_ssZgKxFZS1baCaF8I29D6Ly0-fYiguZfJoqftPb9i7OC7eDYIcGeRqWxmJ_Fa3Osa7uDk25WdLCHIs2HEOTB-Oh5G5YZfyXyiW1OO_nnGEP6OgEvLTbt8o66wzd65KckFUq2yO4G-W-XwATKynOOiC8RDRA2xYkB9dw_WWDGATm7bSOPPu4M3u62AgBrr4tvZp_56qfRAFGO0yZSBfOBAW7bYq_yVejD27GqgmjQur0"/>
 </div>
 </header>
 
@@ -66,9 +66,9 @@ Clinica Odontonil - Módulo Médico
                     <div class="bg-surface-container-low p-5 rounded-2xl">
                         <div class="flex items-center gap-2 mb-3">
                             <span class="material-symbols-outlined text-primary text-xl" data-icon="location_on">location_on</span>
-                            <h3 class="font-label text-[11px] font-bold tracking-wider uppercase text-on-surface-variant">Endereço</h3>
+                            <h3 class="font-label text-[11px] font-bold tracking-wider uppercase text-on-surface-variant">Endereco</h3>
                         </div>
-                        <p id="patient-address" class="text-on-surface font-medium text-sm leading-relaxed">Carregando endereço...</p>
+                        <p id="patient-address" class="text-on-surface font-medium text-sm leading-relaxed">Carregando endereco...</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -92,7 +92,7 @@ Clinica Odontonil - Módulo Médico
                         <div class="w-10 h-10 bg-primary-fixed/30 rounded-full flex items-center justify-center">
                             <span class="material-symbols-outlined text-primary" data-icon="description">description</span>
                         </div>
-                        <h3 class="font-headline text-xl font-bold text-primary tracking-tight">Prescrição e Notas</h3>
+                        <h3 class="font-headline text-xl font-bold text-primary tracking-tight">Prescricao e Notas</h3>
                     </div>
                     <span class="text-outline text-[10px] font-bold uppercase tracking-widest bg-surface-container-low px-3 py-1 rounded-full">Sincronizado</span>
                 </div>
@@ -107,16 +107,36 @@ Clinica Odontonil - Módulo Médico
 
             <button id="save-prontuario-button" type="button" class="w-full bg-gradient-to-r from-primary to-primary-container text-white py-5 px-8 rounded-3xl font-headline font-bold text-lg flex items-center justify-center gap-3 shadow-xl shadow-primary/20 hover:shadow-2xl hover:translate-y-[-2px] transition-all active:scale-[0.98]">
                 <span class="material-symbols-outlined text-2xl" data-icon="check_circle">check_circle</span>
-                Finalizar e Salvar Prontuário
+                Finalizar e Salvar Prontuario
             </button>
         </div>
     </div>
 </main>
 
+<div id="pdf-preview-modal" class="hidden fixed inset-0 z-[80] bg-slate-950/70 backdrop-blur-sm p-3 sm:p-6">
+    <div class="h-full max-w-6xl mx-auto bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col">
+        <div class="px-4 py-4 sm:px-6 border-b border-slate-200 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-[11px] font-bold tracking-[0.18em] uppercase text-secondary">Preview da Receita</p>
+                <h3 class="font-headline text-xl font-extrabold text-primary tracking-tight">Arquivo pronto para impressao</h3>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="pdf-close-button" type="button" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-surface-container-low text-primary font-bold text-sm">
+                    <span class="material-symbols-outlined text-xl">arrow_back</span>
+                    Voltar aos Pacientes
+                </button>
+            </div>
+        </div>
+        <div class="relative flex-1 bg-slate-100 min-h-0">
+            <iframe id="pdf-preview-frame" title="Preview da receita" class="w-full h-full border-0 bg-white"></iframe>
+        </div>
+    </div>
+</div>
+
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 bg-[#f8fafa]/90 backdrop-blur-md z-50 rounded-t-[2rem] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] pb-4">
 <a class="flex flex-col items-center justify-center text-slate-400 rounded-2xl px-6 py-2 hover:text-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,52,43,0.2)] hover:-translate-y-1 active:scale-90 transition-all duration-300" data-haptic="light" href="../painel_da_recep_o/code.html">
 <span class="material-symbols-outlined mb-1" data-icon="desk">desk</span>
-<span class="font-inter text-[11px] font-medium tracking-wide uppercase">Recepção</span>
+<span class="font-inter text-[11px] font-medium tracking-wide uppercase">Recepcao</span>
 </a>
 <a class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-2xl px-6 py-2 transition-all duration-300 shadow-[0_0_15px_rgba(0,52,43,0.15)] hover:shadow-[0_0_20px_rgba(0,52,43,0.25)] hover:bg-primary/20 hover:-translate-y-1" data-haptic="medium" href="../buscar_paciente_m_dico/code.html">
 <span class="material-symbols-outlined mb-1" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
@@ -146,7 +166,7 @@ Clinica Odontonil - Módulo Médico
         async function loadProntuario(patientId) {
             const response = await fetch(`/api/prontuarios/${encodeURIComponent(patientId)}`);
             if (!response.ok) {
-                throw new Error('Falha ao carregar prontuário.');
+                throw new Error('Falha ao carregar prontuario.');
             }
             return response.json();
         }
@@ -159,10 +179,54 @@ Clinica Odontonil - Módulo Médico
             });
 
             if (!response.ok) {
-                throw new Error('Falha ao salvar prontuário.');
+                throw new Error('Falha ao salvar prontuario.');
             }
 
             return response.json();
+        }
+
+        async function generateReceitaPdf(patientId, patientName, patientAddress, patientNumber, patientComplemento, patientBairro, patientCidade, patientUf, patientCep, notes) {
+            const response = await fetch(`/api/prontuarios/${encodeURIComponent(patientId)}/receita-pdf`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    patientName,
+                    patientAddress,
+                    patientNumber,
+                    patientComplemento,
+                    patientBairro,
+                    patientCidade,
+                    patientUf,
+                    patientCep,
+                    notes,
+                }),
+            });
+
+            const payload = await response.json();
+            if (!response.ok) {
+                throw new Error(payload?.details || 'Falha ao gerar PDF.');
+            }
+
+            return payload;
+        }
+
+        function openPdfPreview(pdfUrl, patientId) {
+            const modal = document.getElementById('pdf-preview-modal');
+            const frame = document.getElementById('pdf-preview-frame');
+            const previewUrl = `${pdfUrl}?t=${Date.now()}#toolbar=1`;
+
+            frame.src = previewUrl;
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closePdfPreview() {
+            const modal = document.getElementById('pdf-preview-modal');
+            const frame = document.getElementById('pdf-preview-frame');
+            modal.classList.add('hidden');
+            frame.src = 'about:blank';
+            document.body.classList.remove('overflow-hidden');
+            window.location.href = '../buscar_paciente_m_dico/code.html';
         }
 
         subscribeToPacientesRealtime({ reload: true });
@@ -193,14 +257,21 @@ Clinica Odontonil - Módulo Médico
         const elAddress = document.getElementById('patient-address');
         const notesInput = document.getElementById('patient-notes');
         const saveButton = document.getElementById('save-prontuario-button');
+        const previewCloseButton = document.getElementById('pdf-close-button');
+        let selectedPatient = null;
+
+        if (previewCloseButton) {
+            previewCloseButton.addEventListener('click', closePdfPreview);
+        }
 
         if (patientId) {
             const patients = await getPacientes();
             const patient = patients.find((item) => item.id === patientId);
+            selectedPatient = patient || null;
 
             if (patient) {
                 if (elName) {
-                    elName.textContent = patient.name || 'Paciente Sem Nome';
+                    elName.textContent = patient.name || 'Paciente sem nome';
                 }
                 if (elId) {
                     elId.textContent = `ID: ${formatPatientId(patient.id)}`;
@@ -218,7 +289,7 @@ Clinica Odontonil - Módulo Médico
                     }
                 }
 
-                let fullAddress = 'Endereço não informado';
+                let fullAddress = 'Endereco nao informado';
                 if (patient.endereco) {
                     fullAddress = patient.endereco;
                     if (patient.numero) fullAddress += `, ${patient.numero}`;
@@ -236,37 +307,72 @@ Clinica Odontonil - Módulo Médico
                     elAddress.textContent = fullAddress;
                 }
             } else {
-                if (elName) elName.textContent = 'Paciente Não Encontrado';
-                if (elAddress) elAddress.textContent = 'Dados não disponíveis';
+                if (elName) elName.textContent = 'Paciente nao encontrado';
+                if (elAddress) elAddress.textContent = 'Dados nao disponiveis';
             }
 
             try {
                 const prontuario = await loadProntuario(patientId);
                 notesInput.value = prontuario.notes || '';
             } catch (error) {
-                console.error('Erro ao carregar prontuário:', error);
-                showToast('Não foi possível carregar o prontuário salvo.', 'error');
+                console.error('Erro ao carregar prontuario:', error);
+                showToast('Nao foi possivel carregar o prontuario salvo.', 'error');
             }
         }
 
         saveButton.addEventListener('click', async () => {
             if (!patientId) {
-                showToast('Paciente não identificado para salvar o prontuário.', 'error');
+                showToast('Paciente nao identificado para salvar o prontuario.', 'error');
                 return;
             }
 
             saveButton.disabled = true;
-            showToast('Salvando prontuário...', 'success');
+            showToast('Salvando prontuario...', 'success');
 
             try {
-                await saveProntuario(patientId, notesInput.value);
-                showToast('Prontuário salvo com sucesso!', 'success');
+                const notesValue = notesInput.value;
+                const trimmedNotes = notesValue.trim();
+
+                await saveProntuario(patientId, notesValue);
+                showToast('Prontuario salvo com sucesso!', 'success');
+
+                if (trimmedNotes) {
+                    const shouldGeneratePdf = window.confirm('Prontuario salvo. Deseja gerar o PDF para impressao agora?');
+
+                    if (shouldGeneratePdf) {
+                        const patientName = selectedPatient?.name || elName?.textContent?.trim() || '';
+                        const patientAddress = selectedPatient?.endereco || '';
+                        const patientNumber = selectedPatient?.numero || '';
+                        const patientComplemento = selectedPatient?.complemento || '';
+                        const patientBairro = selectedPatient?.bairro || '';
+                        const patientCidade = selectedPatient?.cidade || '';
+                        const patientUf = selectedPatient?.uf || '';
+                        const patientCep = selectedPatient?.cep || '';
+                        showToast('Gerando receita em PDF...', 'success');
+                        const result = await generateReceitaPdf(
+                            patientId,
+                            patientName,
+                            patientAddress,
+                            patientNumber,
+                            patientComplemento,
+                            patientBairro,
+                            patientCidade,
+                            patientUf,
+                            patientCep,
+                            notesValue
+                        );
+                        openPdfPreview(result.pdfUrl, patientId);
+                        showToast('PDF gerado com sucesso!', 'success');
+                        return;
+                    }
+                }
+
                 setTimeout(() => {
                     window.location.href = '../buscar_paciente_m_dico/code.html';
                 }, 700);
             } catch (error) {
-                console.error('Erro ao salvar prontuário:', error);
-                showToast('Não foi possível salvar o prontuário.', 'error');
+                console.error('Erro ao salvar prontuario:', error);
+                showToast(error.message || 'Nao foi possivel concluir a operacao.', 'error');
             } finally {
                 saveButton.disabled = false;
             }

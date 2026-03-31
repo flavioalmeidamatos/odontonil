@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Visualizacao da Receita | Clinica Odontonil</title>
+    <link href="../public_style.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100dvh;
+        }
+        h1, h2, h3, .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+    <div class="min-h-screen flex flex-col">
+        <header class="sticky top-0 z-40 bg-[#f8fafa]/90 backdrop-blur-xl border-b border-outline-variant/10 px-4 py-4 sm:px-6">
+            <div class="max-w-6xl mx-auto flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-[11px] font-bold tracking-[0.18em] uppercase text-secondary">Receita Gerada</p>
+                    <h1 class="font-headline text-2xl font-extrabold text-primary tracking-tight">Visualizacao do PDF</h1>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a id="open-pdf-link" href="#" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/20">
+                        <span class="material-symbols-outlined text-xl">open_in_new</span>
+                        Abrir PDF
+                    </a>
+                    <a id="back-link" href="../buscar_paciente_m_dico/code.html" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-surface-container-low text-primary font-bold text-sm">
+                        <span class="material-symbols-outlined text-xl">arrow_back</span>
+                        Voltar aos Pacientes
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 px-3 py-3 sm:px-6 sm:py-6">
+            <div class="max-w-6xl mx-auto h-[calc(100dvh-110px)] sm:h-[calc(100dvh-140px)] bg-white rounded-[2rem] overflow-hidden border border-outline-variant/10 shadow-lg">
+                <iframe id="pdf-viewer-frame" title="Visualizacao do PDF da receita" class="w-full h-full border-0 bg-white"></iframe>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const pdfUrl = params.get('pdf');
+        const frame = document.getElementById('pdf-viewer-frame');
+        const openLink = document.getElementById('open-pdf-link');
+        const backLink = document.getElementById('back-link');
+
+        if (pdfUrl) {
+            const decodedPdfUrl = decodeURIComponent(pdfUrl);
+            frame.src = `${decodedPdfUrl}${decodedPdfUrl.includes('?') ? '&' : '?'}t=${Date.now()}#toolbar=1`;
+            openLink.href = decodedPdfUrl;
+        } else {
+            frame.srcdoc = `
+                <div style="height:100%;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;background:#f8fafa;color:#0b3c33;padding:24px;text-align:center;">
+                    <div>
+                        <h2 style="font-family:Manrope,sans-serif;font-size:24px;margin-bottom:12px;">PDF nao encontrado</h2>
+                        <p>Volte para a lista de pacientes e gere a receita novamente.</p>
+                    </div>
+                </div>
+            `;
+            openLink.classList.add('hidden');
+        }
+
+        const returnUrl = params.get('return');
+        if (returnUrl) {
+            backLink.href = decodeURIComponent(returnUrl);
+        }
+    </script>
+</body>
+</html>
