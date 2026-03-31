@@ -23,6 +23,12 @@ const patientAddressPlaceholders = ['\u00abendere\u00e7o_do_paciente\u00bb'];
 const prescriptionAnchors = ['Prescri\u00e7\u00e3o:'];
 const dateAnchors = ['Data'];
 const replacementFontSize = 12.6;
+const prescriptionBaseFontSize = replacementFontSize * 2;
+const isDevWatcherRuntime = Boolean(
+    process.env.NODEMON
+    || process.env.__daemon
+    || process.env.npm_lifecycle_event === 'dev'
+);
 
 let pdfJsModulePromise = null;
 
@@ -519,8 +525,8 @@ function buildPrescriptionRenderLines(notes) {
 }
 
 function calculatePrescriptionLayout(lines, font, width, height) {
-    const maxFontSize = replacementFontSize;
-    const minFontSize = 7.2;
+    const maxFontSize = prescriptionBaseFontSize;
+    const minFontSize = 14.4;
     const availableHeight = height - 14;
 
     for (let fontSize = maxFontSize; fontSize >= minFontSize; fontSize -= 0.2) {
@@ -1144,5 +1150,7 @@ app.listen(port, '0.0.0.0', () => {
     ==================================================
     `);
 
-    open(`http://localhost:${port}`);
+    if (!isDevWatcherRuntime) {
+        open(`http://localhost:${port}`);
+    }
 });

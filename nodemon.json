@@ -1,0 +1,8 @@
+{
+  "ignore": [
+    "data/*.json",
+    "data/**/*.json",
+    "public/receitas-geradas/*",
+    "public/receitas-geradas/**/*"
+  ]
+}

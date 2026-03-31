@@ -243,6 +243,11 @@
         const editingId = searchParams.get('edit');
         let webcamStream = null;
 
+        window.MobileUtils?.bindOverlayProtection?.(webcamModal, {
+            closeOnBackdrop: true,
+            onBackdrop: () => closeWebcamModal(),
+        });
+
         function generatePatientId() {
             const year = new Date().getFullYear();
             const suffix = String(Date.now()).slice(-4);
@@ -387,6 +392,7 @@
         }
 
         function closeWebcamModal() {
+            window.MobileUtils?.guardClickThrough?.();
             webcamModal.classList.add('hidden');
             webcamModal.classList.remove('flex');
             stopWebcamStream();

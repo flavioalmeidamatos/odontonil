@@ -7,6 +7,7 @@
 const MobileUtils = {
     installPromptEvent: null,
     uxHintMounted: false,
+    clickThroughSuppressedUntil: 0,
 
     // 1. Toast System
     toast(message, type = 'info', duration = 3000) {
@@ -65,6 +66,38 @@ const MobileUtils = {
                 navigator.vibrate([15, 30, 20]);
                 break;
         }
+    },
+
+    guardClickThrough(duration = 450) {
+        this.clickThroughSuppressedUntil = Date.now() + duration;
+    },
+
+    bindOverlayProtection(root, options = {}) {
+        if (!root || root.dataset.overlayProtectionBound === '1') {
+            return;
+        }
+
+        root.dataset.overlayProtectionBound = '1';
+
+        root.addEventListener('pointerdown', (event) => {
+            event.stopPropagation();
+        });
+
+        root.addEventListener('click', (event) => {
+            if (Date.now() < this.clickThroughSuppressedUntil) {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+
+            event.stopPropagation();
+
+            if (event.target === root && options.closeOnBackdrop && typeof options.onBackdrop === 'function') {
+                event.preventDefault();
+                this.guardClickThrough();
+                options.onBackdrop();
+            }
+        });
     },
 
     getDeviceContext() {
@@ -302,7 +335,12 @@ const MobileUtils = {
         primary.type = 'button';
         primary.className = 'ux-hint-button primary';
         primary.textContent = hint.primaryLabel;
-        primary.addEventListener('click', () => hint.onPrimary?.());
+        primary.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            this.guardClickThrough();
+            hint.onPrimary?.();
+        });
         actions.appendChild(primary);
 
         if (hint.secondaryLabel) {
@@ -310,13 +348,19 @@ const MobileUtils = {
             secondary.type = 'button';
             secondary.className = 'ux-hint-button secondary';
             secondary.textContent = hint.secondaryLabel;
-            secondary.addEventListener('click', () => hint.onSecondary?.());
+            secondary.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.guardClickThrough();
+                hint.onSecondary?.();
+            });
             actions.appendChild(secondary);
         }
 
         card.append(kicker, title, message, actions);
         root.appendChild(card);
         document.body.appendChild(root);
+        this.bindOverlayProtection(root);
     },
 
     // 3. Auto-attach to interactive elements marked with 'data-haptic'
@@ -337,6 +381,14 @@ const MobileUtils = {
 
             this.renderUXHint();
         }
+
+        document.addEventListener('click', (e) => {
+            if (Date.now() < this.clickThroughSuppressedUntil) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+        }, true);
 
         document.addEventListener('click', (e) => {
             const hapticEl = e.target.closest('[data-haptic]');

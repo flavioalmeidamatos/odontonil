@@ -286,11 +286,25 @@
             color: var(--color-primary);
         }
         .prescription-notes-textarea {
+            display: block;
+            width: 100%;
+            min-height: 18rem;
+            padding: 1rem 1rem 1.35rem;
+            border-radius: 1.35rem;
+            border: 1px solid rgb(191 201 196 / 0.5);
+            background: var(--color-surface-container-low);
+            box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35);
             white-space: pre;
             overflow-x: auto;
             overflow-y: auto;
             overflow-wrap: normal;
             word-break: keep-all;
+            resize: vertical;
+        }
+        .prescription-notes-textarea:focus {
+            outline: none;
+            border-color: rgb(0 77 64 / 0.32);
+            box-shadow: 0 0 0 3px rgb(0 77 64 / 0.08);
         }
         .yes-no-modal[hidden] {
             display: none;
@@ -462,6 +476,10 @@
             }
             .catalog-field-subtitle {
                 font-size: 1.05rem;
+            }
+            .prescription-notes-textarea {
+                min-height: 24rem;
+                resize: both;
             }
             .yes-no-modal {
                 align-items: center;
@@ -678,13 +696,13 @@
                         <div class="w-10 h-10 bg-primary-fixed/30 rounded-full flex items-center justify-center">
                             <span class="material-symbols-outlined text-primary" data-icon="description">description</span>
                         </div>
-                        <h3 class="font-headline text-xl font-bold text-primary tracking-tight">Prescricao e Notas</h3>
+                        <h3 class="font-headline text-xl font-bold text-primary tracking-tight">Prescrição e Notas</h3>
                     </div>
                     <span class="text-outline text-[10px] font-bold uppercase tracking-widest bg-surface-container-low px-3 py-1 rounded-full">Sincronizado</span>
                 </div>
 
                 <div class="flex-1 relative group">
-                    <textarea id="patient-notes" wrap="off" class="prescription-notes-textarea w-full h-full min-h-[400px] bg-transparent border-none focus:ring-0 p-0 text-on-surface font-body leading-relaxed text-lg placeholder:text-slate-300 placeholder:italic resize-none" placeholder="Digite aqui as prescricoes, dosagens e orientacoes para o paciente..."></textarea>
+                    <textarea id="patient-notes" wrap="off" class="prescription-notes-textarea h-full text-on-surface font-body leading-relaxed text-lg placeholder:text-slate-400 placeholder:italic" placeholder="Digite aqui as prescricoes, dosagens e orientacoes para o paciente..."></textarea>
                     <div class="absolute bottom-0 right-0 p-4 opacity-10 pointer-events-none">
                         <span class="material-symbols-outlined text-6xl text-primary" data-icon="clinical_notes">clinical_notes</span>
                     </div>
@@ -709,7 +727,7 @@
             <div class="flex flex-col sm:flex-row gap-3">
                 <button id="pdf-close-button" type="button" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-surface-container-low text-primary font-bold text-sm">
                     <span class="material-symbols-outlined text-xl">arrow_back</span>
-                    Voltar aos Pacientes
+                    Fechar Preview
                 </button>
             </div>
         </div>
@@ -754,6 +772,41 @@
         const yesNoNoButton = document.getElementById('yes-no-no-button');
         let yesNoResolver = null;
         let yesNoLastFocusedElement = null;
+        let suppressClickThroughUntil = 0;
+        let isCatalogMutationInProgress = false;
+
+        function getPageNavigationLinks() {
+            return Array.from(document.querySelectorAll('a[href]'));
+        }
+
+        function setPageNavigationLocked(isLocked) {
+            getPageNavigationLinks().forEach((link) => {
+                if (isLocked) {
+                    if (!link.dataset.prevTabindex) {
+                        link.dataset.prevTabindex = link.getAttribute('tabindex') ?? '';
+                    }
+                    link.setAttribute('aria-disabled', 'true');
+                    link.setAttribute('tabindex', '-1');
+                    link.style.pointerEvents = 'none';
+                    link.style.userSelect = 'none';
+                    return;
+                }
+
+                link.removeAttribute('aria-disabled');
+                if (link.dataset.prevTabindex === '') {
+                    link.removeAttribute('tabindex');
+                } else if (link.dataset.prevTabindex) {
+                    link.setAttribute('tabindex', link.dataset.prevTabindex);
+                }
+                delete link.dataset.prevTabindex;
+                link.style.pointerEvents = '';
+                link.style.userSelect = '';
+            });
+        }
+
+        function guardAgainstClickThrough(duration = 450) {
+            suppressClickThroughUntil = Date.now() + duration;
+        }
 
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
@@ -776,8 +829,14 @@
 
             const resolve = yesNoResolver;
             yesNoResolver = null;
+            guardAgainstClickThrough();
             yesNoModal.hidden = true;
             yesNoModal.setAttribute('aria-hidden', 'true');
+            window.setTimeout(() => {
+                if (!yesNoResolver && !isCatalogMutationInProgress) {
+                    setPageNavigationLocked(false);
+                }
+            }, 500);
             if (yesNoLastFocusedElement instanceof HTMLElement) {
                 yesNoLastFocusedElement.focus();
             }
@@ -792,6 +851,7 @@
             yesNoLastFocusedElement = document.activeElement;
             yesNoTitle.textContent = title;
             yesNoMessage.textContent = message;
+            setPageNavigationLocked(true);
             yesNoModal.hidden = false;
             yesNoModal.setAttribute('aria-hidden', 'false');
 
@@ -801,13 +861,49 @@
             });
         }
 
-        yesNoYesButton?.addEventListener('click', () => closeYesNoModal(true));
-        yesNoNoButton?.addEventListener('click', () => closeYesNoModal(false));
+        yesNoYesButton?.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            closeYesNoModal(true);
+        });
+        yesNoNoButton?.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            closeYesNoModal(false);
+        });
         yesNoModal?.addEventListener('click', (event) => {
+            if (Date.now() < suppressClickThroughUntil) {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+
             if (event.target === yesNoModal) {
+                event.preventDefault();
+                event.stopPropagation();
                 closeYesNoModal(false);
             }
         });
+        yesNoModal?.addEventListener('pointerdown', (event) => {
+            event.stopPropagation();
+        });
+        document.addEventListener('click', (event) => {
+            if (Date.now() < suppressClickThroughUntil) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }, true);
+        document.addEventListener('click', (event) => {
+            const clickedLink = event.target.closest('a[href]');
+            if (!clickedLink) {
+                return;
+            }
+
+            if (yesNoResolver || isCatalogMutationInProgress || Date.now() < suppressClickThroughUntil) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }, true);
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && yesNoResolver) {
                 closeYesNoModal(false);
@@ -911,6 +1007,15 @@
             const frame = document.getElementById('pdf-preview-frame');
             const previewUrl = `${pdfUrl}?t=${Date.now()}#toolbar=1`;
 
+            const shouldOpenInNewTab = window.matchMedia('(min-width: 1024px)').matches;
+
+            if (shouldOpenInNewTab) {
+                const previewWindow = window.open(previewUrl, '_blank', 'noopener,noreferrer');
+                if (previewWindow) {
+                    return;
+                }
+            }
+
             frame.src = previewUrl;
             modal.classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
@@ -919,10 +1024,10 @@
         function closePdfPreview() {
             const modal = document.getElementById('pdf-preview-modal');
             const frame = document.getElementById('pdf-preview-frame');
+            window.MobileUtils?.guardClickThrough?.();
             modal.classList.add('hidden');
             frame.src = 'about:blank';
             document.body.classList.remove('overflow-hidden');
-            window.location.href = '../buscar_paciente_m_dico/code.html';
         }
 
         subscribeToPacientesRealtime({ reload: true });
@@ -954,6 +1059,7 @@
         const notesInput = document.getElementById('patient-notes');
         const saveButton = document.getElementById('save-prontuario-button');
         const previewCloseButton = document.getElementById('pdf-close-button');
+        window.MobileUtils?.bindOverlayProtection?.(document.getElementById('pdf-preview-modal'));
         let selectedPatient = null;
 
         function focusElement(element) {
@@ -1111,6 +1217,8 @@
                 }
 
                 try {
+                    isCatalogMutationInProgress = true;
+                    setPageNavigationLocked(true);
                     const payload = await addCatalogItem(config.endpoint, normalizedName);
                     state.items = Array.isArray(payload.items) ? payload.items : state.items;
                     await selectItem(payload.item || normalizedName);
@@ -1118,6 +1226,11 @@
                 } catch (error) {
                     showToast(error.message || config.messages.addError, 'error');
                     setHelper(error.message || config.messages.addError, 'error');
+                } finally {
+                    isCatalogMutationInProgress = false;
+                    if (!yesNoResolver) {
+                        window.setTimeout(() => setPageNavigationLocked(false), 250);
+                    }
                 }
             }
 
@@ -1143,6 +1256,8 @@
                 }
 
                 try {
+                    isCatalogMutationInProgress = true;
+                    setPageNavigationLocked(true);
                     const payload = await deleteCatalogItem(config.endpoint, exactMatch);
                     state.items = Array.isArray(payload.items) ? payload.items : [];
                     state.matches = [];
@@ -1155,6 +1270,11 @@
                 } catch (error) {
                     showToast(error.message || config.messages.deleteError, 'error');
                     setHelper(error.message || config.messages.deleteError, 'error');
+                } finally {
+                    isCatalogMutationInProgress = false;
+                    if (!yesNoResolver) {
+                        window.setTimeout(() => setPageNavigationLocked(false), 250);
+                    }
                 }
             }
 
@@ -1224,7 +1344,11 @@
                 setDropdownVisibility(true);
             }
 
-            deleteButton.addEventListener('click', handleDelete);
+            deleteButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                void handleDelete();
+            });
 
             input.addEventListener('focus', () => {
                 renderSuggestions(input.value);
@@ -1596,11 +1720,19 @@
             }
 
             try {
+                notesInput.value = '';
                 const prontuario = await loadProntuario(patientId);
-                notesInput.value = prontuario.notes || '';
+                const previousNotes = String(prontuario?.notes || '').trim();
+
+                if (previousNotes) {
+                    await saveProntuario(patientId, '');
+                }
+
+                notesInput.value = '';
             } catch (error) {
-                console.error('Erro ao carregar prontuario:', error);
-                showToast('Nao foi possivel carregar o prontuario salvo.', 'error');
+                console.error('Erro ao preparar novo prontuario:', error);
+                notesInput.value = '';
+                showToast('Nao foi possivel preparar um novo prontuario para este paciente.', 'error');
             }
         }
 
