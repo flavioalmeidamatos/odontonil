@@ -511,49 +511,37 @@ function drawDateAboveAnchor(page, font, match, dateText) {
     });
 }
 
-function wrapTextToWidth(text, font, size, maxWidth) {
-    const words = String(text || '').split(/\s+/).filter(Boolean);
-    if (words.length === 0) {
-        return [''];
-    }
-
-    const lines = [];
-    let currentLine = '';
-
-    words.forEach((word) => {
-        const candidate = currentLine ? `${currentLine} ${word}` : word;
-        if (font.widthOfTextAtSize(candidate, size) <= maxWidth || !currentLine) {
-            currentLine = candidate;
-            return;
-        }
-
-        lines.push(currentLine);
-        currentLine = word;
-    });
-
-    if (currentLine) {
-        lines.push(currentLine);
-    }
-
-    return lines;
+function buildPrescriptionRenderLines(notes) {
+    return normalizeNotesForPdf(notes)
+        .split('\n')
+        .map((line) => String(line || '').replace(/\s+/g, ' ').trim())
+        .filter(Boolean);
 }
 
-function buildPrescriptionRenderLines(notes, font, width) {
-    const paragraphs = normalizeNotesForPdf(notes).split('\n');
-    const lines = [];
+function calculatePrescriptionLayout(lines, font, width, height) {
+    const maxFontSize = replacementFontSize;
+    const minFontSize = 7.2;
+    const availableHeight = height - 14;
 
-    paragraphs.forEach((paragraph) => {
-        if (!paragraph.trim()) {
-            lines.push('');
-            return;
+    for (let fontSize = maxFontSize; fontSize >= minFontSize; fontSize -= 0.2) {
+        const lineHeight = Math.max(fontSize * 1.18, fontSize + 1.6);
+        const longestLineWidth = lines.reduce((maxWidth, line) => {
+            return Math.max(maxWidth, font.widthOfTextAtSize(line, fontSize));
+        }, 0);
+        const totalHeight = lines.length * lineHeight;
+
+        if (longestLineWidth <= width && totalHeight <= availableHeight) {
+            return {
+                fontSize,
+                lineHeight,
+            };
         }
+    }
 
-        wrapTextToWidth(paragraph, font, replacementFontSize, width).forEach((line) => {
-            lines.push(line);
-        });
-    });
-
-    return lines;
+    return {
+        fontSize: minFontSize,
+        lineHeight: Math.max(minFontSize * 1.18, minFontSize + 1.6),
+    };
 }
 
 function drawPrescriptionBlock(page, font, anchor, notes) {
@@ -561,7 +549,6 @@ function drawPrescriptionBlock(page, font, anchor, notes) {
     const topY = anchor.y - 18;
     const width = 255;
     const height = 205;
-    const lineHeight = 15.4;
 
     page.drawRectangle({
         x: x - 2,
@@ -571,7 +558,8 @@ function drawPrescriptionBlock(page, font, anchor, notes) {
         color: rgb(1, 1, 1),
     });
 
-    const lines = buildPrescriptionRenderLines(notes, font, width);
+    const lines = buildPrescriptionRenderLines(notes);
+    const { fontSize, lineHeight } = calculatePrescriptionLayout(lines, font, width);
     let currentY = topY;
 
     lines.forEach((line) => {
@@ -583,7 +571,7 @@ function drawPrescriptionBlock(page, font, anchor, notes) {
             page.drawText(line, {
                 x,
                 y: currentY,
-                size: replacementFontSize,
+                size: fontSize,
                 font,
                 color: rgb(0, 0, 0),
             });

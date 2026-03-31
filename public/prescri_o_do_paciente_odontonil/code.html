@@ -285,6 +285,80 @@
             line-height: 1.15;
             color: var(--color-primary);
         }
+        .prescription-notes-textarea {
+            white-space: pre;
+            overflow-x: auto;
+            overflow-y: auto;
+            overflow-wrap: normal;
+            word-break: keep-all;
+        }
+        .yes-no-modal[hidden] {
+            display: none;
+        }
+        .yes-no-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 90;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 1rem;
+            background: rgb(15 23 42 / 0.55);
+            backdrop-filter: blur(8px);
+        }
+        .yes-no-sheet {
+            width: min(100%, 30rem);
+            background: var(--color-surface-container-lowest);
+            border-radius: 1.6rem;
+            padding: 1.2rem;
+            box-shadow: 0 28px 60px rgb(15 23 42 / 0.22);
+            border: 1px solid rgb(191 201 196 / 0.35);
+        }
+        .yes-no-kicker {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+            margin-bottom: 0.45rem;
+        }
+        .yes-no-title {
+            font-family: var(--font-headline);
+            font-size: 1.15rem;
+            font-weight: 800;
+            line-height: 1.15;
+            color: var(--color-primary);
+            margin-bottom: 0.65rem;
+        }
+        .yes-no-message {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--color-on-surface-variant);
+        }
+        .yes-no-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .yes-no-button {
+            min-height: 3.2rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+        }
+        .yes-no-button:active {
+            transform: scale(0.98);
+        }
+        .yes-no-button.no {
+            background: var(--color-surface-container-low);
+            color: var(--color-primary);
+        }
+        .yes-no-button.yes {
+            background: var(--color-primary);
+            color: var(--color-on-primary);
+            box-shadow: var(--shadow-sm);
+        }
         @media (min-width: 640px) {
             .patient-page-main {
                 padding-top: 6rem;
@@ -388,6 +462,14 @@
             }
             .catalog-field-subtitle {
                 font-size: 1.05rem;
+            }
+            .yes-no-modal {
+                align-items: center;
+                padding: 1.5rem;
+            }
+            .yes-no-sheet {
+                padding: 1.4rem;
+                border-radius: 1.8rem;
             }
         }
     </style>
@@ -602,7 +684,7 @@
                 </div>
 
                 <div class="flex-1 relative group">
-                    <textarea id="patient-notes" class="w-full h-full min-h-[400px] bg-transparent border-none focus:ring-0 p-0 text-on-surface font-body leading-relaxed text-lg placeholder:text-slate-300 placeholder:italic resize-none" placeholder="Digite aqui as prescricoes, dosagens e orientacoes para o paciente..."></textarea>
+                    <textarea id="patient-notes" wrap="off" class="prescription-notes-textarea w-full h-full min-h-[400px] bg-transparent border-none focus:ring-0 p-0 text-on-surface font-body leading-relaxed text-lg placeholder:text-slate-300 placeholder:italic resize-none" placeholder="Digite aqui as prescricoes, dosagens e orientacoes para o paciente..."></textarea>
                     <div class="absolute bottom-0 right-0 p-4 opacity-10 pointer-events-none">
                         <span class="material-symbols-outlined text-6xl text-primary" data-icon="clinical_notes">clinical_notes</span>
                     </div>
@@ -637,6 +719,18 @@
     </div>
 </div>
 
+<div id="yes-no-modal" class="yes-no-modal" hidden aria-hidden="true">
+    <div class="yes-no-sheet" role="dialog" aria-modal="true" aria-labelledby="yes-no-title">
+        <p class="yes-no-kicker">Confirmacao</p>
+        <h3 id="yes-no-title" class="yes-no-title">Deseja continuar?</h3>
+        <p id="yes-no-message" class="yes-no-message"></p>
+        <div class="yes-no-actions">
+            <button id="yes-no-no-button" type="button" class="yes-no-button no">N&atilde;o</button>
+            <button id="yes-no-yes-button" type="button" class="yes-no-button yes">Sim</button>
+        </div>
+    </div>
+</div>
+
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 bg-[#f8fafa]/90 backdrop-blur-md z-50 rounded-t-[2rem] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] pb-4">
 <a class="flex flex-col items-center justify-center text-slate-400 rounded-2xl px-6 py-2 hover:text-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,52,43,0.2)] hover:-translate-y-1 active:scale-90 transition-all duration-300" data-haptic="light" href="../painel_da_recep_o/code.html">
 <span class="material-symbols-outlined mb-1" data-icon="desk">desk</span>
@@ -653,6 +747,14 @@
 <script src="../js/supabase-client.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
+        const yesNoModal = document.getElementById('yes-no-modal');
+        const yesNoTitle = document.getElementById('yes-no-title');
+        const yesNoMessage = document.getElementById('yes-no-message');
+        const yesNoYesButton = document.getElementById('yes-no-yes-button');
+        const yesNoNoButton = document.getElementById('yes-no-no-button');
+        let yesNoResolver = null;
+        let yesNoLastFocusedElement = null;
+
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `fixed bottom-24 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full text-white font-medium z-50 transition-all duration-300 ${
@@ -666,6 +768,51 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
+
+        function closeYesNoModal(answer) {
+            if (!yesNoModal || !yesNoResolver) {
+                return;
+            }
+
+            const resolve = yesNoResolver;
+            yesNoResolver = null;
+            yesNoModal.hidden = true;
+            yesNoModal.setAttribute('aria-hidden', 'true');
+            if (yesNoLastFocusedElement instanceof HTMLElement) {
+                yesNoLastFocusedElement.focus();
+            }
+            resolve(answer);
+        }
+
+        async function askYesNo(message, title = 'Deseja continuar?') {
+            if (!yesNoModal || !yesNoTitle || !yesNoMessage || !yesNoYesButton || !yesNoNoButton) {
+                return false;
+            }
+
+            yesNoLastFocusedElement = document.activeElement;
+            yesNoTitle.textContent = title;
+            yesNoMessage.textContent = message;
+            yesNoModal.hidden = false;
+            yesNoModal.setAttribute('aria-hidden', 'false');
+
+            return new Promise((resolve) => {
+                yesNoResolver = resolve;
+                focusElement(yesNoNoButton);
+            });
+        }
+
+        yesNoYesButton?.addEventListener('click', () => closeYesNoModal(true));
+        yesNoNoButton?.addEventListener('click', () => closeYesNoModal(false));
+        yesNoModal?.addEventListener('click', (event) => {
+            if (event.target === yesNoModal) {
+                closeYesNoModal(false);
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && yesNoResolver) {
+                closeYesNoModal(false);
+            }
+        });
 
         async function loadProntuario(patientId) {
             const response = await fetch(`/api/prontuarios/${encodeURIComponent(patientId)}`);
@@ -858,8 +1005,14 @@
         }
 
         function appendPrescriptionLineToNotes(line) {
-            const currentNotes = String(notesInput?.value || '').trimEnd();
-            notesInput.value = currentNotes ? `${currentNotes}\n${line}` : line;
+            const normalizedLine = String(line || '')
+                .replace(/\r?\n+/g, ' ')
+                .replace(/\s{2,}/g, ' ')
+                .trim();
+            const currentNotes = String(notesInput?.value || '')
+                .replace(/\s+$/g, '');
+
+            notesInput.value = currentNotes ? `${currentNotes}\n${normalizedLine}` : normalizedLine;
         }
         async function setupSmartCombobox(config) {
             const input = document.getElementById(config.inputId);
@@ -952,7 +1105,7 @@
                     return;
                 }
 
-                const shouldAdd = window.confirm(config.messages.addPrompt(normalizedName));
+                const shouldAdd = await askYesNo(config.messages.addPrompt(normalizedName), 'Adicionar item');
                 if (!shouldAdd) {
                     return;
                 }
@@ -984,7 +1137,7 @@
                     return;
                 }
 
-                const shouldDelete = window.confirm(config.messages.deletePrompt(exactMatch));
+                const shouldDelete = await askYesNo(config.messages.deletePrompt(exactMatch), 'Excluir item');
                 if (!shouldDelete) {
                     return;
                 }
@@ -1341,7 +1494,7 @@
                 deleteButtonId: 'delete-duration-button',
                 nextFieldId: 'patient-notes',
                 onValueConfirmed: async ({ focusNextField }) => {
-                    const shouldSendToNotes = window.confirm('Deseja enviar esta prescricao para o prontuario?');
+                    const shouldSendToNotes = await askYesNo('Deseja enviar esta prescricao para o prontuario?', 'Enviar ao prontuario');
 
                     if (!shouldSendToNotes) {
                         focusNextField();
@@ -1352,7 +1505,7 @@
                     appendPrescriptionLineToNotes(prescriptionLine);
                     showToast('Prescricao enviada ao prontuario.', 'success');
 
-                    const shouldAddAnotherPrescription = window.confirm('Tem mais prescricoes para adicionar?');
+                    const shouldAddAnotherPrescription = await askYesNo('Tem mais prescricoes para adicionar?', 'Mais prescricoes');
 
                     if (shouldAddAnotherPrescription) {
                         ['usage-type-input', 'medication-input', 'dosage-input', 'administration-input', 'during-input', 'duration-input']
@@ -1474,7 +1627,7 @@
                 showToast('Prontuario salvo com sucesso!', 'success');
 
                 if (trimmedNotes) {
-                    const shouldGeneratePdf = window.confirm('Prontuario salvo. Deseja gerar o PDF para impressao agora?');
+                    const shouldGeneratePdf = await askYesNo('Prontuario salvo. Deseja gerar o PDF para impressao agora?', 'Gerar PDF');
 
                     if (shouldGeneratePdf) {
                         const patientName = selectedPatient?.name || elName?.textContent?.trim() || '';
