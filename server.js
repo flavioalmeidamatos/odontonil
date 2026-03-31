@@ -161,12 +161,52 @@ function writeDurante(durante) {
     writeListStore(duranteFile, durante, ['6/6hr', '8/8hr']);
 }
 
+function normalizeDurationLabel(value) {
+    const normalizedValue = normalizeCatalogItem(value);
+    const durationMatch = normalizedValue.match(/^(\d{1,2})(?:\s*)(dia|dias)?$/i);
+
+    if (!durationMatch) {
+        return normalizedValue;
+    }
+
+    const dayNumber = String(Number.parseInt(durationMatch[1], 10)).padStart(2, '0');
+    return `${dayNumber} dias`;
+}
+
+function sortDurationList(list) {
+    return [...list].sort((a, b) => {
+        const aMatch = String(a).match(/^(\d{1,2})(?:\s*)dias?$/i);
+        const bMatch = String(b).match(/^(\d{1,2})(?:\s*)dias?$/i);
+
+        if (aMatch && bMatch) {
+            return Number(aMatch[1]) - Number(bMatch[1]);
+        }
+
+        if (aMatch) {
+            return -1;
+        }
+
+        if (bMatch) {
+            return 1;
+        }
+
+        return a.localeCompare(b, 'pt-BR', { sensitivity: 'base' });
+    });
+}
+
 function readDuracoes() {
-    return readListStore(duracoesFile, ['3 dias', '5 dias', '7 dias', '14 dias', '21 dias', '28 dias']);
+    return sortDurationList(
+        readListStore(duracoesFile, ['03 dias', '05 dias', '07 dias', '14 dias', '21 dias', '28 dias'])
+            .map(normalizeDurationLabel)
+    );
 }
 
 function writeDuracoes(duracoes) {
-    writeListStore(duracoesFile, duracoes, ['3 dias', '5 dias', '7 dias', '14 dias', '21 dias', '28 dias']);
+    writeListStore(
+        duracoesFile,
+        sortDurationList((Array.isArray(duracoes) ? duracoes : []).map(normalizeDurationLabel)),
+        ['03 dias', '05 dias', '07 dias', '14 dias', '21 dias', '28 dias']
+    );
 }
 
 function readProntuarios() {

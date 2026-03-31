@@ -585,7 +585,7 @@
                             </button>
                         </div>
 
-                        <p id="duration-helper" class="medication-helper">Ja inicia com 3, 5, 7, 14, 21 e 28 dias, mas voce pode adicionar mais opcoes.</p>
+                        <p id="duration-helper" class="medication-helper">Ja inicia com 03, 05, 07, 14, 21 e 28 dias, mas voce pode adicionar mais opcoes.</p>
                     </div>
                 </div>
             </section>
@@ -808,6 +808,59 @@
         const saveButton = document.getElementById('save-prontuario-button');
         const previewCloseButton = document.getElementById('pdf-close-button');
         let selectedPatient = null;
+
+        function focusElement(element) {
+            if (!element) {
+                return;
+            }
+
+            window.setTimeout(() => {
+                element.focus();
+                if (typeof element.scrollIntoView === 'function') {
+                    element.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                }
+                if (typeof element.select === 'function' && element.tagName === 'INPUT') {
+                    element.select();
+                }
+            }, 80);
+        }
+
+        function getPrescriptionSelections() {
+            return {
+                usageType: normalizeCatalogValue(document.getElementById('usage-type-input')?.value),
+                medication: normalizeCatalogValue(document.getElementById('medication-input')?.value),
+                dosage: normalizeCatalogValue(document.getElementById('dosage-input')?.value),
+                administration: normalizeCatalogValue(document.getElementById('administration-input')?.value),
+                during: normalizeCatalogValue(document.getElementById('during-input')?.value),
+                duration: normalizeCatalogValue(document.getElementById('duration-input')?.value),
+            };
+        }
+
+        function getNextPrescriptionNumber() {
+            const lines = String(notesInput?.value || '').split('\n');
+            let maxNumber = 0;
+
+            lines.forEach((line) => {
+                const match = line.match(/^\s*(\d{1,3})\s*-/);
+                if (!match) {
+                    return;
+                }
+
+                maxNumber = Math.max(maxNumber, Number.parseInt(match[1], 10) || 0);
+            });
+
+            return String(maxNumber + 1).padStart(2, '0');
+        }
+
+        function buildPrescriptionLine() {
+            const selections = getPrescriptionSelections();
+            return `${getNextPrescriptionNumber()} - ${selections.usageType}: ${selections.medication} - ${selections.dosage} ${selections.administration} de ${selections.during} durante: ${selections.duration}.`;
+        }
+
+        function appendPrescriptionLineToNotes(line) {
+            const currentNotes = String(notesInput?.value || '').trimEnd();
+            notesInput.value = currentNotes ? `${currentNotes}\n${line}` : line;
+        }
         async function setupSmartCombobox(config) {
             const input = document.getElementById(config.inputId);
             const suggestions = document.getElementById(config.suggestionsId);
@@ -818,6 +871,9 @@
             if (!input || !suggestions || !helper || !deleteButton || !root) {
                 return null;
             }
+
+            input.required = true;
+            input.setAttribute('aria-required', 'true');
 
             const state = {
                 items: [],
@@ -834,6 +890,16 @@
             function setDropdownVisibility(isOpen) {
                 suggestions.classList.toggle('hidden', !isOpen);
                 input.setAttribute('aria-expanded', String(isOpen));
+            }
+
+            function focusNextField() {
+                const nextField = config.nextFieldId ? document.getElementById(config.nextFieldId) : null;
+
+                if (!nextField) {
+                    return;
+                }
+
+                focusElement(nextField);
             }
 
             function getExactMatch(name) {
@@ -859,13 +925,25 @@
                 return rankedItems.slice(0, 8);
             }
 
-            function selectItem(name) {
+            async function selectItem(name) {
                 const exactMatch = getExactMatch(name) || normalizeCatalogValue(name);
                 state.selectedItem = exactMatch;
                 input.value = exactMatch;
                 state.activeIndex = -1;
                 setDropdownVisibility(false);
                 setHelper(config.messages.selectSuccess(exactMatch), 'success');
+
+                if (typeof config.onValueConfirmed === 'function') {
+                    await config.onValueConfirmed({
+                        value: exactMatch,
+                        focusNextField,
+                        input,
+                        setHelper,
+                    });
+                    return;
+                }
+
+                focusNextField();
             }
 
             async function promptAddItem(name) {
@@ -882,7 +960,7 @@
                 try {
                     const payload = await addCatalogItem(config.endpoint, normalizedName);
                     state.items = Array.isArray(payload.items) ? payload.items : state.items;
-                    selectItem(payload.item || normalizedName);
+                    await selectItem(payload.item || normalizedName);
                     showToast(config.messages.addSuccessToast, 'success');
                 } catch (error) {
                     showToast(error.message || config.messages.addError, 'error');
@@ -964,7 +1042,7 @@
                     optionHint.className = 'medication-option-hint';
                     optionHint.textContent = 'Selecionar';
                     option.append(optionLabel, optionHint);
-                    option.addEventListener('click', () => selectItem(item));
+                    option.addEventListener('click', () => { void selectItem(item); });
                     suggestions.appendChild(option);
                 });
 
@@ -1000,8 +1078,17 @@
             });
 
             input.addEventListener('input', () => {
+                const typedValue = normalizeCatalogValue(input.value);
+                const exactMatch = getExactMatch(typedValue);
+
                 state.selectedItem = '';
                 state.activeIndex = -1;
+
+                if (typedValue && exactMatch && exactMatch.localeCompare(typedValue, 'pt-BR', { sensitivity: 'base' }) === 0) {
+                    void selectItem(exactMatch);
+                    return;
+                }
+
                 setHelper(config.messages.defaultHelper, 'neutral');
                 renderSuggestions(input.value);
             });
@@ -1040,13 +1127,13 @@
                     event.preventDefault();
 
                     if (state.activeIndex >= 0 && state.matches[state.activeIndex]) {
-                        selectItem(state.matches[state.activeIndex]);
+                        await selectItem(state.matches[state.activeIndex]);
                         return;
                     }
 
                     const exactMatch = getExactMatch(typedValue);
                     if (exactMatch) {
-                        selectItem(exactMatch);
+                        await selectItem(exactMatch);
                         return;
                     }
 
@@ -1069,9 +1156,33 @@
 
             return {
                 root,
+                input,
+                label: config.label,
                 close() {
                     state.activeIndex = -1;
                     setDropdownVisibility(false);
+                },
+                reset() {
+                    state.selectedItem = '';
+                    state.activeIndex = -1;
+                    input.value = '';
+                    setDropdownVisibility(false);
+                    setHelper(config.messages.defaultHelper, 'neutral');
+                },
+                getValue() {
+                    return normalizeCatalogValue(input.value);
+                },
+                ensureRequired() {
+                    const currentValue = normalizeCatalogValue(input.value);
+
+                    if (currentValue) {
+                        return true;
+                    }
+
+                    setHelper(config.messages.requiredHelper, 'error');
+                    input.focus();
+                    input.reportValidity?.();
+                    return false;
                 },
             };
         }
@@ -1080,13 +1191,21 @@
             previewCloseButton.addEventListener('click', closePdfPreview);
         }
 
-        const smartComboboxes = (await Promise.all([
+        let smartComboboxes = [];
+
+        function getSmartComboboxById(inputId) {
+            return smartComboboxes.find((combobox) => combobox.input?.id === inputId) || null;
+        }
+
+        smartComboboxes = (await Promise.all([
             setupSmartCombobox({
                 endpoint: '/api/tipos-uso',
                 inputId: 'usage-type-input',
                 suggestionsId: 'usage-type-suggestions',
                 helperId: 'usage-type-helper',
                 deleteButtonId: 'delete-usage-type-button',
+                nextFieldId: 'medication-input',
+                label: 'Tipo de Uso',
                 messages: {
                     selectSuccess: (value) => `Tipo de uso selecionado: ${value}.`,
                     addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar este tipo de uso?`,
@@ -1103,6 +1222,7 @@
                     defaultHelper: 'Selecione um tipo de uso existente ou adicione um novo.',
                     loadError: 'Nao foi possivel carregar a lista de tipos de uso.',
                     loadLogLabel: 'Erro ao carregar tipos de uso:',
+                    requiredHelper: 'Tipo de uso obrigatorio.',
                 },
             }),
             setupSmartCombobox({
@@ -1111,6 +1231,8 @@
                 suggestionsId: 'medication-suggestions',
                 helperId: 'medication-helper',
                 deleteButtonId: 'delete-medication-button',
+                nextFieldId: 'dosage-input',
+                label: 'Medicação',
                 messages: {
                     selectSuccess: (value) => `Medicacao selecionada: ${value}.`,
                     addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar este medicamento?`,
@@ -1127,6 +1249,7 @@
                     defaultHelper: 'Selecione um medicamento existente ou adicione um novo.',
                     loadError: 'Nao foi possivel carregar a lista de medicacoes.',
                     loadLogLabel: 'Erro ao carregar medicacoes:',
+                    requiredHelper: 'Medicacao obrigatoria.',
                 },
             }),
             setupSmartCombobox({
@@ -1135,6 +1258,8 @@
                 suggestionsId: 'dosage-suggestions',
                 helperId: 'dosage-helper',
                 deleteButtonId: 'delete-dosage-button',
+                nextFieldId: 'administration-input',
+                label: 'Dosagem',
                 messages: {
                     selectSuccess: (value) => `Dosagem selecionada: ${value}.`,
                     addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar esta dosagem?`,
@@ -1151,6 +1276,7 @@
                     defaultHelper: 'Selecione uma dosagem existente ou adicione uma nova.',
                     loadError: 'Nao foi possivel carregar a lista de dosagens.',
                     loadLogLabel: 'Erro ao carregar dosagens:',
+                    requiredHelper: 'Dosagem obrigatoria.',
                 },
             }),
             setupSmartCombobox({
@@ -1159,6 +1285,8 @@
                 suggestionsId: 'administration-suggestions',
                 helperId: 'administration-helper',
                 deleteButtonId: 'delete-administration-button',
+                nextFieldId: 'during-input',
+                label: 'Administração',
                 messages: {
                     selectSuccess: (value) => `Administracao selecionada: ${value}.`,
                     addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar esta administracao?`,
@@ -1175,6 +1303,7 @@
                     defaultHelper: 'Selecione uma administracao existente ou adicione uma nova.',
                     loadError: 'Nao foi possivel carregar a lista de administracoes.',
                     loadLogLabel: 'Erro ao carregar administracoes:',
+                    requiredHelper: 'Administracao obrigatoria.',
                 },
             }),
             setupSmartCombobox({
@@ -1183,6 +1312,8 @@
                 suggestionsId: 'during-suggestions',
                 helperId: 'during-helper',
                 deleteButtonId: 'delete-during-button',
+                nextFieldId: 'duration-input',
+                label: 'Durante',
                 messages: {
                     selectSuccess: (value) => `Durante selecionado: ${value}.`,
                     addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar este intervalo?`,
@@ -1199,6 +1330,7 @@
                     defaultHelper: 'Selecione um intervalo existente ou adicione um novo.',
                     loadError: 'Nao foi possivel carregar a lista de intervalos.',
                     loadLogLabel: 'Erro ao carregar intervalos:',
+                    requiredHelper: 'Durante obrigatorio.',
                 },
             }),
             setupSmartCombobox({
@@ -1207,6 +1339,31 @@
                 suggestionsId: 'duration-suggestions',
                 helperId: 'duration-helper',
                 deleteButtonId: 'delete-duration-button',
+                nextFieldId: 'patient-notes',
+                onValueConfirmed: async ({ focusNextField }) => {
+                    const shouldSendToNotes = window.confirm('Deseja enviar esta prescricao para o prontuario?');
+
+                    if (!shouldSendToNotes) {
+                        focusNextField();
+                        return;
+                    }
+
+                    const prescriptionLine = buildPrescriptionLine();
+                    appendPrescriptionLineToNotes(prescriptionLine);
+                    showToast('Prescricao enviada ao prontuario.', 'success');
+
+                    const shouldAddAnotherPrescription = window.confirm('Tem mais prescricoes para adicionar?');
+
+                    if (shouldAddAnotherPrescription) {
+                        ['usage-type-input', 'medication-input', 'dosage-input', 'administration-input', 'during-input', 'duration-input']
+                            .forEach((inputId) => getSmartComboboxById(inputId)?.reset());
+                        focusElement(document.getElementById('usage-type-input'));
+                        return;
+                    }
+
+                    focusElement(saveButton);
+                },
+                label: 'Duração',
                 messages: {
                     selectSuccess: (value) => `Duracao selecionada: ${value}.`,
                     addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar esta duracao?`,
@@ -1223,6 +1380,7 @@
                     defaultHelper: 'Selecione uma duracao existente ou adicione uma nova.',
                     loadError: 'Nao foi possivel carregar a lista de duracoes.',
                     loadLogLabel: 'Erro ao carregar duracoes:',
+                    requiredHelper: 'Duracao obrigatoria.',
                 },
             }),
         ])).filter(Boolean);
@@ -1296,6 +1454,12 @@
         saveButton.addEventListener('click', async () => {
             if (!patientId) {
                 showToast('Paciente nao identificado para salvar o prontuario.', 'error');
+                return;
+            }
+
+            const missingRequiredCombobox = smartComboboxes.find((combobox) => !combobox.ensureRequired());
+            if (missingRequiredCombobox) {
+                showToast(`Preencha o campo obrigatorio ${missingRequiredCombobox.label}.`, 'error');
                 return;
             }
 
