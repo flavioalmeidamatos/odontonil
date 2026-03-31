@@ -252,6 +252,39 @@
         .medication-helper[data-state="success"] {
             color: var(--color-primary-container);
         }
+        .catalog-card {
+            padding: 1rem 1.1rem;
+            border-radius: 1.5rem;
+        }
+        .catalog-card-header {
+            margin-bottom: 1rem;
+        }
+        .catalog-stack {
+            display: grid;
+            gap: 1rem;
+        }
+        .catalog-field {
+            display: grid;
+            gap: 0.75rem;
+        }
+        .catalog-field + .catalog-field {
+            padding-top: 1rem;
+            border-top: 1px solid rgb(191 201 196 / 0.35);
+        }
+        .catalog-field-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+        }
+        .catalog-field-subtitle {
+            font-family: var(--font-headline);
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.15;
+            color: var(--color-primary);
+        }
         @media (min-width: 640px) {
             .patient-page-main {
                 padding-top: 6rem;
@@ -337,6 +370,25 @@
             .medication-helper {
                 font-size: 0.8rem;
             }
+            .catalog-card {
+                padding: 1.25rem 1.35rem;
+                border-radius: 1.75rem;
+            }
+            .catalog-card-header {
+                margin-bottom: 1.25rem;
+            }
+            .catalog-stack {
+                gap: 1.15rem;
+            }
+            .catalog-field {
+                gap: 0.85rem;
+            }
+            .catalog-field + .catalog-field {
+                padding-top: 1.15rem;
+            }
+            .catalog-field-subtitle {
+                font-size: 1.05rem;
+            }
         }
     </style>
 </head>
@@ -391,27 +443,105 @@
         </div>
 
         <div class="lg:col-span-7 space-y-6">
-            <section class="medication-card bg-surface-container-lowest shadow-sm border border-outline-variant/10">
-                <div class="medication-card-header">
-                    <p class="font-label text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Medicacao</p>
-                    <h3 class="font-headline text-lg font-extrabold text-primary tracking-tight">Buscar, adicionar ou excluir medicamento</h3>
+            <section class="catalog-card bg-surface-container-lowest shadow-sm border border-outline-variant/10">
+                <div class="catalog-card-header">
+                    <p class="font-label text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Prescricao</p>
+                    <h3 class="font-headline text-lg font-extrabold text-primary tracking-tight">Configure tipo de uso, medicacao, dosagem e administracao</h3>
                 </div>
 
-                <div class="medication-input-row">
-                    <div class="medication-combobox">
-                        <div class="medication-input-shell">
-                            <span class="material-symbols-outlined text-primary text-xl" data-icon="search">search</span>
-                            <input id="medication-input" class="medication-input text-on-surface" type="text" placeholder="Digite o nome do medicamento" autocomplete="off" spellcheck="false" aria-label="Medicação" aria-autocomplete="list" aria-expanded="false" aria-controls="medication-suggestions"/>
+                <div class="catalog-stack">
+                    <div class="catalog-field">
+                        <div>
+                            <p class="catalog-field-title">Tipo de Uso</p>
+                            <p class="catalog-field-subtitle">Buscar, adicionar ou excluir tipo de uso</p>
                         </div>
-                        <div id="medication-suggestions" class="medication-dropdown hidden" role="listbox"></div>
+
+                        <div class="medication-input-row">
+                            <div class="medication-combobox">
+                                <div class="medication-input-shell">
+                                    <span class="material-symbols-outlined text-primary text-xl" data-icon="search">search</span>
+                                    <input id="usage-type-input" class="medication-input text-on-surface" type="text" placeholder="Digite o tipo de uso" autocomplete="off" spellcheck="false" aria-label="Tipo de Uso" aria-autocomplete="list" aria-expanded="false" aria-controls="usage-type-suggestions"/>
+                                </div>
+                                <div id="usage-type-suggestions" class="medication-dropdown hidden" role="listbox"></div>
+                            </div>
+
+                            <button id="delete-usage-type-button" type="button" class="medication-delete-button" aria-label="Excluir tipo de uso">
+                                <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+                            </button>
+                        </div>
+
+                        <p id="usage-type-helper" class="medication-helper">Ja inicia com Uso Interno Oral e Via Intramuscular, mas voce pode adicionar mais opcoes.</p>
                     </div>
 
-                    <button id="delete-medication-button" type="button" class="medication-delete-button" aria-label="Excluir medicamento">
-                        <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
-                    </button>
-                </div>
+                    <div class="catalog-field">
+                        <div>
+                            <p class="catalog-field-title">Medica&ccedil;&atilde;o</p>
+                            <p class="catalog-field-subtitle">Buscar, adicionar ou excluir medicamento</p>
+                        </div>
 
-                <p id="medication-helper" class="medication-helper">Pesquise para selecionar da lista. Se nao existir, voce podera adicionar.</p>
+                        <div class="medication-input-row">
+                            <div class="medication-combobox">
+                                <div class="medication-input-shell">
+                                    <span class="material-symbols-outlined text-primary text-xl" data-icon="search">search</span>
+                                    <input id="medication-input" class="medication-input text-on-surface" type="text" placeholder="Digite o nome do medicamento" autocomplete="off" spellcheck="false" aria-label="Medicação" aria-autocomplete="list" aria-expanded="false" aria-controls="medication-suggestions"/>
+                                </div>
+                                <div id="medication-suggestions" class="medication-dropdown hidden" role="listbox"></div>
+                            </div>
+
+                            <button id="delete-medication-button" type="button" class="medication-delete-button" aria-label="Excluir medicamento">
+                                <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+                            </button>
+                        </div>
+
+                        <p id="medication-helper" class="medication-helper">Pesquise para selecionar da lista. Se nao existir, voce podera adicionar.</p>
+                    </div>
+
+                    <div class="catalog-field">
+                        <div>
+                            <p class="catalog-field-title">Dosagem</p>
+                            <p class="catalog-field-subtitle">Buscar, adicionar ou excluir dosagem</p>
+                        </div>
+
+                        <div class="medication-input-row">
+                            <div class="medication-combobox">
+                                <div class="medication-input-shell">
+                                    <span class="material-symbols-outlined text-primary text-xl" data-icon="search">search</span>
+                                    <input id="dosage-input" class="medication-input text-on-surface" type="text" placeholder="Digite a dosagem" autocomplete="off" spellcheck="false" aria-label="Dosagem" aria-autocomplete="list" aria-expanded="false" aria-controls="dosage-suggestions"/>
+                                </div>
+                                <div id="dosage-suggestions" class="medication-dropdown hidden" role="listbox"></div>
+                            </div>
+
+                            <button id="delete-dosage-button" type="button" class="medication-delete-button" aria-label="Excluir dosagem">
+                                <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+                            </button>
+                        </div>
+
+                        <p id="dosage-helper" class="medication-helper">Pesquise para selecionar da lista. Se nao existir, voce podera adicionar.</p>
+                    </div>
+
+                    <div class="catalog-field">
+                        <div>
+                            <p class="catalog-field-title">Administra&ccedil;&atilde;o</p>
+                            <p class="catalog-field-subtitle">Buscar, adicionar ou excluir forma de administra&ccedil;&atilde;o</p>
+                        </div>
+
+                        <div class="medication-input-row">
+                            <div class="medication-combobox">
+                                <div class="medication-input-shell">
+                                    <span class="material-symbols-outlined text-primary text-xl" data-icon="search">search</span>
+                                    <input id="administration-input" class="medication-input text-on-surface" type="text" placeholder="Digite a administracao" autocomplete="off" spellcheck="false" aria-label="Administra&ccedil;&atilde;o" aria-autocomplete="list" aria-expanded="false" aria-controls="administration-suggestions"/>
+                                </div>
+                                <div id="administration-suggestions" class="medication-dropdown hidden" role="listbox"></div>
+                            </div>
+
+                            <button id="delete-administration-button" type="button" class="medication-delete-button" aria-label="Excluir administracao">
+                                <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+                            </button>
+                        </div>
+
+                        <p id="administration-helper" class="medication-helper">Ja inicia com Comprimido e C&aacute;psulas, mas voce pode adicionar mais opcoes.</p>
+                    </div>
+                </div>
             </section>
 
             <section class="bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm border border-outline-variant/10 min-h-[500px] flex flex-col">
@@ -513,25 +643,25 @@
             return response.json();
         }
 
-        function normalizeMedicationName(value) {
+        function normalizeCatalogValue(value) {
             return String(value || '')
                 .trim()
                 .replace(/\s+/g, ' ');
         }
 
-        async function loadMedicacoes() {
-            const response = await fetch('/api/medicacoes');
+        async function loadCatalogItems(endpoint) {
+            const response = await fetch(endpoint);
             const payload = await response.json().catch(() => ({ items: [] }));
 
             if (!response.ok) {
-                throw new Error(payload?.error || 'Falha ao carregar medicações.');
+                throw new Error(payload?.error || 'Falha ao carregar itens.');
             }
 
             return Array.isArray(payload.items) ? payload.items : [];
         }
 
-        async function addMedicacao(name) {
-            const response = await fetch('/api/medicacoes', {
+        async function addCatalogItem(endpoint, name) {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name }),
@@ -539,20 +669,20 @@
             const payload = await response.json().catch(() => ({}));
 
             if (!response.ok) {
-                throw new Error(payload?.error || 'Falha ao adicionar medicação.');
+                throw new Error(payload?.error || 'Falha ao adicionar item.');
             }
 
             return payload;
         }
 
-        async function deleteMedicacao(name) {
-            const response = await fetch(`/api/medicacoes/${encodeURIComponent(name)}`, {
+        async function deleteCatalogItem(endpoint, name) {
+            const response = await fetch(`${endpoint}/${encodeURIComponent(name)}`, {
                 method: 'DELETE',
             });
             const payload = await response.json().catch(() => ({}));
 
             if (!response.ok) {
-                throw new Error(payload?.error || 'Falha ao excluir medicação.');
+                throw new Error(payload?.error || 'Falha ao excluir item.');
             }
 
             return payload;
@@ -631,294 +761,387 @@
         const notesInput = document.getElementById('patient-notes');
         const saveButton = document.getElementById('save-prontuario-button');
         const previewCloseButton = document.getElementById('pdf-close-button');
-        const medicationInput = document.getElementById('medication-input');
-        const medicationSuggestions = document.getElementById('medication-suggestions');
-        const medicationHelper = document.getElementById('medication-helper');
-        const deleteMedicationButton = document.getElementById('delete-medication-button');
-        let medicationItems = [];
-        let medicationMatches = [];
-        let medicationActiveIndex = -1;
-        let selectedMedication = '';
         let selectedPatient = null;
+        async function setupSmartCombobox(config) {
+            const input = document.getElementById(config.inputId);
+            const suggestions = document.getElementById(config.suggestionsId);
+            const helper = document.getElementById(config.helperId);
+            const deleteButton = document.getElementById(config.deleteButtonId);
+            const root = input?.closest('.medication-combobox') || null;
 
-        function setMedicationHelper(message, state = 'neutral') {
-            if (!medicationHelper) {
-                return;
+            if (!input || !suggestions || !helper || !deleteButton || !root) {
+                return null;
             }
 
-            medicationHelper.textContent = message;
-            medicationHelper.dataset.state = state;
-        }
+            const state = {
+                items: [],
+                matches: [],
+                activeIndex: -1,
+                selectedItem: '',
+            };
 
-        function setMedicationDropdownVisibility(isOpen) {
-            if (!medicationSuggestions || !medicationInput) {
-                return;
+            function setHelper(message, helperState = 'neutral') {
+                helper.textContent = message;
+                helper.dataset.state = helperState;
             }
 
-            medicationSuggestions.classList.toggle('hidden', !isOpen);
-            medicationInput.setAttribute('aria-expanded', String(isOpen));
-        }
+            function setDropdownVisibility(isOpen) {
+                suggestions.classList.toggle('hidden', !isOpen);
+                input.setAttribute('aria-expanded', String(isOpen));
+            }
 
-        function getMedicationExactMatch(name) {
-            const normalizedName = normalizeMedicationName(name);
-            return medicationItems.find((item) => item.localeCompare(normalizedName, 'pt-BR', { sensitivity: 'base' }) === 0) || '';
-        }
+            function getExactMatch(name) {
+                const normalizedName = normalizeCatalogValue(name);
+                return state.items.find((item) => item.localeCompare(normalizedName, 'pt-BR', { sensitivity: 'base' }) === 0) || '';
+            }
 
-        function buildMedicationMatches(query) {
-            const normalizedQuery = normalizeMedicationName(query).toLocaleLowerCase('pt-BR');
-            const rankedItems = medicationItems
-                .filter((item) => !normalizedQuery || item.toLocaleLowerCase('pt-BR').includes(normalizedQuery))
-                .sort((a, b) => {
-                    const aStartsWith = a.toLocaleLowerCase('pt-BR').startsWith(normalizedQuery);
-                    const bStartsWith = b.toLocaleLowerCase('pt-BR').startsWith(normalizedQuery);
+            function buildMatches(query) {
+                const normalizedQuery = normalizeCatalogValue(query).toLocaleLowerCase('pt-BR');
+                const rankedItems = state.items
+                    .filter((item) => !normalizedQuery || item.toLocaleLowerCase('pt-BR').includes(normalizedQuery))
+                    .sort((a, b) => {
+                        const aStartsWith = a.toLocaleLowerCase('pt-BR').startsWith(normalizedQuery);
+                        const bStartsWith = b.toLocaleLowerCase('pt-BR').startsWith(normalizedQuery);
 
-                    if (aStartsWith !== bStartsWith) {
-                        return aStartsWith ? -1 : 1;
-                    }
+                        if (aStartsWith !== bStartsWith) {
+                            return aStartsWith ? -1 : 1;
+                        }
 
-                    return a.localeCompare(b, 'pt-BR', { sensitivity: 'base' });
+                        return a.localeCompare(b, 'pt-BR', { sensitivity: 'base' });
+                    });
+
+                return rankedItems.slice(0, 8);
+            }
+
+            function selectItem(name) {
+                const exactMatch = getExactMatch(name) || normalizeCatalogValue(name);
+                state.selectedItem = exactMatch;
+                input.value = exactMatch;
+                state.activeIndex = -1;
+                setDropdownVisibility(false);
+                setHelper(config.messages.selectSuccess(exactMatch), 'success');
+            }
+
+            async function promptAddItem(name) {
+                const normalizedName = normalizeCatalogValue(name);
+                if (!normalizedName) {
+                    return;
+                }
+
+                const shouldAdd = window.confirm(config.messages.addPrompt(normalizedName));
+                if (!shouldAdd) {
+                    return;
+                }
+
+                try {
+                    const payload = await addCatalogItem(config.endpoint, normalizedName);
+                    state.items = Array.isArray(payload.items) ? payload.items : state.items;
+                    selectItem(payload.item || normalizedName);
+                    showToast(config.messages.addSuccessToast, 'success');
+                } catch (error) {
+                    showToast(error.message || config.messages.addError, 'error');
+                    setHelper(error.message || config.messages.addError, 'error');
+                }
+            }
+
+            async function handleDelete() {
+                const requestedName = normalizeCatalogValue(input.value || state.selectedItem);
+
+                if (!requestedName) {
+                    showToast(config.messages.deleteEmpty, 'error');
+                    setHelper(config.messages.deleteEmpty, 'error');
+                    return;
+                }
+
+                const exactMatch = getExactMatch(requestedName);
+                if (!exactMatch) {
+                    showToast(config.messages.deleteMissing, 'error');
+                    setHelper(config.messages.deleteMissing, 'error');
+                    return;
+                }
+
+                const shouldDelete = window.confirm(config.messages.deletePrompt(exactMatch));
+                if (!shouldDelete) {
+                    return;
+                }
+
+                try {
+                    const payload = await deleteCatalogItem(config.endpoint, exactMatch);
+                    state.items = Array.isArray(payload.items) ? payload.items : [];
+                    state.matches = [];
+                    state.activeIndex = -1;
+                    state.selectedItem = '';
+                    input.value = '';
+                    setDropdownVisibility(false);
+                    setHelper(config.messages.deleteSuccess(exactMatch), 'success');
+                    showToast(config.messages.deleteSuccessToast, 'success');
+                } catch (error) {
+                    showToast(error.message || config.messages.deleteError, 'error');
+                    setHelper(error.message || config.messages.deleteError, 'error');
+                }
+            }
+
+            function renderSuggestions(query = '') {
+                const normalizedQuery = normalizeCatalogValue(query);
+                const exactMatch = getExactMatch(normalizedQuery);
+                state.matches = buildMatches(normalizedQuery);
+
+                if (state.activeIndex >= state.matches.length) {
+                    state.activeIndex = state.matches.length - 1;
+                }
+
+                suggestions.innerHTML = '';
+
+                if (state.items.length === 0 && !normalizedQuery) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'medication-empty';
+                    emptyState.textContent = config.messages.emptyInitial;
+                    suggestions.appendChild(emptyState);
+                    setDropdownVisibility(true);
+                    return;
+                }
+
+                if (state.matches.length === 0 && !normalizedQuery) {
+                    setDropdownVisibility(false);
+                    return;
+                }
+
+                state.matches.forEach((item, index) => {
+                    const option = document.createElement('button');
+                    const optionLabel = document.createElement('span');
+                    const optionHint = document.createElement('span');
+                    option.type = 'button';
+                    option.className = `medication-option${index === state.activeIndex ? ' is-active' : ''}`;
+                    option.setAttribute('role', 'option');
+                    optionLabel.className = 'medication-option-label';
+                    optionLabel.textContent = item;
+                    optionHint.className = 'medication-option-hint';
+                    optionHint.textContent = 'Selecionar';
+                    option.append(optionLabel, optionHint);
+                    option.addEventListener('click', () => selectItem(item));
+                    suggestions.appendChild(option);
                 });
 
-            return rankedItems.slice(0, 8);
-        }
-
-        function selectMedication(name) {
-            const exactMatch = getMedicationExactMatch(name) || normalizeMedicationName(name);
-            selectedMedication = exactMatch;
-
-            if (medicationInput) {
-                medicationInput.value = exactMatch;
-            }
-
-            medicationActiveIndex = -1;
-            setMedicationDropdownVisibility(false);
-            setMedicationHelper(`Medicacao selecionada: ${exactMatch}.`, 'success');
-        }
-
-        async function promptAddMedication(name) {
-            const normalizedName = normalizeMedicationName(name);
-            if (!normalizedName) {
-                return;
-            }
-
-            const shouldAdd = window.confirm(`"${normalizedName}" nao esta na lista. Deseja adicionar este medicamento?`);
-            if (!shouldAdd) {
-                return;
-            }
-
-            try {
-                const payload = await addMedicacao(normalizedName);
-                medicationItems = Array.isArray(payload.items) ? payload.items : medicationItems;
-                selectMedication(payload.item || normalizedName);
-                showToast('Medicacao adicionada com sucesso!', 'success');
-            } catch (error) {
-                showToast(error.message || 'Nao foi possivel adicionar a medicacao.', 'error');
-                setMedicationHelper(error.message || 'Nao foi possivel adicionar a medicacao.', 'error');
-            }
-        }
-
-        async function handleMedicationDelete() {
-            const requestedName = normalizeMedicationName(medicationInput?.value || selectedMedication);
-
-            if (!requestedName) {
-                showToast('Selecione ou digite uma medicacao para excluir.', 'error');
-                setMedicationHelper('Selecione ou digite uma medicacao para excluir.', 'error');
-                return;
-            }
-
-            const exactMatch = getMedicationExactMatch(requestedName);
-            if (!exactMatch) {
-                showToast('Essa medicacao nao existe na lista.', 'error');
-                setMedicationHelper('Essa medicacao nao existe na lista.', 'error');
-                return;
-            }
-
-            const shouldDelete = window.confirm(`Deseja excluir a medicacao "${exactMatch}" da lista?`);
-            if (!shouldDelete) {
-                return;
-            }
-
-            try {
-                const payload = await deleteMedicacao(exactMatch);
-                medicationItems = Array.isArray(payload.items) ? payload.items : [];
-                medicationMatches = [];
-                medicationActiveIndex = -1;
-                selectedMedication = '';
-                if (medicationInput) {
-                    medicationInput.value = '';
+                if (normalizedQuery && !exactMatch) {
+                    const addOption = document.createElement('button');
+                    const addLabel = document.createElement('span');
+                    const addHint = document.createElement('span');
+                    addOption.type = 'button';
+                    addOption.className = 'medication-option medication-option-add';
+                    addLabel.className = 'medication-option-label';
+                    addLabel.textContent = `Adicionar "${normalizedQuery}"`;
+                    addHint.className = 'medication-option-hint';
+                    addHint.textContent = 'Novo item';
+                    addOption.append(addLabel, addHint);
+                    addOption.addEventListener('click', () => promptAddItem(normalizedQuery));
+                    suggestions.appendChild(addOption);
                 }
-                setMedicationDropdownVisibility(false);
-                setMedicationHelper(`Medicacao "${exactMatch}" excluida da lista.`, 'success');
-                showToast('Medicacao excluida com sucesso!', 'success');
-            } catch (error) {
-                showToast(error.message || 'Nao foi possivel excluir a medicacao.', 'error');
-                setMedicationHelper(error.message || 'Nao foi possivel excluir a medicacao.', 'error');
-            }
-        }
 
-        function renderMedicationSuggestions(query = '') {
-            if (!medicationSuggestions) {
-                return;
+                if (!suggestions.children.length) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'medication-empty';
+                    emptyState.textContent = config.messages.emptySearch;
+                    suggestions.appendChild(emptyState);
+                }
+
+                setDropdownVisibility(true);
             }
 
-            const normalizedQuery = normalizeMedicationName(query);
-            const exactMatch = getMedicationExactMatch(normalizedQuery);
-            medicationMatches = buildMedicationMatches(normalizedQuery);
+            deleteButton.addEventListener('click', handleDelete);
 
-            if (medicationActiveIndex >= medicationMatches.length) {
-                medicationActiveIndex = medicationMatches.length - 1;
-            }
-
-            medicationSuggestions.innerHTML = '';
-
-            if (medicationItems.length === 0 && !normalizedQuery) {
-                const emptyState = document.createElement('div');
-                emptyState.className = 'medication-empty';
-                emptyState.textContent = 'Nenhuma medicacao cadastrada ainda. Digite um nome para adicionar a primeira.';
-                medicationSuggestions.appendChild(emptyState);
-                setMedicationDropdownVisibility(true);
-                return;
-            }
-
-            if (medicationMatches.length === 0 && !normalizedQuery) {
-                setMedicationDropdownVisibility(false);
-                return;
-            }
-
-            medicationMatches.forEach((item, index) => {
-                const option = document.createElement('button');
-                const optionLabel = document.createElement('span');
-                const optionHint = document.createElement('span');
-                option.type = 'button';
-                option.className = `medication-option${index === medicationActiveIndex ? ' is-active' : ''}`;
-                option.setAttribute('role', 'option');
-                optionLabel.className = 'medication-option-label';
-                optionLabel.textContent = item;
-                optionHint.className = 'medication-option-hint';
-                optionHint.textContent = 'Selecionar';
-                option.append(optionLabel, optionHint);
-                option.addEventListener('click', () => selectMedication(item));
-                medicationSuggestions.appendChild(option);
+            input.addEventListener('focus', () => {
+                renderSuggestions(input.value);
             });
 
-            if (normalizedQuery && !exactMatch) {
-                const addOption = document.createElement('button');
-                const addLabel = document.createElement('span');
-                const addHint = document.createElement('span');
-                addOption.type = 'button';
-                addOption.className = 'medication-option medication-option-add';
-                addLabel.className = 'medication-option-label';
-                addLabel.textContent = `Adicionar "${normalizedQuery}"`;
-                addHint.className = 'medication-option-hint';
-                addHint.textContent = 'Novo medicamento';
-                addOption.append(addLabel, addHint);
-                addOption.addEventListener('click', () => promptAddMedication(normalizedQuery));
-                medicationSuggestions.appendChild(addOption);
-            }
-
-            if (!medicationSuggestions.children.length) {
-                const emptyState = document.createElement('div');
-                emptyState.className = 'medication-empty';
-                emptyState.textContent = 'Nenhuma sugestao encontrada para esse termo.';
-                medicationSuggestions.appendChild(emptyState);
-            }
-
-            setMedicationDropdownVisibility(true);
-        }
-
-        if (deleteMedicationButton) {
-            deleteMedicationButton.addEventListener('click', handleMedicationDelete);
-        }
-
-        if (medicationInput) {
-            medicationInput.addEventListener('focus', () => {
-                renderMedicationSuggestions(medicationInput.value);
+            input.addEventListener('input', () => {
+                state.selectedItem = '';
+                state.activeIndex = -1;
+                setHelper(config.messages.defaultHelper, 'neutral');
+                renderSuggestions(input.value);
             });
 
-            medicationInput.addEventListener('input', () => {
-                selectedMedication = '';
-                medicationActiveIndex = -1;
-                setMedicationHelper('Selecione um medicamento existente ou adicione um novo.', 'neutral');
-                renderMedicationSuggestions(medicationInput.value);
-            });
-
-            medicationInput.addEventListener('keydown', async (event) => {
-                const hasVisibleDropdown = medicationSuggestions && !medicationSuggestions.classList.contains('hidden');
+            input.addEventListener('keydown', async (event) => {
+                const hasVisibleDropdown = !suggestions.classList.contains('hidden');
 
                 if (event.key === 'ArrowDown') {
                     event.preventDefault();
                     if (!hasVisibleDropdown) {
-                        renderMedicationSuggestions(medicationInput.value);
+                        renderSuggestions(input.value);
                     }
-                    if (medicationMatches.length > 0) {
-                        medicationActiveIndex = Math.min(medicationActiveIndex + 1, medicationMatches.length - 1);
-                        renderMedicationSuggestions(medicationInput.value);
+                    if (state.matches.length > 0) {
+                        state.activeIndex = Math.min(state.activeIndex + 1, state.matches.length - 1);
+                        renderSuggestions(input.value);
                     }
                     return;
                 }
 
                 if (event.key === 'ArrowUp') {
                     event.preventDefault();
-                    if (medicationMatches.length > 0) {
-                        medicationActiveIndex = Math.max(medicationActiveIndex - 1, 0);
-                        renderMedicationSuggestions(medicationInput.value);
+                    if (state.matches.length > 0) {
+                        state.activeIndex = Math.max(state.activeIndex - 1, 0);
+                        renderSuggestions(input.value);
                     }
                     return;
                 }
 
                 if (event.key === 'Enter') {
-                    const typedName = normalizeMedicationName(medicationInput.value);
+                    const typedValue = normalizeCatalogValue(input.value);
 
-                    if (!typedName) {
+                    if (!typedValue) {
                         return;
                     }
 
                     event.preventDefault();
 
-                    if (medicationActiveIndex >= 0 && medicationMatches[medicationActiveIndex]) {
-                        selectMedication(medicationMatches[medicationActiveIndex]);
+                    if (state.activeIndex >= 0 && state.matches[state.activeIndex]) {
+                        selectItem(state.matches[state.activeIndex]);
                         return;
                     }
 
-                    const exactMatch = getMedicationExactMatch(typedName);
+                    const exactMatch = getExactMatch(typedValue);
                     if (exactMatch) {
-                        selectMedication(exactMatch);
+                        selectItem(exactMatch);
                         return;
                     }
 
-                    await promptAddMedication(typedName);
+                    await promptAddItem(typedValue);
                     return;
                 }
 
                 if (event.key === 'Escape') {
-                    medicationActiveIndex = -1;
-                    setMedicationDropdownVisibility(false);
+                    state.activeIndex = -1;
+                    setDropdownVisibility(false);
                 }
             });
+
+            try {
+                state.items = await loadCatalogItems(config.endpoint);
+            } catch (error) {
+                console.error(config.messages.loadLogLabel, error);
+                setHelper(config.messages.loadError, 'error');
+            }
+
+            return {
+                root,
+                close() {
+                    state.activeIndex = -1;
+                    setDropdownVisibility(false);
+                },
+            };
         }
-
-        document.addEventListener('click', (event) => {
-            if (!medicationSuggestions || !medicationInput) {
-                return;
-            }
-
-            const clickedInsideCombobox = event.target.closest('.medication-combobox');
-            if (!clickedInsideCombobox) {
-                medicationActiveIndex = -1;
-                setMedicationDropdownVisibility(false);
-            }
-        });
 
         if (previewCloseButton) {
             previewCloseButton.addEventListener('click', closePdfPreview);
         }
 
-        try {
-            medicationItems = await loadMedicacoes();
-        } catch (error) {
-            console.error('Erro ao carregar medicacoes:', error);
-            setMedicationHelper('Nao foi possivel carregar a lista de medicacoes.', 'error');
-        }
+        const smartComboboxes = (await Promise.all([
+            setupSmartCombobox({
+                endpoint: '/api/tipos-uso',
+                inputId: 'usage-type-input',
+                suggestionsId: 'usage-type-suggestions',
+                helperId: 'usage-type-helper',
+                deleteButtonId: 'delete-usage-type-button',
+                messages: {
+                    selectSuccess: (value) => `Tipo de uso selecionado: ${value}.`,
+                    addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar este tipo de uso?`,
+                    addSuccessToast: 'Tipo de uso adicionado com sucesso!',
+                    addError: 'Nao foi possivel adicionar o tipo de uso.',
+                    deleteEmpty: 'Selecione ou digite um tipo de uso para excluir.',
+                    deleteMissing: 'Esse tipo de uso nao existe na lista.',
+                    deletePrompt: (value) => `Deseja excluir o tipo de uso "${value}" da lista?`,
+                    deleteSuccess: (value) => `Tipo de uso "${value}" excluido da lista.`,
+                    deleteSuccessToast: 'Tipo de uso excluido com sucesso!',
+                    deleteError: 'Nao foi possivel excluir o tipo de uso.',
+                    emptyInitial: 'Nenhum tipo de uso cadastrado. Digite um nome para adicionar o primeiro.',
+                    emptySearch: 'Nenhuma sugestao encontrada para esse tipo de uso.',
+                    defaultHelper: 'Selecione um tipo de uso existente ou adicione um novo.',
+                    loadError: 'Nao foi possivel carregar a lista de tipos de uso.',
+                    loadLogLabel: 'Erro ao carregar tipos de uso:',
+                },
+            }),
+            setupSmartCombobox({
+                endpoint: '/api/medicacoes',
+                inputId: 'medication-input',
+                suggestionsId: 'medication-suggestions',
+                helperId: 'medication-helper',
+                deleteButtonId: 'delete-medication-button',
+                messages: {
+                    selectSuccess: (value) => `Medicacao selecionada: ${value}.`,
+                    addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar este medicamento?`,
+                    addSuccessToast: 'Medicacao adicionada com sucesso!',
+                    addError: 'Nao foi possivel adicionar a medicacao.',
+                    deleteEmpty: 'Selecione ou digite uma medicacao para excluir.',
+                    deleteMissing: 'Essa medicacao nao existe na lista.',
+                    deletePrompt: (value) => `Deseja excluir a medicacao "${value}" da lista?`,
+                    deleteSuccess: (value) => `Medicacao "${value}" excluida da lista.`,
+                    deleteSuccessToast: 'Medicacao excluida com sucesso!',
+                    deleteError: 'Nao foi possivel excluir a medicacao.',
+                    emptyInitial: 'Nenhuma medicacao cadastrada ainda. Digite um nome para adicionar a primeira.',
+                    emptySearch: 'Nenhuma sugestao encontrada para esse termo.',
+                    defaultHelper: 'Selecione um medicamento existente ou adicione um novo.',
+                    loadError: 'Nao foi possivel carregar a lista de medicacoes.',
+                    loadLogLabel: 'Erro ao carregar medicacoes:',
+                },
+            }),
+            setupSmartCombobox({
+                endpoint: '/api/dosagens',
+                inputId: 'dosage-input',
+                suggestionsId: 'dosage-suggestions',
+                helperId: 'dosage-helper',
+                deleteButtonId: 'delete-dosage-button',
+                messages: {
+                    selectSuccess: (value) => `Dosagem selecionada: ${value}.`,
+                    addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar esta dosagem?`,
+                    addSuccessToast: 'Dosagem adicionada com sucesso!',
+                    addError: 'Nao foi possivel adicionar a dosagem.',
+                    deleteEmpty: 'Selecione ou digite uma dosagem para excluir.',
+                    deleteMissing: 'Essa dosagem nao existe na lista.',
+                    deletePrompt: (value) => `Deseja excluir a dosagem "${value}" da lista?`,
+                    deleteSuccess: (value) => `Dosagem "${value}" excluida da lista.`,
+                    deleteSuccessToast: 'Dosagem excluida com sucesso!',
+                    deleteError: 'Nao foi possivel excluir a dosagem.',
+                    emptyInitial: 'Nenhuma dosagem cadastrada ainda. Digite um nome para adicionar a primeira.',
+                    emptySearch: 'Nenhuma sugestao encontrada para essa dosagem.',
+                    defaultHelper: 'Selecione uma dosagem existente ou adicione uma nova.',
+                    loadError: 'Nao foi possivel carregar a lista de dosagens.',
+                    loadLogLabel: 'Erro ao carregar dosagens:',
+                },
+            }),
+            setupSmartCombobox({
+                endpoint: '/api/administracoes',
+                inputId: 'administration-input',
+                suggestionsId: 'administration-suggestions',
+                helperId: 'administration-helper',
+                deleteButtonId: 'delete-administration-button',
+                messages: {
+                    selectSuccess: (value) => `Administracao selecionada: ${value}.`,
+                    addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar esta administracao?`,
+                    addSuccessToast: 'Administracao adicionada com sucesso!',
+                    addError: 'Nao foi possivel adicionar a administracao.',
+                    deleteEmpty: 'Selecione ou digite uma administracao para excluir.',
+                    deleteMissing: 'Essa administracao nao existe na lista.',
+                    deletePrompt: (value) => `Deseja excluir a administracao "${value}" da lista?`,
+                    deleteSuccess: (value) => `Administracao "${value}" excluida da lista.`,
+                    deleteSuccessToast: 'Administracao excluida com sucesso!',
+                    deleteError: 'Nao foi possivel excluir a administracao.',
+                    emptyInitial: 'Nenhuma administracao cadastrada. Digite um nome para adicionar a primeira.',
+                    emptySearch: 'Nenhuma sugestao encontrada para essa administracao.',
+                    defaultHelper: 'Selecione uma administracao existente ou adicione uma nova.',
+                    loadError: 'Nao foi possivel carregar a lista de administracoes.',
+                    loadLogLabel: 'Erro ao carregar administracoes:',
+                },
+            }),
+        ])).filter(Boolean);
+
+        document.addEventListener('click', (event) => {
+            const clickedCombobox = event.target.closest('.medication-combobox');
+
+            smartComboboxes.forEach((combobox) => {
+                if (!clickedCombobox || clickedCombobox !== combobox.root) {
+                    combobox.close();
+                }
+            });
+        });
 
         if (patientId) {
             const patients = await getPacientes();

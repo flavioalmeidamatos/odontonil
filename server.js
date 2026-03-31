@@ -10,6 +10,9 @@ const port = process.env.PORT || 3000;
 const dataDir = path.join(__dirname, 'data');
 const prontuariosFile = path.join(dataDir, 'prontuarios.json');
 const medicacoesFile = path.join(dataDir, 'medicacoes.json');
+const tiposUsoFile = path.join(dataDir, 'tipos-uso.json');
+const dosagensFile = path.join(dataDir, 'dosagens.json');
+const administracoesFile = path.join(dataDir, 'administracoes.json');
 const receitaTemplateFile = path.join(__dirname, 'public', 'RECEITA RAPHAEL.pdf');
 const generatedReceitasDir = path.join(__dirname, 'public', 'receitas-geradas');
 const arialFontPath = path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts', 'arial.ttf');
@@ -39,31 +42,31 @@ function ensureProntuariosStore() {
     }
 }
 
-function ensureMedicacoesStore() {
+function ensureListStore(filePath, initialItems = []) {
     if (!fs.existsSync(dataDir)) {
         fs.mkdirSync(dataDir, { recursive: true });
     }
 
-    if (!fs.existsSync(medicacoesFile)) {
-        fs.writeFileSync(medicacoesFile, JSON.stringify([], null, 2), 'utf8');
+    if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, JSON.stringify(initialItems, null, 2), 'utf8');
     }
 }
 
-function normalizeMedicationName(value) {
+function normalizeCatalogItem(value) {
     return String(value || '')
         .trim()
         .replace(/\s+/g, ' ');
 }
 
-function sortMedicationList(list) {
+function sortCatalogList(list) {
     return [...list].sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
 }
 
-function readMedicacoes() {
-    ensureMedicacoesStore();
+function readListStore(filePath, initialItems = []) {
+    ensureListStore(filePath, initialItems);
 
     try {
-        const raw = fs.readFileSync(medicacoesFile, 'utf8');
+        const raw = fs.readFileSync(filePath, 'utf8');
         const parsed = raw ? JSON.parse(raw) : [];
         if (!Array.isArray(parsed)) {
             return [];
@@ -73,7 +76,7 @@ function readMedicacoes() {
         const seen = new Set();
 
         parsed.forEach((item) => {
-            const normalizedName = normalizeMedicationName(item);
+            const normalizedName = normalizeCatalogItem(item);
             if (!normalizedName) {
                 return;
             }
@@ -87,18 +90,17 @@ function readMedicacoes() {
             uniqueItems.push(normalizedName);
         });
 
-        return sortMedicationList(uniqueItems);
+        return sortCatalogList(uniqueItems);
     } catch (error) {
-        console.error('Erro ao ler medicacoes:', error);
+        console.error(`Erro ao ler catalogo ${path.basename(filePath)}:`, error);
         return [];
     }
 }
 
-function writeMedicacoes(medicacoes) {
-    ensureMedicacoesStore();
-    const normalizedList = readMedicacoes()
-        .concat(Array.isArray(medicacoes) ? medicacoes : [])
-        .map(normalizeMedicationName)
+function writeListStore(filePath, items, initialItems = []) {
+    ensureListStore(filePath, initialItems);
+    const normalizedList = (Array.isArray(items) ? items : [])
+        .map(normalizeCatalogItem)
         .filter(Boolean);
 
     const uniqueItems = [];
@@ -114,7 +116,39 @@ function writeMedicacoes(medicacoes) {
         uniqueItems.push(item);
     });
 
-    fs.writeFileSync(medicacoesFile, JSON.stringify(sortMedicationList(uniqueItems), null, 2), 'utf8');
+    fs.writeFileSync(filePath, JSON.stringify(sortCatalogList(uniqueItems), null, 2), 'utf8');
+}
+
+function readMedicacoes() {
+    return readListStore(medicacoesFile, []);
+}
+
+function writeMedicacoes(medicacoes) {
+    writeListStore(medicacoesFile, medicacoes, []);
+}
+
+function readTiposUso() {
+    return readListStore(tiposUsoFile, ['Uso Interno Oral', 'Via Intramuscular']);
+}
+
+function writeTiposUso(tiposUso) {
+    writeListStore(tiposUsoFile, tiposUso, ['Uso Interno Oral', 'Via Intramuscular']);
+}
+
+function readDosagens() {
+    return readListStore(dosagensFile, []);
+}
+
+function writeDosagens(dosagens) {
+    writeListStore(dosagensFile, dosagens, []);
+}
+
+function readAdministracoes() {
+    return readListStore(administracoesFile, ['Comprimido', 'C\u00e1psulas']);
+}
+
+function writeAdministracoes(administracoes) {
+    writeListStore(administracoesFile, administracoes, ['Comprimido', 'C\u00e1psulas']);
 }
 
 function readProntuarios() {
@@ -648,7 +682,7 @@ app.get('/api/medicacoes', (req, res) => {
 });
 
 app.post('/api/medicacoes', (req, res) => {
-    const medicationName = normalizeMedicationName(req.body?.name);
+    const medicationName = normalizeCatalogItem(req.body?.name);
 
     if (!medicationName) {
         return res.status(400).json({ error: 'name obrigatorio' });
@@ -675,7 +709,7 @@ app.post('/api/medicacoes', (req, res) => {
 });
 
 app.delete('/api/medicacoes/:medicationName', (req, res) => {
-    const medicationName = normalizeMedicationName(req.params.medicationName);
+    const medicationName = normalizeCatalogItem(req.params.medicationName);
 
     if (!medicationName) {
         return res.status(400).json({ error: 'medicationName obrigatorio' });
@@ -689,11 +723,179 @@ app.delete('/api/medicacoes/:medicationName', (req, res) => {
     }
 
     const [removedMedication] = medicacoes.splice(medicationIndex, 1);
-    fs.writeFileSync(medicacoesFile, JSON.stringify(sortMedicationList(medicacoes), null, 2), 'utf8');
+    writeMedicacoes(medicacoes);
 
     return res.json({
         item: removedMedication,
-        items: sortMedicationList(medicacoes),
+        items: readMedicacoes(),
+    });
+});
+
+app.get('/api/tipos-uso', (req, res) => {
+    return res.json({
+        items: readTiposUso(),
+    });
+});
+
+app.post('/api/tipos-uso', (req, res) => {
+    const usageTypeName = normalizeCatalogItem(req.body?.name);
+
+    if (!usageTypeName) {
+        return res.status(400).json({ error: 'name obrigatorio' });
+    }
+
+    const tiposUso = readTiposUso();
+    const existingUsageType = tiposUso.find((item) => item.localeCompare(usageTypeName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (existingUsageType) {
+        return res.status(409).json({
+            error: 'Tipo de uso ja cadastrado.',
+            item: existingUsageType,
+            items: tiposUso,
+        });
+    }
+
+    tiposUso.push(usageTypeName);
+    writeTiposUso(tiposUso);
+
+    return res.status(201).json({
+        item: usageTypeName,
+        items: readTiposUso(),
+    });
+});
+
+app.delete('/api/tipos-uso/:usageTypeName', (req, res) => {
+    const usageTypeName = normalizeCatalogItem(req.params.usageTypeName);
+
+    if (!usageTypeName) {
+        return res.status(400).json({ error: 'usageTypeName obrigatorio' });
+    }
+
+    const tiposUso = readTiposUso();
+    const usageTypeIndex = tiposUso.findIndex((item) => item.localeCompare(usageTypeName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (usageTypeIndex === -1) {
+        return res.status(404).json({ error: 'Tipo de uso nao encontrado.' });
+    }
+
+    const [removedUsageType] = tiposUso.splice(usageTypeIndex, 1);
+    writeTiposUso(tiposUso);
+
+    return res.json({
+        item: removedUsageType,
+        items: readTiposUso(),
+    });
+});
+
+app.get('/api/dosagens', (req, res) => {
+    return res.json({
+        items: readDosagens(),
+    });
+});
+
+app.post('/api/dosagens', (req, res) => {
+    const dosageName = normalizeCatalogItem(req.body?.name);
+
+    if (!dosageName) {
+        return res.status(400).json({ error: 'name obrigatorio' });
+    }
+
+    const dosagens = readDosagens();
+    const existingDosage = dosagens.find((item) => item.localeCompare(dosageName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (existingDosage) {
+        return res.status(409).json({
+            error: 'Dosagem ja cadastrada.',
+            item: existingDosage,
+            items: dosagens,
+        });
+    }
+
+    dosagens.push(dosageName);
+    writeDosagens(dosagens);
+
+    return res.status(201).json({
+        item: dosageName,
+        items: readDosagens(),
+    });
+});
+
+app.delete('/api/dosagens/:dosageName', (req, res) => {
+    const dosageName = normalizeCatalogItem(req.params.dosageName);
+
+    if (!dosageName) {
+        return res.status(400).json({ error: 'dosageName obrigatorio' });
+    }
+
+    const dosagens = readDosagens();
+    const dosageIndex = dosagens.findIndex((item) => item.localeCompare(dosageName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (dosageIndex === -1) {
+        return res.status(404).json({ error: 'Dosagem nao encontrada.' });
+    }
+
+    const [removedDosage] = dosagens.splice(dosageIndex, 1);
+    writeDosagens(dosagens);
+
+    return res.json({
+        item: removedDosage,
+        items: readDosagens(),
+    });
+});
+
+app.get('/api/administracoes', (req, res) => {
+    return res.json({
+        items: readAdministracoes(),
+    });
+});
+
+app.post('/api/administracoes', (req, res) => {
+    const administrationName = normalizeCatalogItem(req.body?.name);
+
+    if (!administrationName) {
+        return res.status(400).json({ error: 'name obrigatorio' });
+    }
+
+    const administracoes = readAdministracoes();
+    const existingAdministration = administracoes.find((item) => item.localeCompare(administrationName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (existingAdministration) {
+        return res.status(409).json({
+            error: 'Administracao ja cadastrada.',
+            item: existingAdministration,
+            items: administracoes,
+        });
+    }
+
+    administracoes.push(administrationName);
+    writeAdministracoes(administracoes);
+
+    return res.status(201).json({
+        item: administrationName,
+        items: readAdministracoes(),
+    });
+});
+
+app.delete('/api/administracoes/:administrationName', (req, res) => {
+    const administrationName = normalizeCatalogItem(req.params.administrationName);
+
+    if (!administrationName) {
+        return res.status(400).json({ error: 'administrationName obrigatorio' });
+    }
+
+    const administracoes = readAdministracoes();
+    const administrationIndex = administracoes.findIndex((item) => item.localeCompare(administrationName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (administrationIndex === -1) {
+        return res.status(404).json({ error: 'Administracao nao encontrada.' });
+    }
+
+    const [removedAdministration] = administracoes.splice(administrationIndex, 1);
+    writeAdministracoes(administracoes);
+
+    return res.json({
+        item: removedAdministration,
+        items: readAdministracoes(),
     });
 });
 
