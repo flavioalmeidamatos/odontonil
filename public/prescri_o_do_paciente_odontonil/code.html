@@ -541,6 +541,52 @@
 
                         <p id="administration-helper" class="medication-helper">Ja inicia com Comprimido e C&aacute;psulas, mas voce pode adicionar mais opcoes.</p>
                     </div>
+
+                    <div class="catalog-field">
+                        <div>
+                            <p class="catalog-field-title">Durante</p>
+                            <p class="catalog-field-subtitle">Buscar, adicionar ou excluir intervalo</p>
+                        </div>
+
+                        <div class="medication-input-row">
+                            <div class="medication-combobox">
+                                <div class="medication-input-shell">
+                                    <span class="material-symbols-outlined text-primary text-xl" data-icon="search">search</span>
+                                    <input id="during-input" class="medication-input text-on-surface" type="text" placeholder="Digite o intervalo" autocomplete="off" spellcheck="false" aria-label="Durante" aria-autocomplete="list" aria-expanded="false" aria-controls="during-suggestions"/>
+                                </div>
+                                <div id="during-suggestions" class="medication-dropdown hidden" role="listbox"></div>
+                            </div>
+
+                            <button id="delete-during-button" type="button" class="medication-delete-button" aria-label="Excluir durante">
+                                <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+                            </button>
+                        </div>
+
+                        <p id="during-helper" class="medication-helper">Ja inicia com 6/6hr e 8/8hr, mas voce pode adicionar mais opcoes.</p>
+                    </div>
+
+                    <div class="catalog-field">
+                        <div>
+                            <p class="catalog-field-title">Dura&ccedil;&atilde;o</p>
+                            <p class="catalog-field-subtitle">Buscar, adicionar ou excluir duracao</p>
+                        </div>
+
+                        <div class="medication-input-row">
+                            <div class="medication-combobox">
+                                <div class="medication-input-shell">
+                                    <span class="material-symbols-outlined text-primary text-xl" data-icon="search">search</span>
+                                    <input id="duration-input" class="medication-input text-on-surface" type="text" placeholder="Digite a duracao" autocomplete="off" spellcheck="false" aria-label="Dura&ccedil;&atilde;o" aria-autocomplete="list" aria-expanded="false" aria-controls="duration-suggestions"/>
+                                </div>
+                                <div id="duration-suggestions" class="medication-dropdown hidden" role="listbox"></div>
+                            </div>
+
+                            <button id="delete-duration-button" type="button" class="medication-delete-button" aria-label="Excluir duracao">
+                                <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+                            </button>
+                        </div>
+
+                        <p id="duration-helper" class="medication-helper">Ja inicia com 3, 5, 7, 14, 21 e 28 dias, mas voce pode adicionar mais opcoes.</p>
+                    </div>
                 </div>
             </section>
 
@@ -1129,6 +1175,54 @@
                     defaultHelper: 'Selecione uma administracao existente ou adicione uma nova.',
                     loadError: 'Nao foi possivel carregar a lista de administracoes.',
                     loadLogLabel: 'Erro ao carregar administracoes:',
+                },
+            }),
+            setupSmartCombobox({
+                endpoint: '/api/durante',
+                inputId: 'during-input',
+                suggestionsId: 'during-suggestions',
+                helperId: 'during-helper',
+                deleteButtonId: 'delete-during-button',
+                messages: {
+                    selectSuccess: (value) => `Durante selecionado: ${value}.`,
+                    addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar este intervalo?`,
+                    addSuccessToast: 'Intervalo adicionado com sucesso!',
+                    addError: 'Nao foi possivel adicionar o intervalo.',
+                    deleteEmpty: 'Selecione ou digite um intervalo para excluir.',
+                    deleteMissing: 'Esse intervalo nao existe na lista.',
+                    deletePrompt: (value) => `Deseja excluir o intervalo "${value}" da lista?`,
+                    deleteSuccess: (value) => `Intervalo "${value}" excluido da lista.`,
+                    deleteSuccessToast: 'Intervalo excluido com sucesso!',
+                    deleteError: 'Nao foi possivel excluir o intervalo.',
+                    emptyInitial: 'Nenhum intervalo cadastrado. Digite um nome para adicionar o primeiro.',
+                    emptySearch: 'Nenhuma sugestao encontrada para esse intervalo.',
+                    defaultHelper: 'Selecione um intervalo existente ou adicione um novo.',
+                    loadError: 'Nao foi possivel carregar a lista de intervalos.',
+                    loadLogLabel: 'Erro ao carregar intervalos:',
+                },
+            }),
+            setupSmartCombobox({
+                endpoint: '/api/duracoes',
+                inputId: 'duration-input',
+                suggestionsId: 'duration-suggestions',
+                helperId: 'duration-helper',
+                deleteButtonId: 'delete-duration-button',
+                messages: {
+                    selectSuccess: (value) => `Duracao selecionada: ${value}.`,
+                    addPrompt: (value) => `"${value}" nao esta na lista. Deseja adicionar esta duracao?`,
+                    addSuccessToast: 'Duracao adicionada com sucesso!',
+                    addError: 'Nao foi possivel adicionar a duracao.',
+                    deleteEmpty: 'Selecione ou digite uma duracao para excluir.',
+                    deleteMissing: 'Essa duracao nao existe na lista.',
+                    deletePrompt: (value) => `Deseja excluir a duracao "${value}" da lista?`,
+                    deleteSuccess: (value) => `Duracao "${value}" excluida da lista.`,
+                    deleteSuccessToast: 'Duracao excluida com sucesso!',
+                    deleteError: 'Nao foi possivel excluir a duracao.',
+                    emptyInitial: 'Nenhuma duracao cadastrada. Digite um valor para adicionar a primeira.',
+                    emptySearch: 'Nenhuma sugestao encontrada para essa duracao.',
+                    defaultHelper: 'Selecione uma duracao existente ou adicione uma nova.',
+                    loadError: 'Nao foi possivel carregar a lista de duracoes.',
+                    loadLogLabel: 'Erro ao carregar duracoes:',
                 },
             }),
         ])).filter(Boolean);

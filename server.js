@@ -13,6 +13,8 @@ const medicacoesFile = path.join(dataDir, 'medicacoes.json');
 const tiposUsoFile = path.join(dataDir, 'tipos-uso.json');
 const dosagensFile = path.join(dataDir, 'dosagens.json');
 const administracoesFile = path.join(dataDir, 'administracoes.json');
+const duranteFile = path.join(dataDir, 'durante.json');
+const duracoesFile = path.join(dataDir, 'duracoes.json');
 const receitaTemplateFile = path.join(__dirname, 'public', 'RECEITA RAPHAEL.pdf');
 const generatedReceitasDir = path.join(__dirname, 'public', 'receitas-geradas');
 const arialFontPath = path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts', 'arial.ttf');
@@ -149,6 +151,22 @@ function readAdministracoes() {
 
 function writeAdministracoes(administracoes) {
     writeListStore(administracoesFile, administracoes, ['Comprimido', 'C\u00e1psulas']);
+}
+
+function readDurante() {
+    return readListStore(duranteFile, ['6/6hr', '8/8hr']);
+}
+
+function writeDurante(durante) {
+    writeListStore(duranteFile, durante, ['6/6hr', '8/8hr']);
+}
+
+function readDuracoes() {
+    return readListStore(duracoesFile, ['3 dias', '5 dias', '7 dias', '14 dias', '21 dias', '28 dias']);
+}
+
+function writeDuracoes(duracoes) {
+    writeListStore(duracoesFile, duracoes, ['3 dias', '5 dias', '7 dias', '14 dias', '21 dias', '28 dias']);
 }
 
 function readProntuarios() {
@@ -896,6 +914,118 @@ app.delete('/api/administracoes/:administrationName', (req, res) => {
     return res.json({
         item: removedAdministration,
         items: readAdministracoes(),
+    });
+});
+
+app.get('/api/durante', (req, res) => {
+    return res.json({
+        items: readDurante(),
+    });
+});
+
+app.post('/api/durante', (req, res) => {
+    const duringName = normalizeCatalogItem(req.body?.name);
+
+    if (!duringName) {
+        return res.status(400).json({ error: 'name obrigatorio' });
+    }
+
+    const duranteItems = readDurante();
+    const existingDuring = duranteItems.find((item) => item.localeCompare(duringName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (existingDuring) {
+        return res.status(409).json({
+            error: 'Durante ja cadastrado.',
+            item: existingDuring,
+            items: duranteItems,
+        });
+    }
+
+    duranteItems.push(duringName);
+    writeDurante(duranteItems);
+
+    return res.status(201).json({
+        item: duringName,
+        items: readDurante(),
+    });
+});
+
+app.delete('/api/durante/:duringName', (req, res) => {
+    const duringName = normalizeCatalogItem(req.params.duringName);
+
+    if (!duringName) {
+        return res.status(400).json({ error: 'duringName obrigatorio' });
+    }
+
+    const duranteItems = readDurante();
+    const duringIndex = duranteItems.findIndex((item) => item.localeCompare(duringName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (duringIndex === -1) {
+        return res.status(404).json({ error: 'Durante nao encontrado.' });
+    }
+
+    const [removedDuring] = duranteItems.splice(duringIndex, 1);
+    writeDurante(duranteItems);
+
+    return res.json({
+        item: removedDuring,
+        items: readDurante(),
+    });
+});
+
+app.get('/api/duracoes', (req, res) => {
+    return res.json({
+        items: readDuracoes(),
+    });
+});
+
+app.post('/api/duracoes', (req, res) => {
+    const durationName = normalizeCatalogItem(req.body?.name);
+
+    if (!durationName) {
+        return res.status(400).json({ error: 'name obrigatorio' });
+    }
+
+    const duracoes = readDuracoes();
+    const existingDuration = duracoes.find((item) => item.localeCompare(durationName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (existingDuration) {
+        return res.status(409).json({
+            error: 'Duracao ja cadastrada.',
+            item: existingDuration,
+            items: duracoes,
+        });
+    }
+
+    duracoes.push(durationName);
+    writeDuracoes(duracoes);
+
+    return res.status(201).json({
+        item: durationName,
+        items: readDuracoes(),
+    });
+});
+
+app.delete('/api/duracoes/:durationName', (req, res) => {
+    const durationName = normalizeCatalogItem(req.params.durationName);
+
+    if (!durationName) {
+        return res.status(400).json({ error: 'durationName obrigatorio' });
+    }
+
+    const duracoes = readDuracoes();
+    const durationIndex = duracoes.findIndex((item) => item.localeCompare(durationName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (durationIndex === -1) {
+        return res.status(404).json({ error: 'Duracao nao encontrada.' });
+    }
+
+    const [removedDuration] = duracoes.splice(durationIndex, 1);
+    writeDuracoes(duracoes);
+
+    return res.json({
+        item: removedDuration,
+        items: readDuracoes(),
     });
 });
 
