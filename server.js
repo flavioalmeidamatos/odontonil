@@ -9,6 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const dataDir = path.join(__dirname, 'data');
 const prontuariosFile = path.join(dataDir, 'prontuarios.json');
+const medicacoesFile = path.join(dataDir, 'medicacoes.json');
 const receitaTemplateFile = path.join(__dirname, 'public', 'RECEITA RAPHAEL.pdf');
 const generatedReceitasDir = path.join(__dirname, 'public', 'receitas-geradas');
 const arialFontPath = path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts', 'arial.ttf');
@@ -36,6 +37,84 @@ function ensureProntuariosStore() {
     if (!fs.existsSync(prontuariosFile)) {
         fs.writeFileSync(prontuariosFile, JSON.stringify({}, null, 2), 'utf8');
     }
+}
+
+function ensureMedicacoesStore() {
+    if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+    }
+
+    if (!fs.existsSync(medicacoesFile)) {
+        fs.writeFileSync(medicacoesFile, JSON.stringify([], null, 2), 'utf8');
+    }
+}
+
+function normalizeMedicationName(value) {
+    return String(value || '')
+        .trim()
+        .replace(/\s+/g, ' ');
+}
+
+function sortMedicationList(list) {
+    return [...list].sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+}
+
+function readMedicacoes() {
+    ensureMedicacoesStore();
+
+    try {
+        const raw = fs.readFileSync(medicacoesFile, 'utf8');
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
+
+        const uniqueItems = [];
+        const seen = new Set();
+
+        parsed.forEach((item) => {
+            const normalizedName = normalizeMedicationName(item);
+            if (!normalizedName) {
+                return;
+            }
+
+            const dedupeKey = normalizedName.toLocaleLowerCase('pt-BR');
+            if (seen.has(dedupeKey)) {
+                return;
+            }
+
+            seen.add(dedupeKey);
+            uniqueItems.push(normalizedName);
+        });
+
+        return sortMedicationList(uniqueItems);
+    } catch (error) {
+        console.error('Erro ao ler medicacoes:', error);
+        return [];
+    }
+}
+
+function writeMedicacoes(medicacoes) {
+    ensureMedicacoesStore();
+    const normalizedList = readMedicacoes()
+        .concat(Array.isArray(medicacoes) ? medicacoes : [])
+        .map(normalizeMedicationName)
+        .filter(Boolean);
+
+    const uniqueItems = [];
+    const seen = new Set();
+
+    normalizedList.forEach((item) => {
+        const dedupeKey = item.toLocaleLowerCase('pt-BR');
+        if (seen.has(dedupeKey)) {
+            return;
+        }
+
+        seen.add(dedupeKey);
+        uniqueItems.push(item);
+    });
+
+    fs.writeFileSync(medicacoesFile, JSON.stringify(sortMedicationList(uniqueItems), null, 2), 'utf8');
 }
 
 function readProntuarios() {
@@ -560,6 +639,62 @@ app.put('/api/prontuarios/:patientId', (req, res) => {
 
     writeProntuarios(prontuarios);
     return res.json(prontuarios[patientId]);
+});
+
+app.get('/api/medicacoes', (req, res) => {
+    return res.json({
+        items: readMedicacoes(),
+    });
+});
+
+app.post('/api/medicacoes', (req, res) => {
+    const medicationName = normalizeMedicationName(req.body?.name);
+
+    if (!medicationName) {
+        return res.status(400).json({ error: 'name obrigatorio' });
+    }
+
+    const medicacoes = readMedicacoes();
+    const existingMedication = medicacoes.find((item) => item.localeCompare(medicationName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (existingMedication) {
+        return res.status(409).json({
+            error: 'Medicacao ja cadastrada.',
+            item: existingMedication,
+            items: medicacoes,
+        });
+    }
+
+    medicacoes.push(medicationName);
+    writeMedicacoes(medicacoes);
+
+    return res.status(201).json({
+        item: medicationName,
+        items: readMedicacoes(),
+    });
+});
+
+app.delete('/api/medicacoes/:medicationName', (req, res) => {
+    const medicationName = normalizeMedicationName(req.params.medicationName);
+
+    if (!medicationName) {
+        return res.status(400).json({ error: 'medicationName obrigatorio' });
+    }
+
+    const medicacoes = readMedicacoes();
+    const medicationIndex = medicacoes.findIndex((item) => item.localeCompare(medicationName, 'pt-BR', { sensitivity: 'base' }) === 0);
+
+    if (medicationIndex === -1) {
+        return res.status(404).json({ error: 'Medicacao nao encontrada.' });
+    }
+
+    const [removedMedication] = medicacoes.splice(medicationIndex, 1);
+    fs.writeFileSync(medicacoesFile, JSON.stringify(sortMedicationList(medicacoes), null, 2), 'utf8');
+
+    return res.json({
+        item: removedMedication,
+        items: sortMedicationList(medicacoes),
+    });
 });
 
 app.post('/api/prontuarios/:patientId/receita-pdf', async (req, res) => {

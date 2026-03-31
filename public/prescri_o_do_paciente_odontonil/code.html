@@ -3,11 +3,11 @@
 <html class="light" lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Clinica Odontonil - Modulo Medico</title>
+<title>Clinica Odontonil - M&oacute;dulo M&eacute;dico</title>
 <link href="../public_style.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
+    <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             display: inline-block;
@@ -29,54 +29,359 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        .patient-page-main {
+            padding-top: 4.85rem;
+        }
+        .page-header {
+            gap: 0.75rem;
+            padding-inline: 1rem;
+        }
+        .page-header-main {
+            min-width: 0;
+            flex: 1;
+            gap: 0.35rem;
+        }
+        .page-header-brand {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.88rem;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .page-header-brand-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .page-header-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            flex-shrink: 0;
+        }
+        .patient-summary-card {
+            padding: 1.2rem;
+            border-radius: 1.75rem;
+        }
+        .patient-summary-header {
+            display: grid;
+            grid-template-columns: 3rem minmax(0, 1fr) auto;
+            grid-template-areas:
+                "photo kicker id"
+                "photo name name";
+            column-gap: 0.75rem;
+            row-gap: 0.15rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .patient-photo {
+            grid-area: photo;
+            width: 3rem;
+            height: 3rem;
+        }
+        .patient-kicker {
+            grid-area: kicker;
+            margin-left: -0.1rem;
+        }
+        .patient-id-badge {
+            grid-area: id;
+            justify-self: end;
+            align-self: start;
+            margin-top: -0.2rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 0.95rem;
+            font-size: 0.6rem;
+            line-height: 1.15;
+        }
+        .patient-name {
+            grid-area: name;
+            min-width: 0;
+            margin-left: -0.1rem;
+            font-size: 1.05rem;
+            line-height: 1.05;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-wrap: balance;
+        }
+        .patient-summary-content {
+            display: grid;
+            gap: 0.8rem;
+        }
+        .patient-address-box {
+            padding: 0.9rem;
+            border-radius: 1.15rem;
+        }
+        .patient-address-text {
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+        .patient-stats-grid {
+            gap: 0.65rem;
+        }
+        .patient-stat-box {
+            padding: 0.8rem;
+            border-radius: 1rem;
+            min-height: 4.2rem;
+        }
+        .patient-status-text {
+            font-size: 0.8rem;
+            line-height: 1.1;
+            white-space: nowrap;
+        }
+        .medication-card {
+            padding: 1rem 1.1rem;
+            border-radius: 1.5rem;
+        }
+        .medication-card-header {
+            margin-bottom: 0.85rem;
+        }
+        .medication-input-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 0.65rem;
+            align-items: start;
+        }
+        .medication-combobox {
+            position: relative;
+            min-width: 0;
+        }
+        .medication-input-shell {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.9rem 1rem;
+            border-radius: 1rem;
+            background: var(--color-surface-container-low);
+            border: 1px solid rgb(191 201 196 / 0.45);
+            box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35);
+        }
+        .medication-input-shell:focus-within {
+            border-color: rgb(0 77 64 / 0.32);
+            box-shadow: 0 0 0 3px rgb(0 77 64 / 0.08);
+        }
+        .medication-input {
+            width: 100%;
+            min-width: 0;
+            font-size: 0.95rem;
+            line-height: 1.35;
+            background: transparent;
+            outline: none;
+        }
+        .medication-dropdown {
+            position: absolute;
+            top: calc(100% + 0.55rem);
+            left: 0;
+            right: 0;
+            z-index: 40;
+            max-height: 15rem;
+            overflow-y: auto;
+            border-radius: 1rem;
+            border: 1px solid rgb(191 201 196 / 0.55);
+            background: var(--color-surface-container-lowest);
+            box-shadow: 0 18px 38px rgb(15 23 42 / 0.12);
+            overflow-x: hidden;
+        }
+        .medication-option {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            background: transparent;
+            transition: background-color 180ms ease;
+        }
+        .medication-option + .medication-option {
+            border-top: 1px solid rgb(191 201 196 / 0.35);
+        }
+        .medication-option:hover,
+        .medication-option.is-active {
+            background: rgb(0 77 64 / 0.06);
+        }
+        .medication-option-add {
+            color: var(--color-primary-container);
+        }
+        .medication-option-label {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--color-on-surface);
+        }
+        .medication-option-hint {
+            font-size: 0.72rem;
+            line-height: 1.2;
+            color: var(--color-secondary);
+        }
+        .medication-empty {
+            padding: 1rem;
+            font-size: 0.82rem;
+            color: var(--color-secondary);
+        }
+        .medication-delete-button {
+            width: 3.15rem;
+            height: 3.15rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            background: var(--color-error-container);
+            color: var(--color-on-error-container);
+            box-shadow: var(--shadow-sm);
+            transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+        }
+        .medication-delete-button:hover {
+            box-shadow: var(--shadow-md);
+        }
+        .medication-delete-button:active {
+            transform: scale(0.96);
+        }
+        .medication-helper {
+            min-height: 1.1rem;
+            margin-top: 0.7rem;
+            font-size: 0.76rem;
+            line-height: 1.35;
+            color: var(--color-secondary);
+        }
+        .medication-helper[data-state="error"] {
+            color: var(--color-on-error-container);
+        }
+        .medication-helper[data-state="success"] {
+            color: var(--color-primary-container);
+        }
+        @media (min-width: 640px) {
+            .patient-page-main {
+                padding-top: 6rem;
+            }
+            .page-header {
+                padding-inline: 1.5rem;
+            }
+            .page-header-main {
+                gap: 1rem;
+            }
+            .page-header-brand {
+                font-size: 1.125rem;
+                gap: 0.5rem;
+            }
+            .page-header-avatar {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            .patient-summary-card {
+                padding: 2rem;
+                border-radius: 2rem;
+            }
+            .patient-summary-header {
+                grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+                column-gap: 1rem;
+                row-gap: 0.3rem;
+                margin-bottom: 1.5rem;
+            }
+            .patient-photo {
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+            .patient-id-badge {
+                margin-top: -0.1rem;
+                padding: 0.5rem 0.85rem;
+                font-size: 0.64rem;
+            }
+            .patient-name {
+                font-size: 1.85rem;
+            }
+            .patient-summary-content {
+                gap: 1.25rem;
+            }
+            .patient-address-box {
+                padding: 1.25rem;
+                border-radius: 1.5rem;
+            }
+            .patient-address-text {
+                font-size: 0.875rem;
+            }
+            .patient-stats-grid {
+                gap: 1rem;
+            }
+            .patient-stat-box {
+                padding: 1rem;
+                border-radius: 1rem;
+                min-height: 0;
+            }
+            .patient-status-text {
+                font-size: 0.875rem;
+            }
+            .medication-card {
+                padding: 1.25rem 1.35rem;
+                border-radius: 1.75rem;
+            }
+            .medication-card-header {
+                margin-bottom: 1rem;
+            }
+            .medication-input-row {
+                gap: 0.85rem;
+            }
+            .medication-input-shell {
+                padding: 1rem 1.1rem;
+                border-radius: 1.1rem;
+            }
+            .medication-input {
+                font-size: 1rem;
+            }
+            .medication-delete-button {
+                width: 3.4rem;
+                height: 3.4rem;
+            }
+            .medication-helper {
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-background text-on-surface antialiased min-h-screen pb-32">
-<header class="fixed top-0 w-full z-50 bg-[#f8fafa]/80 backdrop-blur-xl shadow-sm shadow-teal-900/5 flex items-center justify-between px-6 h-16">
-<div class="flex items-center gap-4">
+<header class="page-header fixed top-0 w-full z-50 bg-[#f8fafa]/80 backdrop-blur-xl shadow-sm shadow-teal-900/5 flex items-center justify-between h-16">
+<div class="page-header-main flex items-center">
 <a href="../buscar_paciente_m_dico/code.html" class="active:scale-95 duration-200 p-2 -ml-2 hover:bg-teal-50/50 rounded-full transition-colors">
 <span class="material-symbols-outlined text-teal-900" data-icon="arrow_back">arrow_back</span>
 </a>
-<a href="../index.html" class="font-headline tracking-tight font-bold text-lg text-teal-900 hover:opacity-80 transition-opacity flex items-center gap-2">
-<span class="material-symbols-outlined text-primary-container" data-icon="home">home</span>
-Clinica Odontonil - Modulo Medico
+<a href="../index.html" class="page-header-brand font-headline tracking-tight font-bold text-teal-900 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-primary-container shrink-0" data-icon="home">home</span>
+<span class="page-header-brand-text">Clinica Odontonil - M&oacute;dulo M&eacute;dico</span>
 </a>
 </div>
-<div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/15 shadow-sm">
+<div class="page-header-avatar rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/15 shadow-sm">
 <img alt="Perfil do medico" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATnVPuf6QGlVhPOVA5JPowkC0Y6VQaTGk_ssZgKxFZS1baCaF8I29D6Ly0-fYiguZfJoqftPb9i7OC7eDYIcGeRqWxmJ_Fa3Osa7uDk25WdLCHIs2HEOTB-Oh5G5YZfyXyiW1OO_nnGEP6OgEvLTbt8o66wzd65KckFUq2yO4G-W-XwATKynOOiC8RDRA2xYkB9dw_WWDGATm7bSOPPu4M3u62AgBrr4tvZp_56qfRAFGO0yZSBfOBAW7bYq_yVejD27GqgmjQur0"/>
 </div>
 </header>
 
-<main class="pt-24 px-6 container mx-auto max-w-5xl">
+<main class="patient-page-main px-6 container mx-auto max-w-5xl">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div class="lg:col-span-5 space-y-8">
-            <section class="bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm border border-outline-variant/10">
-                <div class="flex items-start justify-between mb-6">
-                    <div class="flex items-center gap-4">
-                        <div id="patient-photo-container" class="h-14 w-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl overflow-hidden shadow-sm border border-outline-variant/20 shrink-0"></div>
-                        <div>
-                            <span class="font-label text-[0.65rem] tracking-[0.1em] uppercase text-secondary font-bold mb-1 block">Ficha do Paciente</span>
-                            <h2 id="patient-name" class="font-headline text-2xl font-extrabold text-primary tracking-tight">Carregando...</h2>
-                        </div>
-                    </div>
-                    <div id="patient-id" class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-wider uppercase mt-1">ID: 0000</div>
+            <section class="patient-summary-card bg-surface-container-lowest shadow-sm border border-outline-variant/10">
+                <div class="patient-summary-header">
+                    <div id="patient-photo-container" class="patient-photo rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl overflow-hidden shadow-sm border border-outline-variant/20 shrink-0"></div>
+                    <span class="patient-kicker font-label text-[0.65rem] tracking-[0.1em] uppercase text-secondary font-bold block">Ficha do Paciente</span>
+                    <div id="patient-id" class="patient-id-badge bg-primary/10 text-primary font-label font-bold tracking-wider uppercase">ID: 0000</div>
+                    <h2 id="patient-name" class="patient-name font-headline font-extrabold text-primary tracking-tight">Carregando...</h2>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                <div class="patient-summary-content">
+                    <div class="patient-address-box bg-surface-container-low">
                         <div class="flex items-center gap-2 mb-3">
                             <span class="material-symbols-outlined text-primary text-xl" data-icon="location_on">location_on</span>
                             <h3 class="font-label text-[11px] font-bold tracking-wider uppercase text-on-surface-variant">Endereco</h3>
                         </div>
-                        <p id="patient-address" class="text-on-surface font-medium text-sm leading-relaxed">Carregando endereco...</p>
+                        <p id="patient-address" class="patient-address-text text-on-surface font-medium">Carregando endereco...</p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-surface-container-low p-4 rounded-2xl">
+                    <div class="patient-stats-grid grid grid-cols-2">
+                        <div class="patient-stat-box bg-surface-container-low">
                             <h4 class="font-label text-[10px] font-semibold text-secondary mb-1">Status</h4>
-                            <p class="text-emerald-600 font-bold text-sm uppercase tracking-tighter">Em Atendimento</p>
+                            <p class="patient-status-text text-emerald-600 font-bold uppercase tracking-tighter">Em Atendimento</p>
                         </div>
-                        <div class="bg-surface-container-low p-4 rounded-2xl">
+                        <div class="patient-stat-box bg-surface-container-low">
                             <h4 class="font-label text-[10px] font-semibold text-secondary mb-1">Data Atendimento</h4>
                             <p id="current-date-display" class="text-on-surface font-semibold text-sm"></p>
                         </div>
@@ -86,6 +391,29 @@ Clinica Odontonil - Modulo Medico
         </div>
 
         <div class="lg:col-span-7 space-y-6">
+            <section class="medication-card bg-surface-container-lowest shadow-sm border border-outline-variant/10">
+                <div class="medication-card-header">
+                    <p class="font-label text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Medicacao</p>
+                    <h3 class="font-headline text-lg font-extrabold text-primary tracking-tight">Buscar, adicionar ou excluir medicamento</h3>
+                </div>
+
+                <div class="medication-input-row">
+                    <div class="medication-combobox">
+                        <div class="medication-input-shell">
+                            <span class="material-symbols-outlined text-primary text-xl" data-icon="search">search</span>
+                            <input id="medication-input" class="medication-input text-on-surface" type="text" placeholder="Digite o nome do medicamento" autocomplete="off" spellcheck="false" aria-label="Medicação" aria-autocomplete="list" aria-expanded="false" aria-controls="medication-suggestions"/>
+                        </div>
+                        <div id="medication-suggestions" class="medication-dropdown hidden" role="listbox"></div>
+                    </div>
+
+                    <button id="delete-medication-button" type="button" class="medication-delete-button" aria-label="Excluir medicamento">
+                        <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+                    </button>
+                </div>
+
+                <p id="medication-helper" class="medication-helper">Pesquise para selecionar da lista. Se nao existir, voce podera adicionar.</p>
+            </section>
+
             <section class="bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm border border-outline-variant/10 min-h-[500px] flex flex-col">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-3">
@@ -185,6 +513,51 @@ Clinica Odontonil - Modulo Medico
             return response.json();
         }
 
+        function normalizeMedicationName(value) {
+            return String(value || '')
+                .trim()
+                .replace(/\s+/g, ' ');
+        }
+
+        async function loadMedicacoes() {
+            const response = await fetch('/api/medicacoes');
+            const payload = await response.json().catch(() => ({ items: [] }));
+
+            if (!response.ok) {
+                throw new Error(payload?.error || 'Falha ao carregar medicações.');
+            }
+
+            return Array.isArray(payload.items) ? payload.items : [];
+        }
+
+        async function addMedicacao(name) {
+            const response = await fetch('/api/medicacoes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name }),
+            });
+            const payload = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(payload?.error || 'Falha ao adicionar medicação.');
+            }
+
+            return payload;
+        }
+
+        async function deleteMedicacao(name) {
+            const response = await fetch(`/api/medicacoes/${encodeURIComponent(name)}`, {
+                method: 'DELETE',
+            });
+            const payload = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(payload?.error || 'Falha ao excluir medicação.');
+            }
+
+            return payload;
+        }
+
         async function generateReceitaPdf(patientId, patientName, patientAddress, patientNumber, patientComplemento, patientBairro, patientCidade, patientUf, patientCep, notes) {
             const response = await fetch(`/api/prontuarios/${encodeURIComponent(patientId)}/receita-pdf`, {
                 method: 'POST',
@@ -258,10 +631,293 @@ Clinica Odontonil - Modulo Medico
         const notesInput = document.getElementById('patient-notes');
         const saveButton = document.getElementById('save-prontuario-button');
         const previewCloseButton = document.getElementById('pdf-close-button');
+        const medicationInput = document.getElementById('medication-input');
+        const medicationSuggestions = document.getElementById('medication-suggestions');
+        const medicationHelper = document.getElementById('medication-helper');
+        const deleteMedicationButton = document.getElementById('delete-medication-button');
+        let medicationItems = [];
+        let medicationMatches = [];
+        let medicationActiveIndex = -1;
+        let selectedMedication = '';
         let selectedPatient = null;
+
+        function setMedicationHelper(message, state = 'neutral') {
+            if (!medicationHelper) {
+                return;
+            }
+
+            medicationHelper.textContent = message;
+            medicationHelper.dataset.state = state;
+        }
+
+        function setMedicationDropdownVisibility(isOpen) {
+            if (!medicationSuggestions || !medicationInput) {
+                return;
+            }
+
+            medicationSuggestions.classList.toggle('hidden', !isOpen);
+            medicationInput.setAttribute('aria-expanded', String(isOpen));
+        }
+
+        function getMedicationExactMatch(name) {
+            const normalizedName = normalizeMedicationName(name);
+            return medicationItems.find((item) => item.localeCompare(normalizedName, 'pt-BR', { sensitivity: 'base' }) === 0) || '';
+        }
+
+        function buildMedicationMatches(query) {
+            const normalizedQuery = normalizeMedicationName(query).toLocaleLowerCase('pt-BR');
+            const rankedItems = medicationItems
+                .filter((item) => !normalizedQuery || item.toLocaleLowerCase('pt-BR').includes(normalizedQuery))
+                .sort((a, b) => {
+                    const aStartsWith = a.toLocaleLowerCase('pt-BR').startsWith(normalizedQuery);
+                    const bStartsWith = b.toLocaleLowerCase('pt-BR').startsWith(normalizedQuery);
+
+                    if (aStartsWith !== bStartsWith) {
+                        return aStartsWith ? -1 : 1;
+                    }
+
+                    return a.localeCompare(b, 'pt-BR', { sensitivity: 'base' });
+                });
+
+            return rankedItems.slice(0, 8);
+        }
+
+        function selectMedication(name) {
+            const exactMatch = getMedicationExactMatch(name) || normalizeMedicationName(name);
+            selectedMedication = exactMatch;
+
+            if (medicationInput) {
+                medicationInput.value = exactMatch;
+            }
+
+            medicationActiveIndex = -1;
+            setMedicationDropdownVisibility(false);
+            setMedicationHelper(`Medicacao selecionada: ${exactMatch}.`, 'success');
+        }
+
+        async function promptAddMedication(name) {
+            const normalizedName = normalizeMedicationName(name);
+            if (!normalizedName) {
+                return;
+            }
+
+            const shouldAdd = window.confirm(`"${normalizedName}" nao esta na lista. Deseja adicionar este medicamento?`);
+            if (!shouldAdd) {
+                return;
+            }
+
+            try {
+                const payload = await addMedicacao(normalizedName);
+                medicationItems = Array.isArray(payload.items) ? payload.items : medicationItems;
+                selectMedication(payload.item || normalizedName);
+                showToast('Medicacao adicionada com sucesso!', 'success');
+            } catch (error) {
+                showToast(error.message || 'Nao foi possivel adicionar a medicacao.', 'error');
+                setMedicationHelper(error.message || 'Nao foi possivel adicionar a medicacao.', 'error');
+            }
+        }
+
+        async function handleMedicationDelete() {
+            const requestedName = normalizeMedicationName(medicationInput?.value || selectedMedication);
+
+            if (!requestedName) {
+                showToast('Selecione ou digite uma medicacao para excluir.', 'error');
+                setMedicationHelper('Selecione ou digite uma medicacao para excluir.', 'error');
+                return;
+            }
+
+            const exactMatch = getMedicationExactMatch(requestedName);
+            if (!exactMatch) {
+                showToast('Essa medicacao nao existe na lista.', 'error');
+                setMedicationHelper('Essa medicacao nao existe na lista.', 'error');
+                return;
+            }
+
+            const shouldDelete = window.confirm(`Deseja excluir a medicacao "${exactMatch}" da lista?`);
+            if (!shouldDelete) {
+                return;
+            }
+
+            try {
+                const payload = await deleteMedicacao(exactMatch);
+                medicationItems = Array.isArray(payload.items) ? payload.items : [];
+                medicationMatches = [];
+                medicationActiveIndex = -1;
+                selectedMedication = '';
+                if (medicationInput) {
+                    medicationInput.value = '';
+                }
+                setMedicationDropdownVisibility(false);
+                setMedicationHelper(`Medicacao "${exactMatch}" excluida da lista.`, 'success');
+                showToast('Medicacao excluida com sucesso!', 'success');
+            } catch (error) {
+                showToast(error.message || 'Nao foi possivel excluir a medicacao.', 'error');
+                setMedicationHelper(error.message || 'Nao foi possivel excluir a medicacao.', 'error');
+            }
+        }
+
+        function renderMedicationSuggestions(query = '') {
+            if (!medicationSuggestions) {
+                return;
+            }
+
+            const normalizedQuery = normalizeMedicationName(query);
+            const exactMatch = getMedicationExactMatch(normalizedQuery);
+            medicationMatches = buildMedicationMatches(normalizedQuery);
+
+            if (medicationActiveIndex >= medicationMatches.length) {
+                medicationActiveIndex = medicationMatches.length - 1;
+            }
+
+            medicationSuggestions.innerHTML = '';
+
+            if (medicationItems.length === 0 && !normalizedQuery) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'medication-empty';
+                emptyState.textContent = 'Nenhuma medicacao cadastrada ainda. Digite um nome para adicionar a primeira.';
+                medicationSuggestions.appendChild(emptyState);
+                setMedicationDropdownVisibility(true);
+                return;
+            }
+
+            if (medicationMatches.length === 0 && !normalizedQuery) {
+                setMedicationDropdownVisibility(false);
+                return;
+            }
+
+            medicationMatches.forEach((item, index) => {
+                const option = document.createElement('button');
+                const optionLabel = document.createElement('span');
+                const optionHint = document.createElement('span');
+                option.type = 'button';
+                option.className = `medication-option${index === medicationActiveIndex ? ' is-active' : ''}`;
+                option.setAttribute('role', 'option');
+                optionLabel.className = 'medication-option-label';
+                optionLabel.textContent = item;
+                optionHint.className = 'medication-option-hint';
+                optionHint.textContent = 'Selecionar';
+                option.append(optionLabel, optionHint);
+                option.addEventListener('click', () => selectMedication(item));
+                medicationSuggestions.appendChild(option);
+            });
+
+            if (normalizedQuery && !exactMatch) {
+                const addOption = document.createElement('button');
+                const addLabel = document.createElement('span');
+                const addHint = document.createElement('span');
+                addOption.type = 'button';
+                addOption.className = 'medication-option medication-option-add';
+                addLabel.className = 'medication-option-label';
+                addLabel.textContent = `Adicionar "${normalizedQuery}"`;
+                addHint.className = 'medication-option-hint';
+                addHint.textContent = 'Novo medicamento';
+                addOption.append(addLabel, addHint);
+                addOption.addEventListener('click', () => promptAddMedication(normalizedQuery));
+                medicationSuggestions.appendChild(addOption);
+            }
+
+            if (!medicationSuggestions.children.length) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'medication-empty';
+                emptyState.textContent = 'Nenhuma sugestao encontrada para esse termo.';
+                medicationSuggestions.appendChild(emptyState);
+            }
+
+            setMedicationDropdownVisibility(true);
+        }
+
+        if (deleteMedicationButton) {
+            deleteMedicationButton.addEventListener('click', handleMedicationDelete);
+        }
+
+        if (medicationInput) {
+            medicationInput.addEventListener('focus', () => {
+                renderMedicationSuggestions(medicationInput.value);
+            });
+
+            medicationInput.addEventListener('input', () => {
+                selectedMedication = '';
+                medicationActiveIndex = -1;
+                setMedicationHelper('Selecione um medicamento existente ou adicione um novo.', 'neutral');
+                renderMedicationSuggestions(medicationInput.value);
+            });
+
+            medicationInput.addEventListener('keydown', async (event) => {
+                const hasVisibleDropdown = medicationSuggestions && !medicationSuggestions.classList.contains('hidden');
+
+                if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    if (!hasVisibleDropdown) {
+                        renderMedicationSuggestions(medicationInput.value);
+                    }
+                    if (medicationMatches.length > 0) {
+                        medicationActiveIndex = Math.min(medicationActiveIndex + 1, medicationMatches.length - 1);
+                        renderMedicationSuggestions(medicationInput.value);
+                    }
+                    return;
+                }
+
+                if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    if (medicationMatches.length > 0) {
+                        medicationActiveIndex = Math.max(medicationActiveIndex - 1, 0);
+                        renderMedicationSuggestions(medicationInput.value);
+                    }
+                    return;
+                }
+
+                if (event.key === 'Enter') {
+                    const typedName = normalizeMedicationName(medicationInput.value);
+
+                    if (!typedName) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    if (medicationActiveIndex >= 0 && medicationMatches[medicationActiveIndex]) {
+                        selectMedication(medicationMatches[medicationActiveIndex]);
+                        return;
+                    }
+
+                    const exactMatch = getMedicationExactMatch(typedName);
+                    if (exactMatch) {
+                        selectMedication(exactMatch);
+                        return;
+                    }
+
+                    await promptAddMedication(typedName);
+                    return;
+                }
+
+                if (event.key === 'Escape') {
+                    medicationActiveIndex = -1;
+                    setMedicationDropdownVisibility(false);
+                }
+            });
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!medicationSuggestions || !medicationInput) {
+                return;
+            }
+
+            const clickedInsideCombobox = event.target.closest('.medication-combobox');
+            if (!clickedInsideCombobox) {
+                medicationActiveIndex = -1;
+                setMedicationDropdownVisibility(false);
+            }
+        });
 
         if (previewCloseButton) {
             previewCloseButton.addEventListener('click', closePdfPreview);
+        }
+
+        try {
+            medicationItems = await loadMedicacoes();
+        } catch (error) {
+            console.error('Erro ao carregar medicacoes:', error);
+            setMedicationHelper('Nao foi possivel carregar a lista de medicacoes.', 'error');
         }
 
         if (patientId) {
